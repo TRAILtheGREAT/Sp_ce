@@ -21,6 +21,17 @@
 #include <string>
 
 using namespace std;
+
+void displayMap(bool(&VdoorArray)[4][5], bool(&HdoorArray)[5][4]);
+int _dice(int max);
+bool encounter(string engineer, string scientist, string pilot, int engHP, int engWEP, int sciHP, int sciWEP, int pilHP, int pilWEP, int encounterID);
+
+struct roomInfo //room struct will store location and encounter. door state will be stored in the door arrays
+{
+	string name;
+	int encounterID;//npc, enemy, or encounter in this room
+};
+
 int main()
 {
 	srand((unsigned)time(NULL));
@@ -506,727 +517,390 @@ int main()
 		}
 	}
 	printf("With the ship fully operational and your party fully equiped, the crew sets off into the great unknown...\n[press any key to continue]");
-	int sectorX = 1;
-	int sectorY = 1;
+	_getch();
+	system("cls");
+	printf("input seed number:");
+	int intIn;
+	cin >> intIn;
+	fseek(stdin, 0, SEEK_END);
+	printf("generating map...\n");
+	srand(intIn);
 	exit = false;
-	while (!exit)//movement loop
+	roomInfo roomArray[5][5];
+	bool VdoorArray[4][5];//assigning all doors closed
+	for (int c = 0; c < 4; c++)
 	{
-		_getch();
-		system("cls");
-		printf("You are in sector (%i, %i)\n", sectorX, sectorY);
-		if (1 == sectorX && 1 == sectorY)
+		for (int r = 0; r < 5; r++)
 		{
-			while (true)
+			VdoorArray[c][r] = 1;
+		}
+	}
+	bool HdoorArray[5][4];
+	for (int c = 0; c < 5; c++)
+	{
+		for (int r = 0; r < 4; r++)
+		{
+			HdoorArray[c][r] = 1;
+		}
+	}
+	int C = 0;
+	int R = 0;
+	bool roomVisited[5][5];
+	for (int c = 0; c < 5; c++)//assigning all rooms unvisited
+	{
+		for (int r = 0; r < 5; r++)
+		{
+			roomVisited[c][r] = 0;
+		}
+	}
+	roomVisited[0][0] = 1;//starting at room (0, 0)
+	while (true)
+	{
+		if (4 == R && 4 == C)//stop when room (4, 4) is reached
+		{
+			break;
+		}
+		int random = _dice(2);
+		if (1 == random && 4 != C)//go east
+		{
+			roomVisited[C + 1][R] = 1;//make next room visited
+			VdoorArray[C][R] = 0;//opening door
+			C++;//move to next room
+		}
+		else if (2 == random && 4 != R)
+		{
+			roomVisited[C][R + 1] = 1;//make next room visited
+			HdoorArray[C][R] = 0;//opening door
+			R++;//move to next room
+		}
+	}
+	bool centralPath[5][5];
+	for (int c = 0; c < 5; c++)//copying roomVisited into central path
+	{
+		for (int r = 0; r < 5; r++)
+		{
+			centralPath[c][r] = roomVisited[c][r];
+		}
+	}
+	//snaking from central path
+	for (int r = 0; r < 5; r++)
+	{
+		for (int c = 0; c < 5; c++)
+		{
+			if (1 == centralPath[c][r])//use a copy of roomVisited
 			{
-				printf("pick a jump location:\n");
-				printf("a. (1, 2)\n");
-				cin >> inputc;
-				fseek(stdin, 0, SEEK_END);
-				if ('a' == inputc)
+				C = c;
+				R = r;
+				exit = false;
+				int counter = 0;
+				while (!exit)//snaking loop
 				{
-					printf("you jump to sector (1, 2)\n[press any key to continue]");
-					sectorY++;
+					counter++;
+					if (4 == counter)
+					{
+						break;
+					}
+					int adjRooms = 0;//number of adjacent open rooms
+					bool unVisN = false;
+					bool unVisE = false;
+					bool unVisS = false;
+					bool unVisW = false;
+					if (0 == roomVisited[C][R - 1] && 0 != R)
+					{
+						adjRooms++;
+						unVisN = true;
+					}
+					if (0 == roomVisited[C + 1][R] && 4 != C)
+					{
+						adjRooms++;
+						unVisE = true;
+					}
+					if (0 == roomVisited[C][R + 1] && 4 != R)
+					{
+						adjRooms++;
+						unVisS = true;
+					}
+					if (0 == roomVisited[C - 1][R] && 0 != C)
+					{
+						adjRooms++;
+						unVisW = true;
+					}
+
+					if (0 == adjRooms)
+					{
+						break;
+					}
+
+					int random = _dice(adjRooms);
+
+					if (1 == random)
+					{
+						if (true == unVisN)
+						{
+							roomVisited[C][R - 1] = 1;//visit next room
+							HdoorArray[C][R - 1] = 0;//open door
+							R--;//set coords to new room
+						}
+						else if (true == unVisE)
+						{
+							roomVisited[C + 1][R] = 1;
+							VdoorArray[C][R] = 0;
+							C++;
+						}
+						else if (true == unVisS)
+						{
+							roomVisited[C][R + 1] = 1;
+							HdoorArray[C][R] = 0;
+							R++;
+						}
+						else if (true == unVisW)
+						{
+							roomVisited[C - 1][R] = 1;
+							VdoorArray[C - 1][R] = 0;
+							C--;
+						}
+					}
+					else if (2 == random)
+					{
+						if (true == unVisE)
+						{
+							roomVisited[C + 1][R] = 1;
+							VdoorArray[C][R] = 0;
+							C++;
+						}
+						else if (true == unVisS)
+						{
+							roomVisited[C][R + 1] = 1;
+							HdoorArray[C][R] = 0;
+							R++;
+						}
+						else if (true == unVisW)
+						{
+							roomVisited[C - 1][R] = 1;
+							VdoorArray[C - 1][R] = 0;
+							C--;
+						}
+					}
+					else if (3 == random)
+					{
+						if (true == unVisS)
+						{
+							roomVisited[C][R + 1] = 1;
+							HdoorArray[C][R] = 0;
+							R++;
+						}
+						else if (true == unVisW)
+						{
+							roomVisited[C - 1][R] = 1;
+							VdoorArray[C - 1][R] = 0;
+							C--;
+						}
+					}
+					else if (4 == random)//prety sure this is impossible
+					{
+						roomVisited[C - 1][R] = 1;
+						VdoorArray[C - 1][R] = 0;
+						C--;
+					}
+				}
+			}
+		}
+	}
+	//opening remaining rooms
+	int openedRooms = 0;
+	for (int r = 0; r < 5; r++)
+	{
+		for (int c = 0; c < 5; c++)
+		{
+			if (0 == roomVisited[c][r])
+			{
+				roomVisited[c][r] = 1;//mark room as visited
+				openedRooms++;
+				if (0 != r)
+				{
+					roomVisited[c][r - 1] = 1;//north room
+					HdoorArray[c][r - 1] = 0;//north door
+				}
+				if (4 != c)
+				{
+					roomVisited[c + 1][r] = 1;//east room
+					VdoorArray[c][r] = 0;//east door
+				}
+				if (4 != r)
+				{
+					roomVisited[c][r + 1] = 1;//south room
+					HdoorArray[c][r] = 0;//south door
+				}
+				if (0 != c)
+				{
+					roomVisited[c - 1][r] = 1;//west room
+					VdoorArray[c - 1][r] = 0;//west door
+				}
+			}
+		}
+	}
+	//opening random rooms until 3 rooms have been opened
+	for (openedRooms; openedRooms < 3; openedRooms++)
+	{
+		int c = _dice(5) - 1;
+		int r = _dice(5) - 1;
+		if (0 != r)
+		{
+			roomVisited[c][r - 1] = 1;//north room
+			HdoorArray[c][r - 1] = 0;//north door
+		}
+		if (4 != c)
+		{
+			roomVisited[c + 1][r] = 1;//east room
+			VdoorArray[c][r] = 0;//east door
+		}
+		if (4 != r)
+		{
+			roomVisited[c][r + 1] = 1;//south room
+			HdoorArray[c][r] = 0;//south door
+		}
+		if (0 != c)
+		{
+			roomVisited[c - 1][r] = 1;//west room
+			VdoorArray[c - 1][r] = 0;//west door
+		}
+	}
+	//filling in 2 x 2 squares
+	for (int r = 0; r < 4; r++)
+	{
+		for (int c = 0; c < 4; c++)
+		{
+			if (VdoorArray[c][r] == 0 && HdoorArray[c][r] == 0 && VdoorArray[c][r + 1] == 0 && HdoorArray[c + 1][r] == 0)
+			{
+				int random = _dice(4);
+				switch (random)
+				{
+				case 1:
+					VdoorArray[c][r] = 1;
+					break;
+				case 2:
+					HdoorArray[c][r] = 1;
+					break;
+				case 3:
+					VdoorArray[c][r + 1] = 1;
+					break;
+				case 4:
+					HdoorArray[c + 1][r] = 1;
 					break;
 				}
-				else
-				{
-					printf("[invalid input]\n");
-					_getch();
-					system("cls");
-				}
 			}
 		}
-		else if (2 == sectorX && 1 == sectorY)
+	}
+	//random name generator
+	for (int r = 0; r < 5; r++)//not neccessary for current goal sheet
+	{
+		break;
+		for (int c = 0; c < 5; c++)
 		{
-			while (true)
+			int adjective = _dice(25);
+			int noun = _dice(25);
+			switch (adjective)
 			{
-				printf("pick a jump location:\n");
-				printf("a. (2, 2)\nb. (3, 1)\n");
-				cin >> inputc;
-				fseek(stdin, 0, SEEK_END);
-				if ('a' == inputc)
-				{
-					printf("you jump to sector (2, 2)\n");
-					sectorY++;
-					break;
-				}
-				else if ('b' == inputc)
-				{
-					printf("you jump to sector (3, 1)\n");
-					sectorX++;
-					break;
-				}
-				else
-				{
-					printf("[invalid input]\n");
-					_getch();
-					system("cls");
-				}
-			}
-		}
-		else if (3 == sectorX && 1 == sectorY)
-		{
-			while (true)
-			{
-				printf("pick a jump location:\n");
-				printf("a. (2, 1)\nb. (4, 1)\n");
-				cin >> inputc;
-				fseek(stdin, 0, SEEK_END);
-				if ('a' == inputc)
-				{
-					printf("you jump to sector (2, 1)\n");
-					sectorX--;
-					break;
-				}
-				else if ('b' == inputc)
-				{
-					printf("you jump to sector (4, 1)\n");
-					sectorX++;
-					break;
-				}
-				else
-				{
-					printf("[invalid input]\n");
-					_getch();
-					system("cls");
-				}
-			}
-		}
-		else if (4 == sectorX && 1 == sectorY)
-		{
-			while (true)
-			{
-				printf("pick a jump location:\n");
-				printf("a. (4, 2)\nb. (3, 1)\n");
-				cin >> inputc;
-				fseek(stdin, 0, SEEK_END);
-				if ('a' == inputc)
-				{
-					printf("you jump to sector (4, 2)\n");
-					sectorY++;
-					break;
-				}
-				else if ('b' == inputc)
-				{
-					printf("you jump to sector (3, 1)\n");
-					sectorX--;
-					break;
-				}
-				else
-				{
-					printf("[invalid input]\n");
-					_getch();
-					system("cls");
-				}
-			}
-		}
-		else if (5 == sectorX && 1 == sectorY)
-		{
-			while (true)
-			{
-				printf("pick a jump location:\n");
-				printf("a. (5, 2)\n");
-				cin >> inputc;
-				fseek(stdin, 0, SEEK_END);
-				if ('a' == inputc)
-				{
-					printf("you jump to sector (5, 2)\n");
-					sectorY++;
-					break;
-				}
-				else
-				{
-					printf("[invalid input]\n");
-					_getch();
-					system("cls");
-				}
-			}
-		}
-		else if (1 == sectorX && 2 == sectorY)
-		{
-			while (true)
-			{
-				printf("pick a jump location:\n");
-				printf("a. (1, 3)\nb. (1, 1)\n");
-				cin >> inputc;
-				fseek(stdin, 0, SEEK_END);
-				if ('a' == inputc)
-				{
-					printf("you jump to sector (1, 3)\n[press any key to continue]");
-					sectorY++;
-					break;
-				}
-				else if ('b' == inputc)
-				{
-					printf("you jump to sector (1, 1)\n[press any key to continue]");
-					sectorY--;
-					break;
-				}
-				else
-				{
-					printf("[invalid input]\n");
-					_getch();
-					system("cls");
-				}
-			}
-		}
-		else if (2 == sectorX && 2 == sectorY)
-		{
-			while (true)
-			{
-				printf("pick a jump location:\n");
-				printf("a. (2, 3)\nb. (4, 1)\n");
-				cin >> inputc;
-				fseek(stdin, 0, SEEK_END);
-				if ('a' == inputc)
-				{
-					printf("you jump to sector (2, 3)\n");
-					sectorY++;
-					break;
-				}
-				else if ('b' == inputc)
-				{
-					printf("you jump to sector (4, 1)\n");
-					sectorY--;
-					break;
-				}
-				else
-				{
-					printf("[invalid input]\n");
-					_getch();
-					system("cls");
-				}
-			}
-		}
-		else if (3 == sectorX && 2 == sectorY)
-		{
-		while (true)
-		{
-			printf("pick a jump location:\n");
-			printf("a. (4, 2)\n");
-			cin >> inputc;
-			fseek(stdin, 0, SEEK_END);
-			if ('a' == inputc)
-			{
-				printf("you jump to sector (4, 2)\n");
-				sectorX++;
+			case 1:
+				roomArray[c][r].name = "soiled";//change to enum later
+				break;
+			case 2:
+				roomArray[c][r].name = "spatered";
+				break;
+			case 3:
+				roomArray[c][r].name = "arcane";
+				break;
+			case 4:
+				roomArray[c][r].name = "soiled";
+				break;
+			case 5:
+				roomArray[c][r].name = "great";
 				break;
 			}
-			else
+			switch (noun)
 			{
-				printf("[invalid input]\n");
-				_getch();
-				system("cls");
+			case 1:
+				roomArray[c][r].name = roomArray[c][r].name + " wastes";
+				break;
 			}
 		}
-		}
-		else if (4 == sectorX && 2 == sectorY)
-		{
-		while (true)
-		{
-			printf("pick a jump location:\n");
-			printf("a. (4, 3)\nb. (3, 2)\nc. (3, 1)\n");
-			cin >> inputc;
-			fseek(stdin, 0, SEEK_END);
-			if ('a' == inputc)
-			{
-				printf("you jump to sector (4, 3)\n");
-				sectorY++;
-				break;
-			}
-			else if ('b' == inputc)
-			{
-				printf("you jump to sector (3, 2)\n");
-				sectorX--;
-				break;
-			}
-			else if ('c' == inputc)
-			{
-				printf("you jump to sector (3, 1)\n");
-				sectorY--;
-				break;
-			}
-			else
-			{
-				printf("[invalid input]\n");
-				_getch();
-				system("cls");
-			}
-		}
-		}
-		else if (5 == sectorX && 2 == sectorY)
-		{
-		while (true)
-		{
-			printf("pick a jump location:\n");
-			printf("a. (5, 3)\nb. (5, 1)\n");
-			cin >> inputc;
-			fseek(stdin, 0, SEEK_END);
-			if ('a' == inputc)
-			{
-				printf("you jump to sector (5, 3)\n");
-				sectorY++;
-				break;
-			}
-			else if ('b' == inputc)
-			{
-				printf("you jump to sector (5, 1)\n");
-				sectorY--;
-				break;
-			}
-			else
-			{
-				printf("[invalid input]\n");
-				_getch();
-				system("cls");
-			}
-		}
-		}
-		else if (1 == sectorX && 3 == sectorY)
-		{
-			while (true)
-			{
-				printf("pick a jump location:\n");
-				printf("a. (1, 4)\nb. (1, 2)\nc. (2, 3)\n");
-				cin >> inputc;
-				fseek(stdin, 0, SEEK_END);
-				if ('a' == inputc)
-				{
-					printf("you jump to sector (1, 4)\n");
-					sectorY++;
-					break;
-				}
-				else if ('b' == inputc)
-				{
-					printf("you jump to sector (1, 2)\n");
-					sectorY--;
-					break;
-				}
-				else if ('c' == inputc)
-				{
-					printf("you jump to sector (2, 3)\n");
-					sectorX++;
-					break;
-				}
-				else
-				{
-					printf("[invalid input]\n");
-					_getch();
-					system("cls");
-				}
-			}
-		}
-		else if (2 == sectorX && 3 == sectorY)
-		{
-		while (true)
-		{
-			printf("pick a jump location:\n");
-			printf("a. (1, 3)\nb. (2, 2)\n");
-			cin >> inputc;
-			fseek(stdin, 0, SEEK_END);
-			if ('a' == inputc)
-			{
-				printf("you jump to sector (1, 3)\n");
-				sectorX--;
-				break;
-			}
-			else if ('b' == inputc)
-			{
-				printf("you jump to sector (2, 2)\n");
-				sectorY--;
-				break;
-			}
-			else
-			{
-				printf("[invalid input]\n");
-				_getch();
-				system("cls");
-			}
-		}
-		}
-		else if (3 == sectorX && 3 == sectorY)
-		{
-		while (true)
-		{
-			printf("pick a jump location:\n");
-			printf("a. (3, 4)\nb. (4, 3)\n");
-			cin >> inputc;
-			fseek(stdin, 0, SEEK_END);
-			if ('a' == inputc)
-			{
-				printf("you jump to sector (3, 4)\n");
-				sectorY++;
-				break;
-			}
-			else if ('b' == inputc)
-			{
-				printf("you jump to sector (4, 3)\n");
-				sectorX++;
-				break;
-			}
-			else
-			{
-				printf("[invalid input]\n");
-				_getch();
-				system("cls");
-			}
-		}
-		}
-		else if (4 == sectorX && 3 == sectorY)
-		{
-		while (true)
-		{
-			printf("pick a jump location:\n");
-			printf("a. (3, 3)\nb. (4, 2)\nc. (5, 3)\n");
-			cin >> inputc;
-			fseek(stdin, 0, SEEK_END);
-			if ('a' == inputc)
-			{
-				printf("you jump to sector (3, 3)\n");
-				sectorX--;
-				break;
-			}
-			else if ('b' == inputc)
-			{
-				printf("you jump to sector (4, 2)\n");
-				sectorY--;
-				break;
-			}
-			else if ('c' == inputc)
-			{
-				printf("you jump to sector (5, 3)\n");
-				sectorX++;
-				break;
-			}
-			else
-			{
-				printf("[invalid input]\n");
-				_getch();
-				system("cls");
-			}
-		}
-		}
-		else if (5 == sectorX && 3 == sectorY)
-		{
-		while (true)
-		{
-			printf("pick a jump location:\n");
-			printf("a. (5, 4)\nb. (4, 3)\nc. (5, 2)\n");
-			cin >> inputc;
-			fseek(stdin, 0, SEEK_END);
-			if ('a' == inputc)
-			{
-				printf("you jump to sector (5, 4)\n");
-				sectorY++;
-				break;
-			}
-			else if ('b' == inputc)
-			{
-				printf("you jump to sector (4, 3)\n");
-				sectorX--;
-				break;
-			}
-			else if ('c' == inputc)
-			{
-				printf("you jump to sector (5, 2)\n");
-				sectorY--;
-				break;
-			}
-			else
-			{
-				printf("[invalid input]\n");
-				_getch();
-				system("cls");
-			}
-		}
-		}
-		else if (1 == sectorX && 4 == sectorY)
-		{
-		while (true)
-		{
-			printf("pick a jump location:\n");
-			printf("a. (1, 3)\nb. (2, 4)\n");
-			cin >> inputc;
-			fseek(stdin, 0, SEEK_END);
-			if ('a' == inputc)
-			{
-				printf("you jump to sector (1, 3)\n");
-				sectorY--;
-				break;
-			}
-			else if ('b' == inputc)
-			{
-				printf("you jump to sector (2, 4)\n");
-				sectorX++;
-				break;
-			}
-			else
-			{
-				printf("[invalid input]\n");
-				_getch();
-				system("cls");
-			}
-		}
-		}
-		else if (2 == sectorX && 4 == sectorY)
-		{
-		while (true)
-		{
-			printf("pick a jump location:\n");
-			printf("a. (2, 5)\nb. (1, 4)\nc. (3, 4)\n");
-			cin >> inputc;
-			fseek(stdin, 0, SEEK_END);
-			if ('a' == inputc)
-			{
-				printf("you jump to sector (2, 5)\n");
-				sectorY++;
-				break;
-			}
-			else if ('b' == inputc)
-			{
-				printf("you jump to sector (1, 4)\n");
-				sectorX--;
-				break;
-			}
-			else if ('c' == inputc)
-			{
-				printf("you jump to sector (3, 4)\n");
-				sectorX++;
-				break;
-			}
-			else
-			{
-				printf("[invalid input]\n");
-				_getch();
-				system("cls");
-			}
-		}
-		}
-		else if (3 == sectorX && 4 == sectorY)
-		{
-		while (true)
-		{
-			printf("pick a jump location:\n");
-			printf("a. (4, 2)\nb. (3, 3)\nc. (4, 4)\n");
-			cin >> inputc;
-			fseek(stdin, 0, SEEK_END);
-			if ('a' == inputc)
-			{
-				printf("you jump to sector (4, 2)\n");
-				sectorX--;
-				break;
-			}
-			else if ('b' == inputc)
-			{
-				printf("you jump to sector (3, 3)\n");
-				sectorY--;
-				break;
-			}
-			else if ('c' == inputc)
-			{
-				printf("you jump to sector (4, 4)\n");
-				sectorX++;
-				break;
-			}
-			else
-			{
-				printf("[invalid input]\n");
-				_getch();
-				system("cls");
-			}
-		}
-		}
-		else if (4 == sectorX && 4 == sectorY)
-		{
-		while (true)
-		{
-			printf("pick a jump location:\n");
-			printf("a. (4, 5)\nb. (3, 4)\n");
-			cin >> inputc;
-			fseek(stdin, 0, SEEK_END);
-			if ('a' == inputc)
-			{
-				printf("you jump to sector (4, 5)\n");
-				sectorY++;
-				break;
-			}
-			else if ('b' == inputc)
-			{
-				printf("you jump to sector (3, 4)\n");
-				sectorX--;
-				break;
-			}
-			else
-			{
-				printf("[invalid input]\n");
-				_getch();
-				system("cls");
-			}
-		}
-		}
-		else if (5 == sectorX && 4 == sectorY)
-		{
-		while (true)
-		{
-			printf("pick a jump location:\n");
-			printf("a. (5, 5)\nb. (5, 3)\n");
-			cin >> inputc;
-			fseek(stdin, 0, SEEK_END);
-			if ('a' == inputc)
-			{
-				printf("you jump to sector (5, 5)\n");
-				sectorY++;
-				break;
-			}
-			else if ('b' == inputc)
-			{
-				printf("you jump to sector (5, 3)\n");
-				sectorY--;
-				break;
-			}
-			else
-			{
-				printf("[invalid input]\n");
-				_getch();
-				system("cls");
-			}
-		}
-		}
-		else if (1 == sectorX && 5 == sectorY)
-		{
-		while (true)
-		{
-			printf("pick a jump location:\n");
-			printf("a. (2, 5)\n");
-			cin >> inputc;
-			fseek(stdin, 0, SEEK_END);
-			if ('a' == inputc)
-			{
-				printf("you jump to sector (2, 5)\n");
-				sectorX++;
-				break;
-			}
-			else
-			{
-				printf("[invalid input]\n");
-				_getch();
-				system("cls");
-			}
-		}
-		}
-		else if (2 == sectorX && 5 == sectorY)
-		{
-		while (true)
-		{
-			printf("pick a jump location:\n");
-			printf("a. (1, 5)\nb. (2, 4)\n");
-			cin >> inputc;
-			fseek(stdin, 0, SEEK_END);
-			if ('a' == inputc)
-			{
-				printf("you jump to sector (1, 5)\n");
-				sectorX--;
-				break;
-			}
-			else if ('b' == inputc)
-			{
-				printf("you jump to sector (2, 4)\n");
-				sectorY--;
-				break;
-			}
-			else
-			{
-				printf("[invalid input]\n");
-				_getch();
-				system("cls");
-			}
-		}
-		}
-		else if (3 == sectorX && 5 == sectorY)
-		{
-		while (true)
-		{
-			printf("pick a jump location:\n");
-			printf("a. (4, 5)\n");
-			cin >> inputc;
-			fseek(stdin, 0, SEEK_END);
-			if ('a' == inputc)
-			{
-				printf("you jump to sector (4, 5)\n");
-				sectorX++;
-				break;
-			}
-			else
-			{
-				printf("[invalid input]\n");
-				_getch();
-				system("cls");
-			}
-		}
-		}
-		else if (4 == sectorX && 5 == sectorY)
-		{
-		while (true)
-		{
-			printf("pick a jump location:\n");
-			printf("a. (3, 5)\nb. (4, 4)\nc. (5, 5)\n");
-			cin >> inputc;
-			fseek(stdin, 0, SEEK_END);
-			if ('a' == inputc)
-			{
-				printf("you jump to sector (3, 5)\n");
-				sectorX--;
-				break;
-			}
-			else if ('b' == inputc)
-			{
-				printf("you jump to sector (4, 4)\n");
-				sectorY--;
-				break;
-			}
-			else if ('c' == inputc)
-			{
-				printf("you jump to sector (5, 5)\n");
-				sectorX++;
-				break;
-			}
-			else
-			{
-				printf("[invalid input]\n");
-				_getch();
-				system("cls");
-			}
-		}
-		}
-		else if (5 == sectorX && 5 == sectorY)
-		{
-		while (true)
-		{
-			printf("pick a jump location:\n");
-			printf("a. (4, 5)\nb. (5, 4)\n");
-			cin >> inputc;
-			fseek(stdin, 0, SEEK_END);
-			if ('a' == inputc)
-			{
-				printf("you jump to sector (4, 5)\n");
-				sectorX++;
-				break;
-			}
-			else if ('b' == inputc)
-			{
-				printf("you jump to sector (5, 4)\n");
-				sectorY--;
-				break;
-			}
-			else
-			{
-				printf("[invalid input]\n");
-				_getch();
-				system("cls");
-			}
-		}
-		}
+	}
+	exit = false;
+	int playerC = 4;
+	int playerR = 4;
+	while (!exit)
+	{
+		printf("you arive in sector (%i, %i), %s\n", playerC + 1, playerR + 1, roomArray[playerC][playerR].name.c_str());
+
 	}
 	return 0;
 }
 
+void displayMap(bool(&VdoorArray)[4][5], bool(&HdoorArray)[5][4])
+{
+	int a = 1;
+	printf("%c%c%c%c%c%c%c%c%c%c%c\n", 201, 205, 203, 205, 203, 205, 203, 205, 203, 205, 187);
+	for (int r = 0; r < 5; r++)
+	{
+		a++;
+		printf("%c", 186);
+		for (int c = 0; c < 4; c++)
+		{
+			if (VdoorArray[c][r] == 1)
+			{
+				printf(" %c", 186);
+			}
+			else
+			{
+				printf("  ");
+			}
+		}
+		printf(" %c\n", 186);
+		if (a <= 5)
+		{
+			printf("%c", 204);
+			for (int c = 0; c < 4; c++)
+			{
+				if (HdoorArray[c][r] == 1)
+				{
+					printf("%c%c", 205, 206);
+				}
+				else
+				{
+					printf(" %c", 206);
+				}
+			}
+			if (HdoorArray[4][r] == 1)
+			{
+				printf("%c%c\n", 205, 185);
+			}
+			else
+			{
+				printf(" %c\n", 185);
+			}
+		}
+		else
+		{
+			printf("%c%c%c%c%c%c%c%c%c%c%c\n", 200, 205, 202, 205, 202, 205, 202, 205, 202, 205, 188);
+		}
+	}
+}
+
+int _dice(int max)//outputs a random number from 1 to max
+{
+	int rn;
+	rn = 1 + rand() % (max);
+	return rn;
+}
+
+bool encounter(string engineer, string scientist, string pilot, int engHP, int engWEP, int sciHP, int sciWEP, int pilHP, int pilWEP, int encounterID)
+{
+	if (1 == encounterID)//starting sector
+	{
+
+	}
+	if (2 == encounterID || 3 == encounterID || 4 == encounterID || 5 == encounterID || 6 == encounterID)//low difficulty enemies ID: 2-6
+	{
+
+	}
+}
