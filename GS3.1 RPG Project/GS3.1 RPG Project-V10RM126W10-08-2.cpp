@@ -95,8 +95,6 @@ bool combat(party& player, int enemyID, int& credits);
 void color(int a);
 void blocks(int a);
 void pixelArtRelay(int id);
-void printCombatGraphic(string image, int Y);
-void printImage(string image, int Y);
 void printSpaceGoblin();
 void printSp_ce();
 
@@ -306,7 +304,6 @@ int main()
 					printf("[invalid input]\n");
 					_getch();
 				}
-				
 			}
 			//exit = false;//review-----------------------------
 			break;
@@ -1338,7 +1335,7 @@ bool encounter(party &player, int encounterID, int &credits)//this is why we use
 bool combat(party& player, int enemyID, int &credits)
 {
 	system("cls");
-	bool DEBUG = true;
+	bool DEBUG = false;
 	HANDLE color = GetStdHandle(STD_OUTPUT_HANDLE);
 	HANDLE standard = GetStdHandle(STD_OUTPUT_HANDLE);
 	COORD coord;
@@ -3168,7 +3165,6 @@ void printHealthWindow(party& player, eparty& enemy)//player, enemy, number of e
 	printf("%c", 192);
 	for (int a = 1; a <= 64; a++) { printf("%c", 196); }
 	printf("%c\n", 217);
-	//cout << enemy.graphic;//old ascii graphic
 	pixelArtRelay(enemy.graphicID);//new pixel art system
 	cout << "\n";
 	//print player HP bars
@@ -3340,256 +3336,15 @@ void blocks(int a)
 
 void pixelArtRelay(int id)
 {
-	string image = "";
-	string image2 = "";
 	switch (id)
 	{
 	case 1:
-		image += "88888878888887888888788888878888n";
-		image += "88888878888887888888788888878888n";
-		image += "88888878888887888888788888878888n";
-		image += "88888878888887888888788888878888n";
-		image += "88888878888887888888788888878888n";
-		image += "88888878888887888888788888878888n";
-		image += "88888887888888788888878888887888n";
-		image += "88888888788888878888887888888788n";
-		image += "88888888878888887888888788888878n";
-		image += "88888888878888887888888788888878n";
-		image += "88888888878888887888888788888878";
-		printCombatGraphic(image, 6);
-		image2 += "                                n";
-		image2 += "              aaaa              n";
-		image2 += "          22 aaaaaa 22          n";
-		image2 += "           22a4aa4a22           n";
-		image2 += "           22aa22aa22           n";
-		image2 += "            2aa22aa2            n";
-		image2 += "             aaaaaa             n";
-		image2 += "             aa22aa             n";
-		image2 += "              aaaa              n";
-		image2 += "           2222aa2222           n";
-		image2 += "          222222222222          ";
-		printCombatGraphic(image2, 6);
+		printSpaceGoblin();
 		break;
 	default:
 		cout << "ERROR\n";
 	}
 	return;
-}
-
-void printCombatGraphic(string image, int Y)
-{
-	HANDLE standard = GetStdHandle(STD_OUTPUT_HANDLE);
-	COORD coord;
-	coord.X = 0;
-	coord.Y = Y;
-	SetConsoleCursorPosition(standard, coord);
-	coord.X = 3;
-	char line = 186;
-	color(15);
-	cout << line;
-	for (int c = 0; c < image.length(); c++)
-	{
-		if ('0' == image[c])
-		{
-			color(0);
-			blocks(1);
-		}
-		else if ('1' == image[c])
-		{
-			color(1);
-			blocks(1);
-		}
-		else if ('2' == image[c])
-		{
-			color(2);
-			blocks(1);
-		}
-		else if ('3' == image[c])
-		{
-			color(3);
-			blocks(1);
-		}
-		else if ('4' == image[c])
-		{
-			color(4);
-			blocks(1);
-		}
-		else if ('5' == image[c])
-		{
-			color(5);
-			blocks(1);
-		}
-		else if ('6' == image[c])
-		{
-			color(6);
-			blocks(1);
-		}
-		else if ('7' == image[c])
-		{
-			color(7);
-			blocks(1);
-		}
-		else if ('8' == image[c])
-		{
-			color(8);
-			blocks(1);
-		}
-		else if ('9' == image[c])
-		{
-			color(9);
-			blocks(1);
-		}
-		else if ('a' == image[c])
-		{
-			color(10);
-			blocks(1);
-		}
-		else if ('b' == image[c])
-		{
-			color(11);
-			blocks(1);
-		}
-		else if ('c' == image[c])
-		{
-			color(12);
-			blocks(1);
-		}
-		else if ('d' == image[c])
-		{
-			color(13);
-			blocks(1);
-		}
-		else if ('e' == image[c])
-		{
-			color(14);
-			blocks(1);
-		}
-		else if ('f' == image[c])
-		{
-			color(15);
-			blocks(1);
-		}
-		else if (' ' == image[c])
-		{
-			SetConsoleCursorPosition(standard, coord);
-		}
-		else if ('n' == image[c])
-		{
-			color(15);
-			cout << line << "\n" << line;
-			coord.Y++;
-			coord.X = 1;
-		}
-		coord.X += 2;
-	}
-	coord.X -= 2;
-	color(15);
-	SetConsoleCursorPosition(standard, coord);
-	cout << line;
-}
-
-void printImage(string image, int Y)
-{
-	HANDLE standard = GetStdHandle(STD_OUTPUT_HANDLE);
-	COORD coord;
-	coord.X = 0;
-	coord.Y = Y;
-	SetConsoleCursorPosition(standard, coord);
-	coord.X = 2;
-	for (int c = 0; c < image.length(); c++)
-	{
-		if ('0' == image[c])
-		{
-			color(0);
-			blocks(1);
-		}
-		else if ('1' == image[c])
-		{
-			color(1);
-			blocks(1);
-		}
-		else if ('2' == image[c])
-		{
-			color(2);
-			blocks(1);
-		}
-		else if ('3' == image[c])
-		{
-			color(3);
-			blocks(1);
-		}
-		else if ('4' == image[c])
-		{
-			color(4);
-			blocks(1);
-		}
-		else if ('5' == image[c])
-		{
-			color(5);
-			blocks(1);
-		}
-		else if ('6' == image[c])
-		{
-			color(6);
-			blocks(1);
-		}
-		else if ('7' == image[c])
-		{
-			color(7);
-			blocks(1);
-		}
-		else if ('8' == image[c])
-		{
-			color(8);
-			blocks(1);
-		}
-		else if ('9' == image[c])
-		{
-			color(9);
-			blocks(1);
-		}
-		else if ('a' == image[c])
-		{
-			color(10);
-			blocks(1);
-		}
-		else if ('b' == image[c])
-		{
-			color(11);
-			blocks(1);
-		}
-		else if ('c' == image[c])
-		{
-			color(12);
-			blocks(1);
-		}
-		else if ('d' == image[c])
-		{
-			color(13);
-			blocks(1);
-		}
-		else if ('e' == image[c])
-		{
-			color(14);
-			blocks(1);
-		}
-		else if ('f' == image[c])
-		{
-			color(15);
-			blocks(1);
-		}
-		else if (' ' == image[c])
-		{
-			SetConsoleCursorPosition(standard, coord);
-		}
-		else if ('n' == image[c])
-		{
-			cout << "\n";
-			coord.Y++;
-			coord.X = 0;
-		}
-		coord.X += 2;
-	}
 }
 
 void printSpaceGoblin()

@@ -95,10 +95,7 @@ bool combat(party& player, int enemyID, int& credits);
 void color(int a);
 void blocks(int a);
 void pixelArtRelay(int id);
-void printCombatGraphic(string image, int Y);
-void printImage(string image, int Y);
 void printSpaceGoblin();
-void printSp_ce();
 
 void spaceGoblinAI(party& player, eparty& enemyParty, int a, int turnNum);
 void spaceGoblinActions(party& player, eparty& enemyParty, int e);
@@ -111,10 +108,7 @@ int main()
 	printf("After a terrible accident they are stranded in a dangerous region of the galaxy thousands of lightyears from home.\n");
 	printf("They will need to fight through the galaxy's most dangerous foes to get them home and find out the truth about what\nhappened in...\n\n");
 	_getch();
-	system("cls");
-	printSp_ce();
-	_getch();
-	system("cls");
+	printf("Sp_ce\n\n");
 	party player;
 	printf("your first crew member is the engineer\nWhat is their name?\n");
 	getline(cin, player.eng.name);
@@ -123,9 +117,9 @@ int main()
 	printf("the last crew member is the pilot\nWhat is their name?\n");
 	getline(cin, player.pil.name);
 	printf("generating random health pools...\n");
-	player.eng.wep = 1;
-	player.sci.wep = 1;
-	player.pil.wep = 1;
+	player.eng.wep = 0;
+	player.sci.wep = 0;
+	player.pil.wep = 0;
 	int crewMin = 9; //using variables in case I want to add difficulty modes later
 	int crewMax = 15;
 	player.eng.HP = crewMin + rand() % (crewMax - crewMin + 1) + 3; //engi has more HP, sci has less
@@ -1338,7 +1332,7 @@ bool encounter(party &player, int encounterID, int &credits)//this is why we use
 bool combat(party& player, int enemyID, int &credits)
 {
 	system("cls");
-	bool DEBUG = true;
+	bool DEBUG = false;
 	HANDLE color = GetStdHandle(STD_OUTPUT_HANDLE);
 	HANDLE standard = GetStdHandle(STD_OUTPUT_HANDLE);
 	COORD coord;
@@ -1390,21 +1384,18 @@ bool combat(party& player, int enemyID, int &credits)
 	spaceGoblin.e1.HP = 9;
 	spaceGoblin.e1.HPmax = 9;
 	spaceGoblin.e1.dead = false;
-	spaceGoblin.e1.ID = 1;
 	spaceGoblin.e2.name = "Space Goblin Tom";
 	spaceGoblin.e2.atk = 3;
 	spaceGoblin.e2.atkMulti = 1.0;
 	spaceGoblin.e2.HP = 9;
 	spaceGoblin.e2.HPmax = 9;
 	spaceGoblin.e2.dead = false;
-	spaceGoblin.e2.ID = 1;
 	spaceGoblin.e3.name = "Space Goblin Tam";
 	spaceGoblin.e3.atk = 3;
 	spaceGoblin.e3.atkMulti = 1.0;
 	spaceGoblin.e3.HP = 9;
 	spaceGoblin.e3.HPmax = 9;
 	spaceGoblin.e3.dead = false;
-	spaceGoblin.e3.ID = 1;
 	spaceGoblin.ship.HP = 20;
 	spaceGoblin.ship.HPmax = 20;
 	spaceGoblin.ship.name = "Goblin Junker";
@@ -2465,7 +2456,7 @@ bool combat(party& player, int enemyID, int &credits)
 		switch (enemyParty.e1.ID)
 		{
 		case 1:
-			spaceGoblinAI(player, enemyParty, 0, turnNum);
+			spaceGoblinAI(player, enemyParty, 1, turnNum);
 			break;
 		}
 		switch (enemyParty.e2.ID)
@@ -2477,7 +2468,7 @@ bool combat(party& player, int enemyID, int &credits)
 		switch (enemyParty.e3.ID)
 		{
 		case 1:
-			spaceGoblinAI(player, enemyParty, 2, turnNum);
+			spaceGoblinAI(player, enemyParty, 1, turnNum);
 			break;
 		}
 		if (DEBUG)//artificial enemy actions
@@ -2881,7 +2872,7 @@ bool combat(party& player, int enemyID, int &credits)
 							player.eng.HP += 1;
 						}
 					}
-					else if (2 == player.pil.target)//on scientist
+					else if (3 == player.pil.target)//on scientist
 					{
 						if (1 == player.pil.wep)//heals
 						{
@@ -3340,256 +3331,15 @@ void blocks(int a)
 
 void pixelArtRelay(int id)
 {
-	string image = "";
-	string image2 = "";
 	switch (id)
 	{
 	case 1:
-		image += "88888878888887888888788888878888n";
-		image += "88888878888887888888788888878888n";
-		image += "88888878888887888888788888878888n";
-		image += "88888878888887888888788888878888n";
-		image += "88888878888887888888788888878888n";
-		image += "88888878888887888888788888878888n";
-		image += "88888887888888788888878888887888n";
-		image += "88888888788888878888887888888788n";
-		image += "88888888878888887888888788888878n";
-		image += "88888888878888887888888788888878n";
-		image += "88888888878888887888888788888878";
-		printCombatGraphic(image, 6);
-		image2 += "                                n";
-		image2 += "              aaaa              n";
-		image2 += "          22 aaaaaa 22          n";
-		image2 += "           22a4aa4a22           n";
-		image2 += "           22aa22aa22           n";
-		image2 += "            2aa22aa2            n";
-		image2 += "             aaaaaa             n";
-		image2 += "             aa22aa             n";
-		image2 += "              aaaa              n";
-		image2 += "           2222aa2222           n";
-		image2 += "          222222222222          ";
-		printCombatGraphic(image2, 6);
+		printSpaceGoblin();
 		break;
 	default:
 		cout << "ERROR\n";
 	}
 	return;
-}
-
-void printCombatGraphic(string image, int Y)
-{
-	HANDLE standard = GetStdHandle(STD_OUTPUT_HANDLE);
-	COORD coord;
-	coord.X = 0;
-	coord.Y = Y;
-	SetConsoleCursorPosition(standard, coord);
-	coord.X = 3;
-	char line = 186;
-	color(15);
-	cout << line;
-	for (int c = 0; c < image.length(); c++)
-	{
-		if ('0' == image[c])
-		{
-			color(0);
-			blocks(1);
-		}
-		else if ('1' == image[c])
-		{
-			color(1);
-			blocks(1);
-		}
-		else if ('2' == image[c])
-		{
-			color(2);
-			blocks(1);
-		}
-		else if ('3' == image[c])
-		{
-			color(3);
-			blocks(1);
-		}
-		else if ('4' == image[c])
-		{
-			color(4);
-			blocks(1);
-		}
-		else if ('5' == image[c])
-		{
-			color(5);
-			blocks(1);
-		}
-		else if ('6' == image[c])
-		{
-			color(6);
-			blocks(1);
-		}
-		else if ('7' == image[c])
-		{
-			color(7);
-			blocks(1);
-		}
-		else if ('8' == image[c])
-		{
-			color(8);
-			blocks(1);
-		}
-		else if ('9' == image[c])
-		{
-			color(9);
-			blocks(1);
-		}
-		else if ('a' == image[c])
-		{
-			color(10);
-			blocks(1);
-		}
-		else if ('b' == image[c])
-		{
-			color(11);
-			blocks(1);
-		}
-		else if ('c' == image[c])
-		{
-			color(12);
-			blocks(1);
-		}
-		else if ('d' == image[c])
-		{
-			color(13);
-			blocks(1);
-		}
-		else if ('e' == image[c])
-		{
-			color(14);
-			blocks(1);
-		}
-		else if ('f' == image[c])
-		{
-			color(15);
-			blocks(1);
-		}
-		else if (' ' == image[c])
-		{
-			SetConsoleCursorPosition(standard, coord);
-		}
-		else if ('n' == image[c])
-		{
-			color(15);
-			cout << line << "\n" << line;
-			coord.Y++;
-			coord.X = 1;
-		}
-		coord.X += 2;
-	}
-	coord.X -= 2;
-	color(15);
-	SetConsoleCursorPosition(standard, coord);
-	cout << line;
-}
-
-void printImage(string image, int Y)
-{
-	HANDLE standard = GetStdHandle(STD_OUTPUT_HANDLE);
-	COORD coord;
-	coord.X = 0;
-	coord.Y = Y;
-	SetConsoleCursorPosition(standard, coord);
-	coord.X = 2;
-	for (int c = 0; c < image.length(); c++)
-	{
-		if ('0' == image[c])
-		{
-			color(0);
-			blocks(1);
-		}
-		else if ('1' == image[c])
-		{
-			color(1);
-			blocks(1);
-		}
-		else if ('2' == image[c])
-		{
-			color(2);
-			blocks(1);
-		}
-		else if ('3' == image[c])
-		{
-			color(3);
-			blocks(1);
-		}
-		else if ('4' == image[c])
-		{
-			color(4);
-			blocks(1);
-		}
-		else if ('5' == image[c])
-		{
-			color(5);
-			blocks(1);
-		}
-		else if ('6' == image[c])
-		{
-			color(6);
-			blocks(1);
-		}
-		else if ('7' == image[c])
-		{
-			color(7);
-			blocks(1);
-		}
-		else if ('8' == image[c])
-		{
-			color(8);
-			blocks(1);
-		}
-		else if ('9' == image[c])
-		{
-			color(9);
-			blocks(1);
-		}
-		else if ('a' == image[c])
-		{
-			color(10);
-			blocks(1);
-		}
-		else if ('b' == image[c])
-		{
-			color(11);
-			blocks(1);
-		}
-		else if ('c' == image[c])
-		{
-			color(12);
-			blocks(1);
-		}
-		else if ('d' == image[c])
-		{
-			color(13);
-			blocks(1);
-		}
-		else if ('e' == image[c])
-		{
-			color(14);
-			blocks(1);
-		}
-		else if ('f' == image[c])
-		{
-			color(15);
-			blocks(1);
-		}
-		else if (' ' == image[c])
-		{
-			SetConsoleCursorPosition(standard, coord);
-		}
-		else if ('n' == image[c])
-		{
-			cout << "\n";
-			coord.Y++;
-			coord.X = 0;
-		}
-		coord.X += 2;
-	}
 }
 
 void printSpaceGoblin()
@@ -3867,336 +3617,6 @@ void printSpaceGoblin()
 	cout << bb;
 	color(15);
 	cout << line;//end of line 10
-	return;
-}
-
-void printSp_ce()
-{
-	color(0);
-	for (int a = 0; a < 4; a++)
-	{
-		blocks(60);
-		cout << "\n";
-	}
-	blocks(4);
-	color(15);
-	blocks(11);
-	color(0);
-	blocks(44);
-	cout << "\n";
-	blocks(3);
-	color(15);
-	blocks(12);
-	color(0);
-	blocks(44);
-	cout << "\n";
-	blocks(2);
-	color(15);
-	blocks(3);
-	color(0);
-	blocks(55);
-	cout << "\n";
-	blocks(1);
-	color(15);
-	blocks(3);
-	color(0);
-	blocks(56);
-	cout << "\n";
-	for (int a = 0; a < 4; a++)
-	{
-		blocks(1);
-		color(15);
-		blocks(2);
-		color(0);
-		blocks(57);
-		cout << "\n";
-	}
-	blocks(1);
-	color(15);
-	blocks(3);
-	color(0);
-	blocks(56);
-	cout << "\n";
-	blocks(2);
-	color(15);
-	blocks(3);
-	color(0);
-	blocks(55);
-	cout << "\n";//begining of first line of lowercase letters
-	blocks(3);
-	color(15);
-	blocks(9);
-	color(0);
-	blocks(4);
-	color(15);
-	blocks(2);
-	color(0);
-	blocks(1);
-	color(15);
-	blocks(5);
-	color(0);
-	blocks(17);
-	color(15);
-	blocks(7);
-	color(0);
-	blocks(3);
-	color(15);
-	blocks(6);
-	color(0);
-	blocks(3);
-	cout << "\n";
-	blocks(4);
-	color(15);
-	blocks(9);
-	color(0);
-	blocks(3);
-	color(15);
-	blocks(9);
-	color(0);
-	blocks(15);
-	color(15);
-	blocks(8);
-	color(0);
-	blocks(2);
-	color(15);
-	blocks(8);
-	color(0);
-	blocks(2);
-	cout << "\n";
-	blocks(11);
-	color(15);
-	blocks(3);
-	color(0);
-	blocks(2);
-	color(15);
-	blocks(4);
-	color(0);
-	blocks(3);
-	color(15);
-	blocks(3);
-	color(0);
-	blocks(13);
-	color(15);
-	blocks(3);
-	color(0);
-	blocks(8);
-	color(15);
-	blocks(2);
-	color(0);
-	blocks(4);
-	color(15);
-	blocks(2);
-	color(0);
-	blocks(2);
-	cout << "\n";
-	blocks(12);
-	color(15);
-	blocks(3);
-	color(0);
-	blocks(1);
-	color(15);
-	blocks(2);
-	color(0);
-	blocks(6);
-	color(15);
-	blocks(3);
-	color(0);
-	blocks(11);
-	color(15);
-	blocks(3);
-	color(0);
-	blocks(8);
-	color(15);
-	blocks(2);
-	color(0);
-	blocks(6);
-	color(15);
-	blocks(2);
-	color(0);
-	blocks(1);
-	cout << "\n";
-	blocks(13);
-	color(15);
-	blocks(2);
-	color(0);
-	blocks(1);
-	color(15);
-	blocks(2);
-	color(0);
-	blocks(7);
-	color(15);
-	blocks(2);
-	color(0);
-	blocks(11);
-	color(15);
-	blocks(2);
-	color(0);
-	blocks(9);
-	color(15);
-	blocks(2);
-	color(0);
-	blocks(6);
-	color(15);
-	blocks(2);
-	color(0);
-	blocks(1);
-	cout << "\n";
-	for (int a = 0; a < 2; a++)
-	{
-		blocks(13);
-		color(15);
-		blocks(2);
-		color(0);
-		blocks(1);
-		color(15);
-		blocks(2);
-		color(0);
-		blocks(7);
-		color(15);
-		blocks(2);
-		color(0);
-		blocks(11);
-		color(15);
-		blocks(2);
-		color(0);
-		blocks(9);
-		color(15);
-		blocks(10);
-		color(0);
-		blocks(1);
-		cout << "\n";
-	}
-	blocks(13);
-	color(15);
-	blocks(2);
-	color(0);
-	blocks(1);
-	color(15);
-	blocks(2);
-	color(0);
-	blocks(7);
-	color(15);
-	blocks(2);
-	color(0);
-	blocks(11);
-	color(15);
-	blocks(2);
-	color(0);
-	blocks(9);
-	color(15);
-	blocks(2);
-	color(0);
-	blocks(9);
-	cout << "\n";
-	blocks(12);
-	color(15);
-	blocks(3);
-	color(0);
-	blocks(1);
-	color(15);
-	blocks(2);
-	color(0);
-	blocks(6);
-	color(15);
-	blocks(3);
-	color(0);
-	blocks(11);
-	color(15);
-	blocks(3);
-	color(0);
-	blocks(8);
-	color(15);
-	blocks(2);
-	color(0);
-	blocks(9);
-	cout << "\n";
-	blocks(11);
-	color(15);
-	blocks(3);
-	color(0);
-	blocks(2);
-	color(15);
-	blocks(4);
-	color(0);
-	blocks(3);
-	color(15);
-	blocks(3);
-	color(0);
-	blocks(13);
-	color(15);
-	blocks(3);
-	color(0);
-	blocks(8);
-	color(15);
-	blocks(2);
-	color(0);
-	blocks(4);
-	color(15);
-	blocks(2);
-	color(0);
-	blocks(2);
-	cout << "\n";
-	blocks(1);
-	color(15);
-	blocks(12);
-	color(0);
-	blocks(3);
-	color(15);
-	blocks(9);
-	color(0);
-	blocks(3);
-	color(15);
-	blocks(9);
-	color(0);
-	blocks(3);
-	color(15);
-	blocks(8);
-	color(0);
-	blocks(2);
-	color(15);
-	blocks(8);
-	color(0);
-	blocks(2);
-	cout << "\n";
-	blocks(1);
-	color(15);
-	blocks(11);
-	color(0);
-	blocks(4);
-	color(15);
-	blocks(2);
-	color(0);
-	blocks(1);
-	color(15);
-	blocks(5);
-	color(0);
-	blocks(4);
-	color(15);
-	blocks(9);
-	color(0);
-	blocks(4);
-	color(15);
-	blocks(7);
-	color(0);
-	blocks(3);
-	color(15);
-	blocks(6);
-	color(0);
-	blocks(3);
-	cout << "\n";
-	for (int a = 0; a < 4; a++)
-	{
-		blocks(16);
-		color(15);
-		blocks(2);
-		color(0);
-		blocks(42);
-		if (a < 3)
-		{
-			cout << "\n";
-		}
-	}
-	color(15);
 	return;
 }
 
