@@ -1,1 +1,55 @@
-first section - shoot down asteroids that can't harm you.
+General Notes:
+	if an enemy doesn't evade, the player will miss if the accuracy of their weapon is the minimum possible value
+	escaping damages your ship. ship can only be repaired at certain places (NPCs, ???)
+
+NPCs
+	- Space Lizard
+		- Heals you if you can beat him at brawlhalla (based on attack damage or minigame)
+		- Gives "Lizard Staff" and "Wizard Tail" healing abilities (trade offs ex. less healing, more uses per battle, or small AoE heals vs single big heal)
+	- Miyoshi
+		- gives "Large Stapler" and "Print Project" attack moves
+	- Blueberry
+		- Heals your party if you can beat him at smash (based on attack damage or minigame)
+		- Gives "Insult" defensive move
+Moves
+	Attacks
+		Basic Attack :: ID 0
+			attack damage = 8
+			accuracy = 10 + _dice(25)
+		Large Stapler :: ID 1
+			attack damage = 1 + _dice(5)
+			gets AtkMulti x 3
+			accuracy = 20 + _dice(15)
+		Print Project :: ID 2
+			attack damage = (0.06 * printedProjects^2) + (0.1 * printedProjects)
+			player.printedProjects starts at 0
+			increases player.printedProjects counter by 1 every time it is used
+			accuracy = 15 + _dice(20)
+	Specials
+		Basic Heal :: ID 0
+			gives a single party member + 4 health
+		Lizard Staff :: ID 1
+			heals each party member by 2 HP and gives + 0.1 to damage multiplier
+		Wizard Tail :: ID 2
+			Gives single party member + 0.3 atkMulti
+	Defensive
+		Basic Evade :: ID 0
+			adds 20 + _dice(20) to evasion score
+		Insult :: ID 1
+Enemies
+	SpaceGoblin :: party and enemy ID 0
+		accuracy = 20 + _dice(10)
+			adds 20 + _dice(30) to evasion score
+	RobotSwarm :: party ID 2
+		drone :: enemy ID 2
+			accuracy 15 + _dice(15)
+		brain :: enemy ID 3
+			accuracy 15 + _dice(15)
+		5 enemies, 4 bots and 1 "brain" (larger bot)
+		bots will occaisonally heal the brain, which deals masive damage, encouraging players to evade the brain and target the bots
+		image could have the brain in the middle and bots around it that could be removed as they die
+		the encounter would end when the brain dies but the bots have to do enough healing that the player must kill some of them off before trying to kill the
+		brain
+	squid :: party and enemy ID 1
+		accuracy = 25 + _dice(5)
+		
