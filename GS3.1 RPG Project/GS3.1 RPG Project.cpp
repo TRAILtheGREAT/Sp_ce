@@ -959,17 +959,17 @@ bool encounter(party &player, int encounterID, int &credits, vector <eparty> ene
 			cout << "a haphazardly constructed vessel suddenly careens into the ship's starbord side" << endl;
 			cout << "rushing to assess the damage, your crew stumbles upon a band of three raggedy goblins ravaging the crew quarters" << endl;
 			_getch();
-			combat(player, enemyVector[2], credits);
+			combat(player, enemyVector[0], credits);
 			break;
 		case 2:
-			cout << "a haphazardly constructed vessel suddenly careens into the ship's starbord side" << endl;
-			cout << "rushing to assess the damage, your crew stumbles upon a band of three raggedy goblins ravaging the crew quarters" << endl;
+			cout << "your crew exits warp straight into an astroid field" << endl;
+			cout << "they begin to get an uneasy feeling when a breach is detected and tentacled creatures can be seen creeping into the ship" << endl;
 			_getch();
-			combat(player, enemyVector[2], credits);
+			combat(player, enemyVector[1], credits);
 			break;
 		case 3:
-			cout << "a haphazardly constructed vessel suddenly careens into the ship's starbord side" << endl;
-			cout << "rushing to assess the damage, your crew stumbles upon a band of three raggedy goblins ravaging the crew quarters" << endl;
+			cout << "lazers flash across the sky in this new sector" << endl;
+			cout << "a squad of armed drones spot your ship and move in to attack" << endl;
 			_getch();
 			combat(player, enemyVector[2], credits);
 			break;
@@ -981,14 +981,14 @@ bool encounter(party &player, int encounterID, int &credits, vector <eparty> ene
 		switch (_dice(2))
 		{
 		case 1:
-			cout << "a haphazardly constructed vessel suddenly careens into the ship's starbord side" << endl;
-			cout << "rushing to assess the damage, your crew stumbles upon a band of three raggedy goblins ravaging the crew quarters" << endl;
+			cout << "your crew exits warp straight into an astroid field" << endl;
+			cout << "they begin to get an uneasy feeling when a breach is detected and tentacled creatures can be seen creeping into the ship" << endl;
 			_getch();
-			combat(player, enemyVector[2], credits);
+			combat(player, enemyVector[1], credits);
 			break;
 		case 2:
-			cout << "a haphazardly constructed vessel suddenly careens into the ship's starbord side" << endl;
-			cout << "rushing to assess the damage, your crew stumbles upon a band of three raggedy goblins ravaging the crew quarters" << endl;
+			cout << "lazers flash across the sky in this new sector" << endl;
+			cout << "a squad of armed drones spot your ship and move in to attack" << endl;
 			_getch();
 			combat(player, enemyVector[2], credits);
 			break;
