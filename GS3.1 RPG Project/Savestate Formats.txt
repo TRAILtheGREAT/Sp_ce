@@ -1,0 +1,16 @@
+------------------------------Enemies----------------------------
+//graphicBackID
+//graphicForID
+//a
+//ID, name, atk, HP and HPmax, dodgeValue
+------------------------------CrewSave---------------------------
+//name,HP,HPmax (ship)
+//projectsPrinted
+//name,HP,HPmax,dead,attackID,specialID,defenceID (eng)
+//name,HP,HPmax,dead,attackID,specialID,defenceID (sci)
+//name,HP,HPmax,dead,attackID,specialID,defenceID (pil)
+------------------------------MapSave----------------------------
+//condition (bool)
+//VdoorArray
+//HdoorArray
+//name,encounterID

@@ -39,6 +39,7 @@
 #include <string>
 #include <vector>
 #include <Windows.h>
+#include <fstream>
 
 using namespace std;
 
@@ -57,7 +58,7 @@ struct point
 struct crew
 {
 	string name;
-	int HP, HPmax, atk;
+	int HP, HPmax;
 	bool dead;
 	action act;//attacking, using special, evading...
 	int target;//which crew/enemy is being targeted
@@ -69,7 +70,6 @@ struct vessel
 {
 	string name;
 	int HP, HPmax;
-	action act;
 };
 struct party
 {
@@ -125,11 +125,16 @@ void droneBrainActions(party& player, eparty& enemyParty, int e);
 void largeStapelerAttack(party& player, eparty& enemyParty, int p);
 void basicAttack(party& player, eparty& enemyParty, int p);
 void basicHeal(party& player, eparty& enemyParty, int p);
-void basicEvade(party& player, eparty& enemyParty, int p);
+void basicEvade(party& player, int p);
+
+void updateCrewSave(party player);
 
 int main()
 {
 	srand((unsigned)time(NULL));
+	ifstream in;
+	ofstream out;
+	in.open("Enemies.txt");
 	cout << "LOADING...";
 	//realy wish i could use file IO
 	//easy enemies: space Golbin, Ooze, spider drone, squid
@@ -138,6 +143,45 @@ int main()
 	eparty tempParty;
 	enemy tempEnemy;
 	vector <eparty> enemyVector;
+	while (true)
+	{
+		tempParty.eVect.clear();
+		string temp;
+		getline(in, temp);
+		if ("END" == temp)
+		{
+			break;
+		}
+		tempParty.graphicBackID = stoi(temp);
+		getline(in, temp);
+		tempParty.graphicForID = stoi(temp);
+		getline(in, temp);
+		tempParty.a = stoi(temp);
+		while (true)
+		{
+			getline(in, temp, ',');
+			if ("ENDPARTY" == temp)
+			{
+				getline(in, temp);
+				break;
+			}
+			tempEnemy.ID = stoi(temp);
+			getline(in, temp, ',');
+			tempEnemy.name = temp;
+			getline(in, temp, ',');
+			tempEnemy.atk = stoi(temp);
+			getline(in, temp, ',');
+			tempEnemy.HP = stoi(temp);
+			tempEnemy.HPmax = stoi(temp);
+			getline(in, temp);
+			tempEnemy.dodgeValue = stoi(temp);
+			tempEnemy.atkMulti = 1.0;
+			tempEnemy.dead = false;
+			tempParty.eVect.push_back(tempEnemy);
+		}
+		enemyVector.push_back(tempParty);
+	}
+	/*
 	//space Goblin Party of 6
 	tempEnemy.name = "Tam";
 	tempEnemy.atk = 3;
@@ -218,504 +262,609 @@ int main()
 	tempParty.graphicForID = 3;
 	tempParty.a = 5;
 	enemyVector.push_back(tempParty);
-	system("cls");
-	printf("Hello!\nMy name is Trail Sammarco, the creator of this game.\nMiyoshi says that introductions should be written last so that's all I'll say about that.\n\n");
-	printf("You are in control of a group of 3 cosmonauts.\n");
-	printf("After a terrible accident they are stranded in a dangerous region of the galaxy thousands of lightyears from home.\n");
-	printf("They will need to fight through the galaxy's most dangerous foes to get them home and find out the truth about what\nhappened in...\n\n");
-	_getch();
-	system("cls");
-	pixelArtRelay(1, 1);
-	_getch();
-	system("cls");
+	*/
+	in.close();
+	in.open("CrewSave.txt");
+	string fileTemp;
+	getline(in, fileTemp, ',');
 	party player;
-	crew tempCrew;
-	player.cVect.push_back(tempCrew);
-	player.cVect.push_back(tempCrew);
-	player.cVect.push_back(tempCrew);
-	printf("your first crew member is the engineer\nWhat is their name?\n");
-	getline(cin, player.cVect[0].name);
-	printf("your second crew member is the scientist\nWhat is their name?\n");
-	getline(cin, player.cVect[1].name);
-	printf("the last crew member is the pilot\nWhat is their name?\n");
-	getline(cin, player.cVect[2].name);
-	printf("generating random health pools...\n");
-	int crewMin = 9; //using variables in case I want to add difficulty modes later
-	int crewMax = 15;
-	player.cVect[0].HP = crewMin + rand() % (crewMax - crewMin + 1) + 3; //engi has more HP, sci has less
-	player.cVect[1].HP = crewMin + rand() % (crewMax - crewMin + 1) - 2;
-	player.cVect[2].HP = crewMin + rand() % (crewMax - crewMin + 1);
-	player.cVect[0].HPmax = player.cVect[0].HP;
-	player.cVect[0].dead = false;
-	player.cVect[1].HPmax = player.cVect[1].HP;
-	player.cVect[1].dead = false;
-	player.cVect[2].HPmax = player.cVect[2].HP;
-	player.cVect[2].dead = false;
-	int shipMin = 15;
-	int shipMax = 25;
-	player.ship.HP = 15 + rand() % (25 - 15 + 1);
-	player.ship.HPmax = player.ship.HP;
-	printf("%s the engineer: %i HP\n", player.cVect[0].name.c_str(), player.cVect[0].HP);
-	printf("%s the scientist: %i HP\n", player.cVect[1].name.c_str(), player.cVect[1].HP);
-	printf("%s the pilot: %i HP\n", player.cVect[2].name.c_str(), player.cVect[2].HP);
+	if ("0" == fileTemp)//no savestate
+	{
+		out.open("CrewSave.txt");
+		system("cls");
+		printf("Hello!\nMy name is Trail Sammarco, the creator of this game.\nMiyoshi says that introductions should be written last so that's all I'll say about that.\n\n");
+		printf("You are in control of a group of 3 cosmonauts.\n");
+		printf("After a terrible accident they are stranded in a dangerous region of the galaxy thousands of lightyears from home.\n");
+		printf("They will need to fight through the galaxy's most dangerous foes to get them home and find out the truth about what\nhappened in...\n\n");
+		_getch();
+		system("cls");
+		pixelArtRelay(1, 1);
+		_getch();
+		system("cls");
+		crew tempCrew;
+		player.cVect.push_back(tempCrew);
+		player.cVect.push_back(tempCrew);
+		player.cVect.push_back(tempCrew);
+		printf("your first crew member is the engineer\nWhat is their name?\n");
+		getline(cin, player.cVect[0].name);
+		printf("your second crew member is the scientist\nWhat is their name?\n");
+		getline(cin, player.cVect[1].name);
+		printf("the last crew member is the pilot\nWhat is their name?\n");
+		getline(cin, player.cVect[2].name);
+		printf("generating random health pools...\n");
+		int crewMin = 9; //using variables in case I want to add difficulty modes later
+		int crewMax = 15;
+		player.cVect[0].HP = crewMin + rand() % (crewMax - crewMin + 1) + 3; //engi has more HP, sci has less
+		player.cVect[1].HP = crewMin + rand() % (crewMax - crewMin + 1) - 2;
+		player.cVect[2].HP = crewMin + rand() % (crewMax - crewMin + 1);
+		player.cVect[0].HPmax = player.cVect[0].HP;
+		player.cVect[0].dead = false;
+		player.cVect[1].HPmax = player.cVect[1].HP;
+		player.cVect[1].dead = false;
+		player.cVect[2].HPmax = player.cVect[2].HP;
+		player.cVect[2].dead = false;
+		int shipMin = 15;
+		int shipMax = 25;
+		player.ship.HP = 15 + rand() % (25 - 15 + 1);
+		player.ship.HPmax = player.ship.HP;
+		printf("%s the engineer: %i HP\n", player.cVect[0].name.c_str(), player.cVect[0].HP);
+		printf("%s the scientist: %i HP\n", player.cVect[1].name.c_str(), player.cVect[1].HP);
+		printf("%s the pilot: %i HP\n", player.cVect[2].name.c_str(), player.cVect[2].HP);
 
-	printf("%s, %s, and %s have found themselves stranded on an abandoned asteroid mining station\n", player.cVect[0].name.c_str(), player.cVect[1].name.c_str(), player.cVect[2].name.c_str());
-	printf("they find an old mining vesslewith a bit of fuel still in the tank\n");
-	printf("what do they name the ship?\n");
-	getline(cin, player.ship.name);
-	printf("after %s does some repairs, %s is ready to fly\n", player.cVect[0].name.c_str(), player.ship.name.c_str());
-	printf("%s has %i HP\n[press any key to continue]\n", player.ship.name.c_str(), player.ship.HP);
-	_getch();
+		printf("%s, %s, and %s have found themselves stranded on an abandoned asteroid mining station\n", player.cVect[0].name.c_str(), player.cVect[1].name.c_str(), player.cVect[2].name.c_str());
+		printf("they find an old mining vesslewith a bit of fuel still in the tank\n");
+		printf("what do they name the ship?\n");
+		getline(cin, player.ship.name);
+		printf("after %s does some repairs, %s is ready to fly\n", player.cVect[0].name.c_str(), player.ship.name.c_str());
+		printf("%s has %i HP\n[press any key to continue]\n", player.ship.name.c_str(), player.ship.HP);
+		_getch();
+		system("cls");
+		printf("there are some items left in the lockers that the miners left behind\n");
+		printf("the crew scavenges what they can\n");
+		player.cVect[0].attackID = 0;
+		player.cVect[0].defenceID = 0;
+		player.cVect[0].specialID = 0;
+		player.cVect[1].attackID = 1;
+		player.cVect[1].defenceID = 0;
+		player.cVect[1].specialID = 0;
+		player.cVect[2].attackID = 0;
+		player.cVect[2].defenceID = 0;
+		player.cVect[2].specialID = 0;
+		player.projectsPrinted = 0;
+		// JoeJoeJoeBob
+		updateCrewSave(player);
+		printf("With the ship fully operational and your party fully equiped, the crew sets off into the great unknown...\n[press any key to continue]");
+		_getch();
+	}
+	else//inport existing savestate
+	{
+		player.ship.name = fileTemp;
+		getline(in, fileTemp, ',');
+		player.ship.HP = stoi(fileTemp);
+		getline(in, fileTemp);
+		player.ship.HPmax = stoi(fileTemp);
+		getline(in, fileTemp);
+		player.projectsPrinted = stoi(fileTemp);
+		crew temp;
+		for (int a = 0; a < 3; a++)
+		{
+			getline(in, fileTemp, ',');
+			temp.name = fileTemp;
+			getline(in, fileTemp, ',');
+			temp.HP = stoi(fileTemp);
+			getline(in, fileTemp, ',');
+			temp.HPmax = stoi(fileTemp);
+			getline(in, fileTemp, ',');
+			temp.dead = stoi(fileTemp);
+			getline(in, fileTemp, ',');
+			temp.attackID = stoi(fileTemp);
+			getline(in, fileTemp, ',');
+			temp.specialID = stoi(fileTemp);
+			getline(in, fileTemp, ',');
+			temp.defenceID = stoi(fileTemp);
+			player.cVect.push_back(temp);
+		}
+	}
 	system("cls");
-	printf("there are some items left in the lockers that the miners left behind\n");
-	printf("the crew scavenges what they can\n");
-	player.cVect[0].attackID = 0;
-	player.cVect[0].defenceID = 0;
-	player.cVect[0].specialID = 0;
-	player.cVect[1].attackID = 1;
-	player.cVect[1].defenceID = 0;
-	player.cVect[1].specialID = 0;
-	player.cVect[2].attackID = 0;
-	player.cVect[2].defenceID = 0;
-	player.cVect[2].specialID = 0;
-	char inputc;
-	bool exit = false;
-	// JoeJoeJoeBob
-	printf("With the ship fully operational and your party fully equiped, the crew sets off into the great unknown...\n[press any key to continue]");
-	_getch();
-	system("cls");
-	printf("input seed number:");
-	int intIn;
-	cin >> intIn;
-	fseek(stdin, 0, SEEK_END);
-	printf("generating map...\n");
-	srand(intIn);
-	exit = false;
+	in.close();
+	out.close();
+	in.open("MapSave.txt");
+	getline(in, fileTemp, ',');
 	roomInfo roomArray[5][5];
-	bool VdoorArray[4][5];//assigning all doors closed
-	for (int c = 0; c < 4; c++)
-	{
-		for (int r = 0; r < 5; r++)
-		{
-			VdoorArray[c][r] = 1;
-		}
-	}
+	bool VdoorArray[4][5];
 	bool HdoorArray[5][4];
-	for (int c = 0; c < 5; c++)
+	if ("0" == fileTemp)//no map generated
 	{
-		for (int r = 0; r < 4; r++)
-		{
-			HdoorArray[c][r] = 1;
-		}
-	}
-	int C = 0;
-	int R = 0;
-	bool roomVisited[5][5];
-	for (int c = 0; c < 5; c++)//assigning all rooms unvisited
-	{
-		for (int r = 0; r < 5; r++)
-		{
-			roomVisited[c][r] = 0;
-		}
-	}
-	roomVisited[0][0] = 1;//starting at room (0, 0)
-	while (true)
-	{
-		if (4 == R && 4 == C)//stop when room (4, 4) is reached
-		{
-			break;
-		}
-		int random = _dice(2);
-		if (1 == random && 4 != C)//go east
-		{
-			roomVisited[C + 1][R] = 1;//make next room visited
-			VdoorArray[C][R] = 0;//opening door
-			C++;//move to next room
-		}
-		else if (2 == random && 4 != R)
-		{
-			roomVisited[C][R + 1] = 1;//make next room visited
-			HdoorArray[C][R] = 0;//opening door
-			R++;//move to next room
-		}
-	}
-	bool centralPath[5][5];
-	for (int c = 0; c < 5; c++)//copying roomVisited into central path
-	{
-		for (int r = 0; r < 5; r++)
-		{
-			centralPath[c][r] = roomVisited[c][r];
-		}
-	}
-	//snaking from central path
-	for (int r = 0; r < 5; r++)
-	{
-		for (int c = 0; c < 5; c++)
-		{
-			if (1 == centralPath[c][r])//use a copy of roomVisited
-			{
-				C = c;
-				R = r;
-				exit = false;
-				int counter = 0;
-				while (!exit)//snaking loop
-				{
-					counter++;
-					if (4 == counter)
-					{
-						break;
-					}
-					int adjRooms = 0;//number of adjacent open rooms
-					bool unVisN = false;
-					bool unVisE = false;
-					bool unVisS = false;
-					bool unVisW = false;
-					if (0 == roomVisited[C][R - 1] && 0 != R)
-					{
-						adjRooms++;
-						unVisN = true;
-					}
-					if (0 == roomVisited[C + 1][R] && 4 != C)
-					{
-						adjRooms++;
-						unVisE = true;
-					}
-					if (0 == roomVisited[C][R + 1] && 4 != R)
-					{
-						adjRooms++;
-						unVisS = true;
-					}
-					if (0 == roomVisited[C - 1][R] && 0 != C)
-					{
-						adjRooms++;
-						unVisW = true;
-					}
-
-					if (0 == adjRooms)
-					{
-						break;
-					}
-
-					int random = _dice(adjRooms);
-
-					if (1 == random)
-					{
-						if (true == unVisN)
-						{
-							roomVisited[C][R - 1] = 1;//visit next room
-							HdoorArray[C][R - 1] = 0;//open door
-							R--;//set coords to new room
-						}
-						else if (true == unVisE)
-						{
-							roomVisited[C + 1][R] = 1;
-							VdoorArray[C][R] = 0;
-							C++;
-						}
-						else if (true == unVisS)
-						{
-							roomVisited[C][R + 1] = 1;
-							HdoorArray[C][R] = 0;
-							R++;
-						}
-						else if (true == unVisW)
-						{
-							roomVisited[C - 1][R] = 1;
-							VdoorArray[C - 1][R] = 0;
-							C--;
-						}
-					}
-					else if (2 == random)
-					{
-						if (true == unVisE)
-						{
-							roomVisited[C + 1][R] = 1;
-							VdoorArray[C][R] = 0;
-							C++;
-						}
-						else if (true == unVisS)
-						{
-							roomVisited[C][R + 1] = 1;
-							HdoorArray[C][R] = 0;
-							R++;
-						}
-						else if (true == unVisW)
-						{
-							roomVisited[C - 1][R] = 1;
-							VdoorArray[C - 1][R] = 0;
-							C--;
-						}
-					}
-					else if (3 == random)
-					{
-						if (true == unVisS)
-						{
-							roomVisited[C][R + 1] = 1;
-							HdoorArray[C][R] = 0;
-							R++;
-						}
-						else if (true == unVisW)
-						{
-							roomVisited[C - 1][R] = 1;
-							VdoorArray[C - 1][R] = 0;
-							C--;
-						}
-					}
-					else if (4 == random)//prety sure this is impossible
-					{
-						roomVisited[C - 1][R] = 1;
-						VdoorArray[C - 1][R] = 0;
-						C--;
-					}
-				}
-			}
-		}
-	}
-	//opening remaining rooms
-	int openedRooms = 0;
-	for (int r = 0; r < 5; r++)
-	{
-		for (int c = 0; c < 5; c++)
-		{
-			if (0 == roomVisited[c][r])
-			{
-				roomVisited[c][r] = 1;//mark room as visited
-				openedRooms++;
-				if (0 != r)
-				{
-					roomVisited[c][r - 1] = 1;//north room
-					HdoorArray[c][r - 1] = 0;//north door
-				}
-				if (4 != c)
-				{
-					roomVisited[c + 1][r] = 1;//east room
-					VdoorArray[c][r] = 0;//east door
-				}
-				if (4 != r)
-				{
-					roomVisited[c][r + 1] = 1;//south room
-					HdoorArray[c][r] = 0;//south door
-				}
-				if (0 != c)
-				{
-					roomVisited[c - 1][r] = 1;//west room
-					VdoorArray[c - 1][r] = 0;//west door
-				}
-			}
-		}
-	}
-	//opening random rooms until 3 rooms have been opened
-	for (openedRooms; openedRooms < 3; openedRooms++)
-	{
-		int c = _dice(5) - 1;
-		int r = _dice(5) - 1;
-		if (0 != r)
-		{
-			roomVisited[c][r - 1] = 1;//north room
-			HdoorArray[c][r - 1] = 0;//north door
-		}
-		if (4 != c)
-		{
-			roomVisited[c + 1][r] = 1;//east room
-			VdoorArray[c][r] = 0;//east door
-		}
-		if (4 != r)
-		{
-			roomVisited[c][r + 1] = 1;//south room
-			HdoorArray[c][r] = 0;//south door
-		}
-		if (0 != c)
-		{
-			roomVisited[c - 1][r] = 1;//west room
-			VdoorArray[c - 1][r] = 0;//west door
-		}
-	}
-	//filling in 2 x 2 squares
-	for (int r = 0; r < 4; r++)
-	{
+		in.close();
+		out.open("MapSave.txt");
+		printf("input seed number:");
+		int intIn;
+		cin >> intIn;
+		printf("generating map...\n");
+		srand(intIn);
+		bool exit = false;
+		
+		//assigning all doors closed
 		for (int c = 0; c < 4; c++)
 		{
-			if (VdoorArray[c][r] == 0 && HdoorArray[c][r] == 0 && VdoorArray[c][r + 1] == 0 && HdoorArray[c + 1][r] == 0)
+			for (int r = 0; r < 5; r++)
 			{
-				int random = _dice(4);
-				switch (random)
-				{
-				case 1:
-					VdoorArray[c][r] = 1;
-					break;
-				case 2:
-					HdoorArray[c][r] = 1;
-					break;
-				case 3:
-					VdoorArray[c][r + 1] = 1;
-					break;
-				case 4:
-					HdoorArray[c + 1][r] = 1;
-					break;
-				}
+				VdoorArray[c][r] = 1;
 			}
 		}
-	}
-	//random name generator and encouter assigner
-	int npc1 = 0;//max 1
-	int npc2 = 0;//max 1
-	int npc3 = 0;//max 1
-	int lowDiff = 0;//max 6
-	int medDiff = 0;//max 4
-	int hrdDiff = 0;//max 3
-	int shop = 0;//max 2
-	int trove = 0;//max 3
-	for (int r = 0; r < 5; r++)
-	{
 		for (int c = 0; c < 5; c++)
 		{
-			if ((0 == c && 0 == r) || (0 == c && 4 == r) || (4 == c && 0 == r) || (4 == c && 4 == r))
+			for (int r = 0; r < 4; r++)
 			{
-				roomArray[c][r].name = "Ancient Warp Gate";
-				roomArray[c][r].encounterID = 1;
-				continue;
+				HdoorArray[c][r] = 1;
 			}
-			int adjective = _dice(14);
-			int noun = _dice(12);
-			switch (adjective)
+		}
+		int C = 0;
+		int R = 0;
+		bool roomVisited[5][5];
+		for (int c = 0; c < 5; c++)//assigning all rooms unvisited
+		{
+			for (int r = 0; r < 5; r++)
 			{
-			case 1:
-				roomArray[c][r].name = "Soiled";//change to enum later
-				break;
-			case 2:
-				roomArray[c][r].name = "Spatered";
-				break;
-			case 3:
-				roomArray[c][r].name = "Arcane";
-				break;
-			case 4:
-				roomArray[c][r].name = "Soiled";
-				break;
-			case 5:
-				roomArray[c][r].name = "Great";
-				break;
-			case 6:
-				roomArray[c][r].name = "Wasted";
-				break;
-			case 7:
-				roomArray[c][r].name = "Glimering";
-				break;
-			case 8:
-				roomArray[c][r].name = "Colored";
-				break;
-			case 9:
-				roomArray[c][r].name = "Filthy";
-				break;
-			case 10:
-				roomArray[c][r].name = "Daunting";
-				break;
-			case 11:
-				roomArray[c][r].name = "Terrifying";
-				break;
-			case 12:
-				roomArray[c][r].name = "Spectral";
-				break;
-			case 13:
-				roomArray[c][r].name = "Abandoned";
-				break;
-			case 14:
-				roomArray[c][r].name = "Easter";
+				roomVisited[c][r] = 0;
+			}
+		}
+		roomVisited[0][0] = 1;//starting at room (0, 0)
+		while (true)
+		{
+			if (4 == R && 4 == C)//stop when room (4, 4) is reached
+			{
 				break;
 			}
-			switch (noun)
+			int random = _dice(2);
+			if (1 == random && 4 != C)//go east
 			{
-			case 1:
-				roomArray[c][r].name = roomArray[c][r].name + " Wastes";
-				break;
-			case 2:
-				roomArray[c][r].name = roomArray[c][r].name + " Singularity";
-				break;
-			case 3:
-				roomArray[c][r].name = roomArray[c][r].name + " Reaches";
-				break;
-			case 4:
-				roomArray[c][r].name = roomArray[c][r].name + " Rim";
-				break;
-			case 5:
-				roomArray[c][r].name = roomArray[c][r].name + " Reef";
-				break;
-			case 6:
-				roomArray[c][r].name = roomArray[c][r].name + " Breach";
-				break;
-			case 7:
-				roomArray[c][r].name = roomArray[c][r].name + " Row";
-				break;
-			case 8:
-				roomArray[c][r].name = roomArray[c][r].name + " Hole";
-				break;
-			case 9:
-				roomArray[c][r].name = roomArray[c][r].name + " Terminal";
-				break;
-			case 10:
-				roomArray[c][r].name = roomArray[c][r].name + " Sink";
-				break;
-			case 11:
-				roomArray[c][r].name = roomArray[c][r].name + " Station";
-				break;
-			case 12:
-				roomArray[c][r].name = roomArray[c][r].name + " Egg";
-				break;
+				roomVisited[C + 1][R] = 1;//make next room visited
+				VdoorArray[C][R] = 0;//opening door
+				C++;//move to next room
 			}
-			while (true)
+			else if (2 == random && 4 != R)
 			{
-				int rand = _dice(8);
-				if (npc1 != 1 && rand == 1)
+				roomVisited[C][R + 1] = 1;//make next room visited
+				HdoorArray[C][R] = 0;//opening door
+				R++;//move to next room
+			}
+		}
+		bool centralPath[5][5];
+		for (int c = 0; c < 5; c++)//copying roomVisited into central path
+		{
+			for (int r = 0; r < 5; r++)
+			{
+				centralPath[c][r] = roomVisited[c][r];
+			}
+		}
+		//snaking from central path
+		for (int r = 0; r < 5; r++)
+		{
+			for (int c = 0; c < 5; c++)
+			{
+				if (1 == centralPath[c][r])//use a copy of roomVisited
 				{
-					roomArray[c][r].encounterID = 6;
-					npc1++;
-					break;
-				}
-				if (npc2 != 1 && rand == 2)
-				{
-					roomArray[c][r].encounterID = 7;
-					npc2++;
-					break;
-				}
-				if (npc3 != 1 && rand == 3)
-				{
-					roomArray[c][r].encounterID = 8;
-					npc3++;
-					break;
-				}
-				if (lowDiff != 6 && rand == 4)
-				{
-					roomArray[c][r].encounterID = 2;
-					lowDiff++;
-					break;
-				}
-				if (medDiff != 4 && rand == 5)
-				{
-					roomArray[c][r].encounterID = 3;
-					medDiff++;
-					break;
-				}
-				if (hrdDiff != 3 && rand == 6)
-				{
-					roomArray[c][r].encounterID = 4;
-					hrdDiff++;
-					break;
-				}
-				if (shop != 2 && rand == 7)
-				{
-					roomArray[c][r].encounterID = 5;
-					shop++;
-					break;
-				}
-				if (trove != 3 && rand == 8)
-				{
-					roomArray[c][r].encounterID = 9;
-					trove++;
-					break;
+					C = c;
+					R = r;
+					exit = false;
+					int counter = 0;
+					while (!exit)//snaking loop
+					{
+						counter++;
+						if (4 == counter)
+						{
+							break;
+						}
+						int adjRooms = 0;//number of adjacent open rooms
+						bool unVisN = false;
+						bool unVisE = false;
+						bool unVisS = false;
+						bool unVisW = false;
+						if (0 == roomVisited[C][R - 1] && 0 != R)
+						{
+							adjRooms++;
+							unVisN = true;
+						}
+						if (0 == roomVisited[C + 1][R] && 4 != C)
+						{
+							adjRooms++;
+							unVisE = true;
+						}
+						if (0 == roomVisited[C][R + 1] && 4 != R)
+						{
+							adjRooms++;
+							unVisS = true;
+						}
+						if (0 == roomVisited[C - 1][R] && 0 != C)
+						{
+							adjRooms++;
+							unVisW = true;
+						}
+
+						if (0 == adjRooms)
+						{
+							break;
+						}
+
+						int random = _dice(adjRooms);
+
+						if (1 == random)
+						{
+							if (true == unVisN)
+							{
+								roomVisited[C][R - 1] = 1;//visit next room
+								HdoorArray[C][R - 1] = 0;//open door
+								R--;//set coords to new room
+							}
+							else if (true == unVisE)
+							{
+								roomVisited[C + 1][R] = 1;
+								VdoorArray[C][R] = 0;
+								C++;
+							}
+							else if (true == unVisS)
+							{
+								roomVisited[C][R + 1] = 1;
+								HdoorArray[C][R] = 0;
+								R++;
+							}
+							else if (true == unVisW)
+							{
+								roomVisited[C - 1][R] = 1;
+								VdoorArray[C - 1][R] = 0;
+								C--;
+							}
+						}
+						else if (2 == random)
+						{
+							if (true == unVisE)
+							{
+								roomVisited[C + 1][R] = 1;
+								VdoorArray[C][R] = 0;
+								C++;
+							}
+							else if (true == unVisS)
+							{
+								roomVisited[C][R + 1] = 1;
+								HdoorArray[C][R] = 0;
+								R++;
+							}
+							else if (true == unVisW)
+							{
+								roomVisited[C - 1][R] = 1;
+								VdoorArray[C - 1][R] = 0;
+								C--;
+							}
+						}
+						else if (3 == random)
+						{
+							if (true == unVisS)
+							{
+								roomVisited[C][R + 1] = 1;
+								HdoorArray[C][R] = 0;
+								R++;
+							}
+							else if (true == unVisW)
+							{
+								roomVisited[C - 1][R] = 1;
+								VdoorArray[C - 1][R] = 0;
+								C--;
+							}
+						}
+						else if (4 == random)//prety sure this is impossible
+						{
+							roomVisited[C - 1][R] = 1;
+							VdoorArray[C - 1][R] = 0;
+							C--;
+						}
+					}
 				}
 			}
 		}
+		//opening remaining rooms
+		int openedRooms = 0;
+		for (int r = 0; r < 5; r++)
+		{
+			for (int c = 0; c < 5; c++)
+			{
+				if (0 == roomVisited[c][r])
+				{
+					roomVisited[c][r] = 1;//mark room as visited
+					openedRooms++;
+					if (0 != r)
+					{
+						roomVisited[c][r - 1] = 1;//north room
+						HdoorArray[c][r - 1] = 0;//north door
+					}
+					if (4 != c)
+					{
+						roomVisited[c + 1][r] = 1;//east room
+						VdoorArray[c][r] = 0;//east door
+					}
+					if (4 != r)
+					{
+						roomVisited[c][r + 1] = 1;//south room
+						HdoorArray[c][r] = 0;//south door
+					}
+					if (0 != c)
+					{
+						roomVisited[c - 1][r] = 1;//west room
+						VdoorArray[c - 1][r] = 0;//west door
+					}
+				}
+			}
+		}
+		//opening random rooms until 3 rooms have been opened
+		for (openedRooms; openedRooms < 3; openedRooms++)
+		{
+			int c = _dice(5) - 1;
+			int r = _dice(5) - 1;
+			if (0 != r)
+			{
+				roomVisited[c][r - 1] = 1;//north room
+				HdoorArray[c][r - 1] = 0;//north door
+			}
+			if (4 != c)
+			{
+				roomVisited[c + 1][r] = 1;//east room
+				VdoorArray[c][r] = 0;//east door
+			}
+			if (4 != r)
+			{
+				roomVisited[c][r + 1] = 1;//south room
+				HdoorArray[c][r] = 0;//south door
+			}
+			if (0 != c)
+			{
+				roomVisited[c - 1][r] = 1;//west room
+				VdoorArray[c - 1][r] = 0;//west door
+			}
+		}
+		//filling in 2 x 2 squares
+		for (int r = 0; r < 4; r++)
+		{
+			for (int c = 0; c < 4; c++)
+			{
+				if (VdoorArray[c][r] == 0 && HdoorArray[c][r] == 0 && VdoorArray[c][r + 1] == 0 && HdoorArray[c + 1][r] == 0)
+				{
+					int random = _dice(4);
+					switch (random)
+					{
+					case 1:
+						VdoorArray[c][r] = 1;
+						break;
+					case 2:
+						HdoorArray[c][r] = 1;
+						break;
+					case 3:
+						VdoorArray[c][r + 1] = 1;
+						break;
+					case 4:
+						HdoorArray[c + 1][r] = 1;
+						break;
+					}
+				}
+			}
+		}
+		//random name generator and encouter assigner
+		int npc1 = 0;//max 1
+		int npc2 = 0;//max 1
+		int npc3 = 0;//max 1
+		int lowDiff = 0;//max 6
+		int medDiff = 0;//max 4
+		int hrdDiff = 0;//max 3
+		int shop = 0;//max 2
+		int trove = 0;//max 3
+		for (int r = 0; r < 5; r++)
+		{
+			for (int c = 0; c < 5; c++)
+			{
+				if ((0 == c && 0 == r) || (0 == c && 4 == r) || (4 == c && 0 == r) || (4 == c && 4 == r))
+				{
+					roomArray[c][r].name = "Ancient Warp Gate";
+					roomArray[c][r].encounterID = 1;
+					continue;
+				}
+				int adjective = _dice(14);
+				int noun = _dice(12);
+				switch (adjective)
+				{
+				case 1:
+					roomArray[c][r].name = "Soiled";//change to enum later
+					break;
+				case 2:
+					roomArray[c][r].name = "Spatered";
+					break;
+				case 3:
+					roomArray[c][r].name = "Arcane";
+					break;
+				case 4:
+					roomArray[c][r].name = "Soiled";
+					break;
+				case 5:
+					roomArray[c][r].name = "Great";
+					break;
+				case 6:
+					roomArray[c][r].name = "Wasted";
+					break;
+				case 7:
+					roomArray[c][r].name = "Glimering";
+					break;
+				case 8:
+					roomArray[c][r].name = "Colored";
+					break;
+				case 9:
+					roomArray[c][r].name = "Filthy";
+					break;
+				case 10:
+					roomArray[c][r].name = "Daunting";
+					break;
+				case 11:
+					roomArray[c][r].name = "Terrifying";
+					break;
+				case 12:
+					roomArray[c][r].name = "Spectral";
+					break;
+				case 13:
+					roomArray[c][r].name = "Abandoned";
+					break;
+				case 14:
+					roomArray[c][r].name = "Easter";
+					break;
+				}
+				switch (noun)
+				{
+				case 1:
+					roomArray[c][r].name = roomArray[c][r].name + " Wastes";
+					break;
+				case 2:
+					roomArray[c][r].name = roomArray[c][r].name + " Singularity";
+					break;
+				case 3:
+					roomArray[c][r].name = roomArray[c][r].name + " Reaches";
+					break;
+				case 4:
+					roomArray[c][r].name = roomArray[c][r].name + " Rim";
+					break;
+				case 5:
+					roomArray[c][r].name = roomArray[c][r].name + " Reef";
+					break;
+				case 6:
+					roomArray[c][r].name = roomArray[c][r].name + " Breach";
+					break;
+				case 7:
+					roomArray[c][r].name = roomArray[c][r].name + " Row";
+					break;
+				case 8:
+					roomArray[c][r].name = roomArray[c][r].name + " Hole";
+					break;
+				case 9:
+					roomArray[c][r].name = roomArray[c][r].name + " Terminal";
+					break;
+				case 10:
+					roomArray[c][r].name = roomArray[c][r].name + " Sink";
+					break;
+				case 11:
+					roomArray[c][r].name = roomArray[c][r].name + " Station";
+					break;
+				case 12:
+					roomArray[c][r].name = roomArray[c][r].name + " Egg";
+					break;
+				}
+				while (true)
+				{
+					int rand = _dice(8);
+					if (npc1 != 1 && rand == 1)
+					{
+						roomArray[c][r].encounterID = 6;
+						npc1++;
+						break;
+					}
+					if (npc2 != 1 && rand == 2)
+					{
+						roomArray[c][r].encounterID = 7;
+						npc2++;
+						break;
+					}
+					if (npc3 != 1 && rand == 3)
+					{
+						roomArray[c][r].encounterID = 8;
+						npc3++;
+						break;
+					}
+					if (lowDiff != 6 && rand == 4)
+					{
+						roomArray[c][r].encounterID = 2;
+						lowDiff++;
+						break;
+					}
+					if (medDiff != 4 && rand == 5)
+					{
+						roomArray[c][r].encounterID = 3;
+						medDiff++;
+						break;
+					}
+					if (hrdDiff != 3 && rand == 6)
+					{
+						roomArray[c][r].encounterID = 4;
+						hrdDiff++;
+						break;
+					}
+					if (shop != 2 && rand == 7)
+					{
+						roomArray[c][r].encounterID = 5;
+						shop++;
+						break;
+					}
+					if (trove != 3 && rand == 8)
+					{
+						roomArray[c][r].encounterID = 9;
+						trove++;
+						break;
+					}
+				}
+			}
+		}
+		//print map to file
+		for (int c = 0; c < 4; c++)//print VdoorArray
+		{
+			for (int r = 0; r < 5; r++)
+			{
+				out << VdoorArray[c][r] << ',';
+			}
+		}
+		out << '\n';
+		for (int c = 0; c < 5; c++)//print HdoorArray
+		{
+			for (int r = 0; r < 4; r++)
+			{
+				out << HdoorArray[c][r] << ',';
+			}
+		}
+		out << '\n';
+		for (int r = 0; r < 5; r++)//print name and encounterID
+		{
+			for (int c = 0; c < 5; c++)
+			{
+				out << roomArray[r][c].name << ',' << roomArray[r][c].encounterID << ',';
+			}
+		}
+		out.close();
 	}
-	exit = false;
+	else
+	{
+		for (int c = 0; c < 4; c++)//get VdoorArray
+		{
+			for (int r = 0; r < 5; r++)
+			{
+				getline(in, fileTemp, ',');
+				VdoorArray[c][r] = stoi(fileTemp);
+			}
+		}
+		getline(in, fileTemp);
+		for (int c = 0; c < 5; c++)//print HdoorArray
+		{
+			for (int r = 0; r < 4; r++)
+			{
+				getline(in, fileTemp, ',');
+				HdoorArray[c][r] = stoi(fileTemp);
+			}
+		}
+		getline(in, fileTemp);
+		for (int r = 0; r < 5; r++)//print name and encounterID
+		{
+			for (int c = 0; c < 5; c++)
+			{
+				getline(in, fileTemp, ',');
+				roomArray[r][c].name = fileTemp;
+				getline(in, fileTemp, ',');
+				roomArray[r][c].encounterID = stoi(fileTemp);
+			}
+		}
+	}
+	char inputc;
+	bool exit = false;
 	int credits = 0;
 	int playerC = 4;
 	int playerR = 4;
@@ -974,6 +1123,7 @@ bool encounter(party &player, int encounterID, int &credits, vector <eparty> ene
 			combat(player, enemyVector[2], credits);
 			break;
 		}
+		updateCrewSave(player);
 		return 1;
 	}
 	else if (3 == encounterID)//medium difficulty enemies
@@ -993,42 +1143,49 @@ bool encounter(party &player, int encounterID, int &credits, vector <eparty> ene
 			combat(player, enemyVector[2], credits);
 			break;
 		}
+		updateCrewSave(player);
 		return 1;
 	}
 	else if (4 == encounterID)//hard difficulty enemies
 	{
 		cout << "hard difficulty enemy";
 		_getch();
+		updateCrewSave(player);
 		return 1;
 	}
 	else if (5 == encounterID)//shop
 	{
 		cout << "shop";
 		_getch();
+		updateCrewSave(player);
 		return 1;
 	}
 	else if (6 == encounterID)//npc 1
 	{
 		cout << "first NPC";
 		_getch();
+		updateCrewSave(player);
 		return 1;
 	}
 	else if (7 == encounterID)//npc 2
 	{
 		cout << "second NPC\n";
 		_getch();
+		updateCrewSave(player);
 		return 1;
 	}
 	else if (8 == encounterID)//npc 3
 	{
 		cout << "third NPC\n";
 		_getch();
+		updateCrewSave(player);
 		return 1;
 	}
 	else if (9 == encounterID)//treasure trove
 	{
 		cout << "treasure\n";
 		_getch();
+		updateCrewSave(player);
 		return 1;
 	}
 }
@@ -2609,7 +2766,7 @@ bool combat(party& player, eparty enemyParty, int &credits)
 				switch (player.cVect[a].defenceID)
 				{
 				case 0:
-					basicEvade(player, enemyParty, a);
+					basicEvade(player, a);
 					break;
 				}
 			}
@@ -2668,7 +2825,15 @@ bool combat(party& player, eparty enemyParty, int &credits)
 			}
 		}
 		killAndTop(player, enemyParty);
-		if (enemyParty.eVect[0].dead && enemyParty.eVect[1].dead && enemyParty.eVect[2].dead)
+		bool allDead = true;
+		for (int a = 0; a < enemyParty.a; a++)
+		{
+			if (!enemyParty.eVect[a].dead)
+			{
+				allDead = false;
+			}
+		}
+		if (allDead)
 		{
 			//victory animation
 			//also change "victory" bool
@@ -3206,7 +3371,7 @@ void printHealthWindow(party& player, eparty& enemy)//player, enemy, number of e
 
 void killAndTop(party& player, eparty& enemyParty)//use between ai and action loops
 {
-	for (int e = 0; e < 3; e++)
+	for (int e = 0; e < enemyParty.a; e++)
 	{
 		if (!enemyParty.eVect[e].dead)
 		{
@@ -4289,7 +4454,22 @@ void basicHeal(party& player, eparty& enemyParty, int p)
 }
 
 //player defenses
-void basicEvade(party& player, eparty& enemyParty, int p)
+void basicEvade(party& player, int p)
 {
 	player.cVect[p].defenceValue += 20 + _dice(20);
+}
+
+
+
+void updateCrewSave(party player)
+ {
+	ofstream out;
+	out.open("CrewSave.txt");
+	out << player.ship.name << ',' << player.ship.HP << ',' << player.ship.HPmax << '\n' << player.projectsPrinted << '\n';
+	for (int a = 0; a < 3; a++)
+	{
+		out << player.cVect[a].name << ',' << player.cVect[a].HP << ',' << player.cVect[a].HPmax << ',';
+		out << player.cVect[a].dead << ',' << player.cVect[a].attackID << ',';
+		out << player.cVect[a].specialID << ',' << player.cVect[a].defenceID << '\n';
+	}
 }
