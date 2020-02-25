@@ -127,7 +127,7 @@ void basicAttack(party& player, eparty& enemyParty, int p);
 void basicHeal(party& player, eparty& enemyParty, int p);
 void basicEvade(party& player, int p);
 
-void updateCrewSave(party player);
+void updateCrewSave(party player, int playerC, int playerR);
 
 int main()
 {
@@ -268,6 +268,8 @@ int main()
 	string fileTemp;
 	getline(in, fileTemp, ',');
 	party player;
+	int playerC;
+	int playerR;
 	if ("0" == fileTemp)//no savestate
 	{
 		out.open("CrewSave.txt");
@@ -331,8 +333,10 @@ int main()
 		player.cVect[2].defenceID = 0;
 		player.cVect[2].specialID = 0;
 		player.projectsPrinted = 0;
+		playerC = 4;
+		playerR = 4;
 		// JoeJoeJoeBob
-		updateCrewSave(player);
+		updateCrewSave(player, playerC, playerR);
 		printf("With the ship fully operational and your party fully equiped, the crew sets off into the great unknown...\n[press any key to continue]");
 		_getch();
 	}
@@ -345,6 +349,10 @@ int main()
 		player.ship.HPmax = stoi(fileTemp);
 		getline(in, fileTemp);
 		player.projectsPrinted = stoi(fileTemp);
+		getline(in, fileTemp, ',');
+		playerR = stoi(fileTemp);
+		getline(in, fileTemp);
+		playerC = stoi(fileTemp);
 		crew temp;
 		for (int a = 0; a < 3; a++)
 		{
@@ -360,7 +368,7 @@ int main()
 			temp.attackID = stoi(fileTemp);
 			getline(in, fileTemp, ',');
 			temp.specialID = stoi(fileTemp);
-			getline(in, fileTemp, ',');
+			getline(in, fileTemp);
 			temp.defenceID = stoi(fileTemp);
 			player.cVect.push_back(temp);
 		}
@@ -369,7 +377,7 @@ int main()
 	in.close();
 	out.close();
 	in.open("MapSave.txt");
-	getline(in, fileTemp, ',');
+	getline(in, fileTemp);
 	roomInfo roomArray[5][5];
 	bool VdoorArray[4][5];
 	bool HdoorArray[5][4];
@@ -807,6 +815,7 @@ int main()
 			}
 		}
 		//print map to file
+		out << 1 << '\n';
 		for (int c = 0; c < 4; c++)//print VdoorArray
 		{
 			for (int r = 0; r < 5; r++)
@@ -866,8 +875,6 @@ int main()
 	char inputc;
 	bool exit = false;
 	int credits = 0;
-	int playerC = 4;
-	int playerR = 4;
 	//navigation/main game loop
 	while (!exit)
 	{
@@ -875,6 +882,7 @@ int main()
 		
 		printf("you arive in sector (%i, %i), %s\n", playerC + 1, playerR + 1, roomArray[playerC][playerR].name.c_str());
 		bool victory = encounter(player, roomArray[playerC][playerR].encounterID, credits, enemyVector);
+		updateCrewSave(player, playerC, playerR);
 		if (!victory)//game over
 		{
 			break;
@@ -1123,7 +1131,6 @@ bool encounter(party &player, int encounterID, int &credits, vector <eparty> ene
 			combat(player, enemyVector[2], credits);
 			break;
 		}
-		updateCrewSave(player);
 		return 1;
 	}
 	else if (3 == encounterID)//medium difficulty enemies
@@ -1143,49 +1150,42 @@ bool encounter(party &player, int encounterID, int &credits, vector <eparty> ene
 			combat(player, enemyVector[2], credits);
 			break;
 		}
-		updateCrewSave(player);
 		return 1;
 	}
 	else if (4 == encounterID)//hard difficulty enemies
 	{
 		cout << "hard difficulty enemy";
 		_getch();
-		updateCrewSave(player);
 		return 1;
 	}
 	else if (5 == encounterID)//shop
 	{
 		cout << "shop";
 		_getch();
-		updateCrewSave(player);
 		return 1;
 	}
 	else if (6 == encounterID)//npc 1
 	{
 		cout << "first NPC";
 		_getch();
-		updateCrewSave(player);
 		return 1;
 	}
 	else if (7 == encounterID)//npc 2
 	{
 		cout << "second NPC\n";
 		_getch();
-		updateCrewSave(player);
 		return 1;
 	}
 	else if (8 == encounterID)//npc 3
 	{
 		cout << "third NPC\n";
 		_getch();
-		updateCrewSave(player);
 		return 1;
 	}
 	else if (9 == encounterID)//treasure trove
 	{
 		cout << "treasure\n";
 		_getch();
-		updateCrewSave(player);
 		return 1;
 	}
 }
@@ -4461,11 +4461,12 @@ void basicEvade(party& player, int p)
 
 
 
-void updateCrewSave(party player)
+void updateCrewSave(party player, int playerC, int playerR)
  {
 	ofstream out;
 	out.open("CrewSave.txt");
 	out << player.ship.name << ',' << player.ship.HP << ',' << player.ship.HPmax << '\n' << player.projectsPrinted << '\n';
+	out << playerR << ',' << playerC << '\n';
 	for (int a = 0; a < 3; a++)
 	{
 		out << player.cVect[a].name << ',' << player.cVect[a].HP << ',' << player.cVect[a].HPmax << ',';
