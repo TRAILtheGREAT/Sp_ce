@@ -17,7 +17,7 @@ Moves
 			attack damage = 8
 			accuracy = 10 + _dice(25)
 		Large Stapler :: ID 1
-			attack damage = 1 + _dice(5)
+			attack damage = 1 + _dice(12)
 			gets AtkMulti x 3
 			accuracy = 20 + _dice(15)
 		Print Project :: ID 2
@@ -34,8 +34,9 @@ Moves
 			Gives single party member + 0.3 atkMulti
 	Defensive
 		Basic Evade :: ID 0
-			adds 20 + _dice(20) to evasion score
+			adds 2 to defence
 		Insult :: ID 1
+			adds 4 to defence
 Enemies
 	SpaceGoblin :: party and enemy ID 0
 		accuracy = 20 + _dice(10)

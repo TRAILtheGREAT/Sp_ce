@@ -153,6 +153,16 @@
   <ItemGroup>
     <ClCompile Include="GS3.1 RPG Project.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Attack.h" />
+    <ClInclude Include="Combat.h" />
+    <ClInclude Include="Defence.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyParty.h" />
+    <ClInclude Include="Goblin.h" />
+    <ClInclude Include="Party.h" />
+    <ClInclude Include="Special.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -1,0 +1,18 @@
+Class Party
+	Class Attack
+		contains a list of attacks and a switch that takes the characters attack ID and determines the attack to use
+	Class Special
+		same as attack class
+	Class Defence
+		same as defence class
+
+Class Enemy
+	Class Goblin
+		
+	Class Squid
+	Class Drone Brain
+	etc.
+Class Encounter
+	Class Combat
+		contains vector of enemies
+	Classes for other encounters
