@@ -40,6 +40,7 @@
 #include <vector>
 #include <Windows.h>
 #include <fstream>
+#include "Enemy.h"
 
 using namespace std;
 
@@ -77,20 +78,9 @@ struct party
 	vessel ship;
 	int projectsPrinted;//used for print project attack
 };
-struct enemy
-{
-	string name;
-	int HP, HPmax, atk;
-	bool dead = true;
-	action act;//attacking, using special, evading...
-	int target;//which crew/enemy is being targeted
-	float atkMulti;
-	int ID;
-	int dodgeValue;//add to dodge chance when evading/blocking
-};
 struct eparty
 {
-	vector <enemy> eVect;
+	vector <Enemy> eVect;
 	int a;//number of enemies in the party that need to be displayed
 	int credits;
 	int graphicBackID, graphicForID;
@@ -141,7 +131,7 @@ int main()
 	//medium enemies: zombie, rock man
 	//hard enemy: astroid worm
 	eparty tempParty;
-	enemy tempEnemy;
+	Enemy tempEnemy;
 	vector <eparty> enemyVector;
 	while (true)
 	{
@@ -165,18 +155,18 @@ int main()
 				getline(in, temp);
 				break;
 			}
-			tempEnemy.ID = stoi(temp);
+			tempEnemy.setID(stoi(temp));
 			getline(in, temp, ',');
-			tempEnemy.name = temp;
+			tempEnemy.setName(temp);
 			getline(in, temp, ',');
-			tempEnemy.atk = stoi(temp);
+			tempEnemy.setAtk(stoi(temp));
 			getline(in, temp, ',');
-			tempEnemy.HP = stoi(temp);
-			tempEnemy.HPmax = stoi(temp);
+			tempEnemy.setHP(stoi(temp));
+			tempEnemy.setHPmax(stoi(temp));
 			getline(in, temp);
-			tempEnemy.dodgeValue = stoi(temp);
-			tempEnemy.atkMulti = 1.0;
-			tempEnemy.dead = false;
+			tempEnemy.setDodgeValue(stoi(temp));
+			tempEnemy.setAtkMulti(stoi(temp));
+			tempEnemy.setDead(false);
 			tempParty.eVect.push_back(tempEnemy);
 		}
 		enemyVector.push_back(tempParty);
@@ -1492,9 +1482,9 @@ bool combat(party& player, eparty enemyParty, int &credits)
 						{
 							for (int a = 0; a < 32; a++)
 							{
-								if (a <= enemyParty.eVect[0].name.length())
+								if (a <= enemyParty.eVect[0].getName().length())
 								{
-									cout << enemyParty.eVect[0].name[a];
+									cout << enemyParty.eVect[0].getName()[a];
 								}
 								else
 								{
@@ -1513,9 +1503,9 @@ bool combat(party& player, eparty enemyParty, int &credits)
 						{
 							for (int a = 0; a < 32; a++)
 							{
-								if (a <= enemyParty.eVect[1].name.length())
+								if (a <= enemyParty.eVect[1].getName().length())
 								{
-									cout << enemyParty.eVect[1].name[a];
+									cout << enemyParty.eVect[1].getName()[a];
 								}
 								else
 								{
@@ -1536,9 +1526,9 @@ bool combat(party& player, eparty enemyParty, int &credits)
 						{
 							for (int a = 0; a < 32; a++)
 							{
-								if (a <= enemyParty.eVect[2].name.length())
+								if (a <= enemyParty.eVect[2].getName().length())
 								{
-									cout << enemyParty.eVect[2].name[a];
+									cout << enemyParty.eVect[2].getName()[a];
 								}
 								else
 								{
@@ -1557,9 +1547,9 @@ bool combat(party& player, eparty enemyParty, int &credits)
 						{
 							for (int a = 0; a < 32; a++)
 							{
-								if (a <= enemyParty.eVect[3].name.length())
+								if (a <= enemyParty.eVect[3].getName().length())
 								{
-									cout << enemyParty.eVect[3].name[a];
+									cout << enemyParty.eVect[3].getName()[a];
 								}
 								else
 								{
@@ -1580,9 +1570,9 @@ bool combat(party& player, eparty enemyParty, int &credits)
 						{
 							for (int a = 0; a < 32; a++)
 							{
-								if (a <= enemyParty.eVect[4].name.length())
+								if (a <= enemyParty.eVect[4].getName().length())
 								{
-									cout << enemyParty.eVect[4].name[a];
+									cout << enemyParty.eVect[4].getName()[a];
 								}
 								else
 								{
@@ -1601,9 +1591,9 @@ bool combat(party& player, eparty enemyParty, int &credits)
 						{
 							for (int a = 0; a < 32; a++)
 							{
-								if (a <= enemyParty.eVect[5].name.length())
+								if (a <= enemyParty.eVect[5].getName().length())
 								{
-									cout << enemyParty.eVect[5].name[a];
+									cout << enemyParty.eVect[5].getName()[a];
 								}
 								else
 								{
@@ -1649,7 +1639,7 @@ bool combat(party& player, eparty enemyParty, int &credits)
 								coord.Y = 24;
 								SetConsoleCursorPosition(standard, coord);
 								SetConsoleTextAttribute(color, 4);
-								cout << enemyParty.eVect[0].name;
+								cout << enemyParty.eVect[0].getName();
 							}
 							else if (1 == menu.X && 2 == menu.Y)
 							{
@@ -1657,7 +1647,7 @@ bool combat(party& player, eparty enemyParty, int &credits)
 								coord.Y = 25;
 								SetConsoleCursorPosition(standard, coord);
 								SetConsoleTextAttribute(color, 4);
-								cout << enemyParty.eVect[2].name;
+								cout << enemyParty.eVect[2].getName();
 							}
 							else if (1 == menu.X && 3 == menu.Y)
 							{
@@ -1665,7 +1655,7 @@ bool combat(party& player, eparty enemyParty, int &credits)
 								coord.Y = 26;
 								SetConsoleCursorPosition(standard, coord);
 								SetConsoleTextAttribute(color, 4);
-								cout << enemyParty.eVect[4].name;
+								cout << enemyParty.eVect[4].getName();
 							}
 							else if (2 == menu.X && 1 == menu.Y)
 							{
@@ -1673,7 +1663,7 @@ bool combat(party& player, eparty enemyParty, int &credits)
 								coord.Y = 24;
 								SetConsoleCursorPosition(standard, coord);
 								SetConsoleTextAttribute(color, 4);
-								cout << enemyParty.eVect[1].name;
+								cout << enemyParty.eVect[1].getName();
 							}
 							else if (2 == menu.X && 2 == menu.Y)
 							{
@@ -1681,7 +1671,7 @@ bool combat(party& player, eparty enemyParty, int &credits)
 								coord.Y = 25;
 								SetConsoleCursorPosition(standard, coord);
 								SetConsoleTextAttribute(color, 4);
-								cout << enemyParty.eVect[3].name;
+								cout << enemyParty.eVect[3].getName();
 							}
 							else if (2 == menu.X && 3 == menu.Y)
 							{
@@ -1689,7 +1679,7 @@ bool combat(party& player, eparty enemyParty, int &credits)
 								coord.Y = 26;
 								SetConsoleCursorPosition(standard, coord);
 								SetConsoleTextAttribute(color, 4);
-								cout << enemyParty.eVect[5].name;
+								cout << enemyParty.eVect[5].getName();
 							}
 							else if (4 == menu.Y)
 							{
@@ -1708,7 +1698,7 @@ bool combat(party& player, eparty enemyParty, int &credits)
 									coord.Y = 24;
 									SetConsoleCursorPosition(standard, coord);
 									SetConsoleTextAttribute(color, 15);
-									cout << enemyParty.eVect[0].name;
+									cout << enemyParty.eVect[0].getName();
 								}
 								else if (1 == menuPast.X && 2 == menuPast.Y)
 								{
@@ -1716,7 +1706,7 @@ bool combat(party& player, eparty enemyParty, int &credits)
 									coord.Y = 25;
 									SetConsoleCursorPosition(standard, coord);
 									SetConsoleTextAttribute(color, 15);
-									cout << enemyParty.eVect[2].name;
+									cout << enemyParty.eVect[2].getName();
 								}
 								else if (1 == menuPast.X && 3 == menuPast.Y)
 								{
@@ -1724,7 +1714,7 @@ bool combat(party& player, eparty enemyParty, int &credits)
 									coord.Y = 26;
 									SetConsoleCursorPosition(standard, coord);
 									SetConsoleTextAttribute(color, 15);
-									cout << enemyParty.eVect[4].name;
+									cout << enemyParty.eVect[4].getName();
 								}
 								else if (2 == menuPast.X && 1 == menuPast.Y)
 								{
@@ -1732,7 +1722,7 @@ bool combat(party& player, eparty enemyParty, int &credits)
 									coord.Y = 24;
 									SetConsoleCursorPosition(standard, coord);
 									SetConsoleTextAttribute(color, 15);
-									cout << enemyParty.eVect[1].name;
+									cout << enemyParty.eVect[1].getName();
 								}
 								else if (2 == menuPast.X && 2 == menuPast.Y)
 								{
@@ -1740,7 +1730,7 @@ bool combat(party& player, eparty enemyParty, int &credits)
 									coord.Y = 25;
 									SetConsoleCursorPosition(standard, coord);
 									SetConsoleTextAttribute(color, 15);
-									cout << enemyParty.eVect[3].name;
+									cout << enemyParty.eVect[3].getName();
 								}
 								else if (2 == menuPast.X && 3 == menuPast.Y)
 								{
@@ -1748,7 +1738,7 @@ bool combat(party& player, eparty enemyParty, int &credits)
 									coord.Y = 26;
 									SetConsoleCursorPosition(standard, coord);
 									SetConsoleTextAttribute(color, 15);
-									cout << enemyParty.eVect[5].name;
+									cout << enemyParty.eVect[5].getName();
 								}
 								else if (4 == menuPast.Y)
 								{
