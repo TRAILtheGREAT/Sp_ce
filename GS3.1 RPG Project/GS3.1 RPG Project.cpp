@@ -869,7 +869,6 @@ int main()
 	while (!exit)
 	{
 		system("cls");
-		
 		printf("you arive in sector (%i, %i), %s\n", playerC + 1, playerR + 1, roomArray[playerC][playerR].name.c_str());
 		bool victory = encounter(player, roomArray[playerC][playerR].encounterID, credits, enemyVector);
 		updateCrewSave(player, playerC, playerR);
@@ -1174,8 +1173,10 @@ bool encounter(party &player, int encounterID, int &credits, vector <eparty> ene
 	}
 	else if (9 == encounterID)//treasure trove
 	{
-		cout << "treasure\n";
+		cout << "while carfully navigating an astroid field, a glint catches " << player.cVect[2].name << "'s eye\n";
+		cout << "beaming the object into the ship reveals it to be a lost credit cache\n";
 		_getch();
+		treasureCache(player, credits);
 		return 1;
 	}
 }
@@ -3413,6 +3414,43 @@ string getMoveName(action type, int ID)//0 = attack, 1 = defence, 2 = special
 	return output;
 }
 
+void treasureCache(party& player, int& credits)
+{
+	system("cls");
+	COORD coord;
+	coord.X = 0;
+	coord.Y = 25;
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+	cout << "[press any key to open]";
+	pixelArtRelay(7, 7);
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+	cout << "the cache contained:\n";
+	int random = _dice(5);
+	if (1 == random)
+	{
+		cout << "Large Stapler (attack)\n";
+	}
+	else if (2 == random)
+	{
+		cout << "Printer (attack)\n";
+	}
+	else if (3 == random)
+	{
+		cout << "Lizard Staff (special)\n";
+	}
+	else if (4 == random)
+	{
+		cout << "Wizard Tail (special)\n";
+	}
+	else if (5 == random)
+	{
+		cout << "Book of Insults (defensive)\n";
+	}
+	int creditsFound = 199 + _dice(400);
+	cout << creditsFound << " credits\n";
+	credits += creditsFound;
+}
+
 
 //pixel art related functions
 void color(int a)
@@ -4444,7 +4482,7 @@ void largeStapelerAttack(party& player, eparty& enemyParty, int p)//p = which pl
 void basicAttack(party& player, eparty& enemyParty, int p)
 {
 	int e = player.cVect[p].target;
-	if (evade == (action)enemyParty.eVect[e].getAction() && 0 == enemyParty.eVect[e].getTarget())//enemy evades
+	if (evade == (action)enemyParty.eVect[e].getAction() && p == enemyParty.eVect[e].getTarget())//enemy evades
 	{
 		if (enemyParty.eVect[e].getDodgeValue() <= 10 + _dice(20))//hit
 		{
