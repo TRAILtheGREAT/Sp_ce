@@ -96,6 +96,7 @@ char _getdir();
 void killAndTop(party& player, eparty& enemyParty);
 string getMoveName(action type, int ID);
 bool combat(party& player, eparty enemyParty, int& credits);
+void treasureCache(party& player, int& credits);
 
 void color(int a);
 void blocks(int a);
@@ -3424,7 +3425,7 @@ void treasureCache(party& player, int& credits)
 	cout << "[press any key to open]";
 	pixelArtRelay(7, 7);
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
-	cout << "the cache contained:\n";
+	cout << "the cache contained:                             \n";
 	int random = _dice(5);
 	if (1 == random)
 	{
@@ -3449,6 +3450,7 @@ void treasureCache(party& player, int& credits)
 	int creditsFound = 199 + _dice(400);
 	cout << creditsFound << " credits\n";
 	credits += creditsFound;
+	_getch();
 }
 
 
@@ -3604,7 +3606,7 @@ void pixelArtRelay(int backID, int forID)
 	case 5://worm forground
 	case 6://guardian forground
 	case 7://chest animation
-		in.open("chest opening.txt");
+		in.open("chest_opening_animation.txt");
 		temp2 = "";
 		for (int f = 0; f < 9; f++)
 		{
