@@ -165,7 +165,7 @@ int main()
 			tempEnemy.setHPmax(stoi(temp));
 			getline(in, temp);
 			tempEnemy.setDodgeValue(stoi(temp));
-			tempEnemy.setAtkMulti(stoi(temp));
+			tempEnemy.setAtkMulti(1.0);
 			tempEnemy.setDead(false);
 			tempParty.eVect.push_back(tempEnemy);
 		}
@@ -2201,9 +2201,9 @@ bool combat(party& player, eparty enemyParty, int &credits)
 						{
 							for (int a = 0; a < 32; a++)
 							{
-								if (a <= enemyParty.eVect[0].name.length())
+								if (a <= enemyParty.eVect[0].getName().length())
 								{
-									cout << enemyParty.eVect[0].name[a];
+									cout << enemyParty.eVect[0].getName()[a];
 								}
 								else
 								{
@@ -2222,9 +2222,9 @@ bool combat(party& player, eparty enemyParty, int &credits)
 						{
 							for (int a = 0; a < 32; a++)
 							{
-								if (a <= enemyParty.eVect[1].name.length())
+								if (a <= enemyParty.eVect[1].getName().length())
 								{
-									cout << enemyParty.eVect[1].name[a];
+									cout << enemyParty.eVect[1].getName()[a];
 								}
 								else
 								{
@@ -2245,9 +2245,9 @@ bool combat(party& player, eparty enemyParty, int &credits)
 						{
 							for (int a = 0; a < 32; a++)
 							{
-								if (a <= enemyParty.eVect[2].name.length())
+								if (a <= enemyParty.eVect[2].getName().length())
 								{
-									cout << enemyParty.eVect[2].name[a];
+									cout << enemyParty.eVect[2].getName()[a];
 								}
 								else
 								{
@@ -2266,9 +2266,9 @@ bool combat(party& player, eparty enemyParty, int &credits)
 						{
 							for (int a = 0; a < 32; a++)
 							{
-								if (a <= enemyParty.eVect[3].name.length())
+								if (a <= enemyParty.eVect[3].getName().length())
 								{
-									cout << enemyParty.eVect[3].name[a];
+									cout << enemyParty.eVect[3].getName()[a];
 								}
 								else
 								{
@@ -2289,9 +2289,9 @@ bool combat(party& player, eparty enemyParty, int &credits)
 						{
 							for (int a = 0; a < 32; a++)
 							{
-								if (a <= enemyParty.eVect[4].name.length())
+								if (a <= enemyParty.eVect[4].getName().length())
 								{
-									cout << enemyParty.eVect[4].name[a];
+									cout << enemyParty.eVect[4].getName()[a];
 								}
 								else
 								{
@@ -2310,9 +2310,9 @@ bool combat(party& player, eparty enemyParty, int &credits)
 						{
 							for (int a = 0; a < 32; a++)
 							{
-								if (a <= enemyParty.eVect[5].name.length())
+								if (a <= enemyParty.eVect[5].getName().length())
 								{
-									cout << enemyParty.eVect[5].name[a];
+									cout << enemyParty.eVect[5].getName()[a];
 								}
 								else
 								{
@@ -2349,7 +2349,7 @@ bool combat(party& player, eparty enemyParty, int &credits)
 								coord.Y = 24;
 								SetConsoleCursorPosition(standard, coord);
 								SetConsoleTextAttribute(color, 4);
-								cout << enemyParty.eVect[0].name;
+								cout << enemyParty.eVect[0].getName();
 							}
 							else if (1 == menu.X && 2 == menu.Y)
 							{
@@ -2357,7 +2357,7 @@ bool combat(party& player, eparty enemyParty, int &credits)
 								coord.Y = 25;
 								SetConsoleCursorPosition(standard, coord);
 								SetConsoleTextAttribute(color, 4);
-								cout << enemyParty.eVect[2].name;
+								cout << enemyParty.eVect[2].getName();
 							}
 							else if (1 == menu.X && 3 == menu.Y)
 							{
@@ -2365,7 +2365,7 @@ bool combat(party& player, eparty enemyParty, int &credits)
 								coord.Y = 26;
 								SetConsoleCursorPosition(standard, coord);
 								SetConsoleTextAttribute(color, 4);
-								cout << enemyParty.eVect[4].name;
+								cout << enemyParty.eVect[4].getName();
 							}
 							else if (2 == menu.X && 1 == menu.Y)
 							{
@@ -2373,7 +2373,7 @@ bool combat(party& player, eparty enemyParty, int &credits)
 								coord.Y = 24;
 								SetConsoleCursorPosition(standard, coord);
 								SetConsoleTextAttribute(color, 4);
-								cout << enemyParty.eVect[1].name;
+								cout << enemyParty.eVect[1].getName();
 							}
 							else if (2 == menu.X && 2 == menu.Y)
 							{
@@ -2381,7 +2381,7 @@ bool combat(party& player, eparty enemyParty, int &credits)
 								coord.Y = 25;
 								SetConsoleCursorPosition(standard, coord);
 								SetConsoleTextAttribute(color, 4);
-								cout << enemyParty.eVect[3].name;
+								cout << enemyParty.eVect[3].getName();
 							}
 							else if (2 == menu.X && 3 == menu.Y)
 							{
@@ -2389,7 +2389,7 @@ bool combat(party& player, eparty enemyParty, int &credits)
 								coord.Y = 26;
 								SetConsoleCursorPosition(standard, coord);
 								SetConsoleTextAttribute(color, 4);
-								cout << enemyParty.eVect[5].name;
+								cout << enemyParty.eVect[5].getName();
 							}
 							else if (4 == menu.Y)
 							{
@@ -2408,7 +2408,7 @@ bool combat(party& player, eparty enemyParty, int &credits)
 									coord.Y = 24;
 									SetConsoleCursorPosition(standard, coord);
 									SetConsoleTextAttribute(color, 15);
-									cout << enemyParty.eVect[0].name;
+									cout << enemyParty.eVect[0].getName();
 								}
 								else if (1 == menuPast.X && 2 == menuPast.Y)
 								{
@@ -2416,7 +2416,7 @@ bool combat(party& player, eparty enemyParty, int &credits)
 									coord.Y = 25;
 									SetConsoleCursorPosition(standard, coord);
 									SetConsoleTextAttribute(color, 15);
-									cout << enemyParty.eVect[2].name;
+									cout << enemyParty.eVect[2].getName();
 								}
 								else if (1 == menuPast.X && 3 == menuPast.Y)
 								{
@@ -2424,7 +2424,7 @@ bool combat(party& player, eparty enemyParty, int &credits)
 									coord.Y = 26;
 									SetConsoleCursorPosition(standard, coord);
 									SetConsoleTextAttribute(color, 15);
-									cout << enemyParty.eVect[4].name;
+									cout << enemyParty.eVect[4].getName();
 								}
 								else if (2 == menuPast.X && 1 == menuPast.Y)
 								{
@@ -2432,7 +2432,7 @@ bool combat(party& player, eparty enemyParty, int &credits)
 									coord.Y = 24;
 									SetConsoleCursorPosition(standard, coord);
 									SetConsoleTextAttribute(color, 15);
-									cout << enemyParty.eVect[1].name;
+									cout << enemyParty.eVect[1].getName();
 								}
 								else if (2 == menuPast.X && 2 == menuPast.Y)
 								{
@@ -2440,7 +2440,7 @@ bool combat(party& player, eparty enemyParty, int &credits)
 									coord.Y = 25;
 									SetConsoleCursorPosition(standard, coord);
 									SetConsoleTextAttribute(color, 15);
-									cout << enemyParty.eVect[3].name;
+									cout << enemyParty.eVect[3].getName();
 								}
 								else if (2 == menuPast.X && 3 == menuPast.Y)
 								{
@@ -2448,7 +2448,7 @@ bool combat(party& player, eparty enemyParty, int &credits)
 									coord.Y = 26;
 									SetConsoleCursorPosition(standard, coord);
 									SetConsoleTextAttribute(color, 15);
-									cout << enemyParty.eVect[5].name;
+									cout << enemyParty.eVect[5].getName();
 								}
 								else if (4 == menuPast.Y)
 								{
@@ -2650,6 +2650,7 @@ bool combat(party& player, eparty enemyParty, int &credits)
 						coord.Y = 24;
 						SetConsoleCursorPosition(standard, coord);
 						cout << "this is the info window";
+						menuReprint = true;
 						_getch();
 					}
 					//used by menus for BACK option
@@ -2682,7 +2683,7 @@ bool combat(party& player, eparty enemyParty, int &credits)
 		//enemies don't escape
 		for (int a = 0; a < enemyParty.eVect.size(); a++)
 		{
-			switch (enemyParty.eVect[a].ID)
+			switch (enemyParty.eVect[a].getID())
 			{
 			case 0:
 				spaceGoblinAI(player, enemyParty, a, turnNum);
@@ -2707,9 +2708,9 @@ bool combat(party& player, eparty enemyParty, int &credits)
 		if (DEBUG)
 		{
 			SetConsoleTextAttribute(color, 15);
-			cout << "e1: action " << enemyParty.eVect[0].act << " target " << enemyParty.eVect[0].target << "\n";
-			cout << "e2: action " << enemyParty.eVect[1].act << " target " << enemyParty.eVect[1].target << "\n";
-			cout << "e3: action " << enemyParty.eVect[2].act << " target " << enemyParty.eVect[2].target << "\n";
+			cout << "e1: action " << enemyParty.eVect[0].getAction() << " target " << enemyParty.eVect[0].getTarget() << "\n";
+			cout << "e2: action " << enemyParty.eVect[1].getAction() << " target " << enemyParty.eVect[1].getTarget() << "\n";
+			cout << "e3: action " << enemyParty.eVect[2].getAction() << " target " << enemyParty.eVect[2].getTarget() << "\n";
 			_getch();
 		}
 		player.cVect[0].defenceValue = 10;//resetting/initializing defence Values
@@ -2780,7 +2781,7 @@ bool combat(party& player, eparty enemyParty, int &credits)
 		//enemy actions
 		for (int a = 0; a < enemyParty.a; a++)
 		{
-			switch (enemyParty.eVect[a].ID)
+			switch (enemyParty.eVect[a].getID())
 			{
 			case 0:
 				spaceGoblinActions(player, enemyParty, a);
@@ -2796,7 +2797,7 @@ bool combat(party& player, eparty enemyParty, int &credits)
 				break;
 			}
 		}
-		if (evade == player.cVect[0].act && evade == player.cVect[1].act && evade == player.cVect[2].act && evade == enemyParty.eVect[0].act && evade == enemyParty.eVect[1].act && evade == enemyParty.eVect[2].act)
+		if (evade == player.cVect[0].act && evade == player.cVect[1].act && evade == player.cVect[2].act && evade == (action)enemyParty.eVect[0].getAction() && evade == (action)enemyParty.eVect[1].getAction() && evade == (action)enemyParty.eVect[2].getAction())
 		{
 			coord.X = 0;
 			coord.Y = 29;
@@ -2818,7 +2819,7 @@ bool combat(party& player, eparty enemyParty, int &credits)
 		bool allDead = true;
 		for (int a = 0; a < enemyParty.a; a++)
 		{
-			if (!enemyParty.eVect[a].dead)
+			if (!enemyParty.eVect[a].getDead())
 			{
 				allDead = false;
 			}
@@ -2911,9 +2912,9 @@ void printHealthWindow(party& player, eparty& enemy)//player, enemy, number of e
 		printf("                      ");//print 22 spaces
 		for (int a = 0; a < 20; a++)
 		{
-			if (a < enemy.eVect[0].name.size())
+			if (a < enemy.eVect[0].getName().size())
 			{
-				cout << enemy.eVect[0].name[a];
+				cout << enemy.eVect[0].getName()[a];
 			}
 			else
 			{
@@ -2924,7 +2925,7 @@ void printHealthWindow(party& player, eparty& enemy)//player, enemy, number of e
 		printf("%c\n", 179);
 		printf("%c", 179);
 		printf("                      ");//print 22 spaces
-		printHbar(enemy.eVect[0].HP, enemy.eVect[0].HPmax, 20);
+		printHbar(enemy.eVect[0].getHP(), enemy.eVect[0].getHPmax(), 20);
 		printf("                      ");//print 22 spaces
 		printf("%c\n", 179);
 		printf("%c", 179);
@@ -2944,9 +2945,9 @@ void printHealthWindow(party& player, eparty& enemy)//player, enemy, number of e
 		printf("        ");//print 8 spaces
 		for (int a = 0; a < 20; a++)
 		{
-			if (a < enemy.eVect[0].name.size())
+			if (a < enemy.eVect[0].getName().size())
 			{
-				cout << enemy.eVect[0].name[a];
+				cout << enemy.eVect[0].getName()[a];
 			}
 			else
 			{
@@ -2956,9 +2957,9 @@ void printHealthWindow(party& player, eparty& enemy)//player, enemy, number of e
 		printf("        ");//8 spaces
 		for (int a = 0; a < 20; a++)
 		{
-			if (a < enemy.eVect[1].name.size())
+			if (a < enemy.eVect[1].getName().size())
 			{
-				cout << enemy.eVect[1].name[a];
+				cout << enemy.eVect[1].getName()[a];
 			}
 			else
 			{
@@ -2969,9 +2970,9 @@ void printHealthWindow(party& player, eparty& enemy)//player, enemy, number of e
 		printf("%c\n", 179);
 		printf("%c", 179);
 		printf("        ");//print 8 spaces
-		printHbar(enemy.eVect[0].HP, enemy.eVect[0].HPmax, 20);
+		printHbar(enemy.eVect[0].getHP(), enemy.eVect[0].getHPmax(), 20);
 		printf("        ");//8 spaces
-		printHbar(enemy.eVect[1].HP, enemy.eVect[1].HPmax, 20);
+		printHbar(enemy.eVect[1].getHP(), enemy.eVect[1].getHPmax(), 20);
 		printf("        ");//print 8 spaces
 		printf("%c\n", 179);
 		printf("%c", 179);
@@ -2990,9 +2991,9 @@ void printHealthWindow(party& player, eparty& enemy)//player, enemy, number of e
 	{
 		for (int a = 0; a < 20; a++)
 		{
-			if (a < enemy.eVect[0].name.size())
+			if (a < enemy.eVect[0].getName().size())
 			{
-				cout << enemy.eVect[0].name[a];
+				cout << enemy.eVect[0].getName()[a];
 			}
 			else
 			{
@@ -3002,9 +3003,9 @@ void printHealthWindow(party& player, eparty& enemy)//player, enemy, number of e
 		printf("  ");//2 spaces
 		for (int a = 0; a < 20; a++)
 		{
-			if (a < enemy.eVect[1].name.size())
+			if (a < enemy.eVect[1].getName().size())
 			{
-				cout << enemy.eVect[1].name[a];
+				cout << enemy.eVect[1].getName()[a];
 			}
 			else
 			{
@@ -3014,9 +3015,9 @@ void printHealthWindow(party& player, eparty& enemy)//player, enemy, number of e
 		printf("  ");//2 spaces
 		for (int a = 0; a < 20; a++)
 		{
-			if (a < enemy.eVect[2].name.size())
+			if (a < enemy.eVect[2].getName().size())
 			{
-				cout << enemy.eVect[2].name[a];
+				cout << enemy.eVect[2].getName()[a];
 			}
 			else
 			{
@@ -3025,11 +3026,11 @@ void printHealthWindow(party& player, eparty& enemy)//player, enemy, number of e
 		}
 		printf("%c\n", 179);
 		printf("%c", 179);
-		printHbar(enemy.eVect[0].HP, enemy.eVect[0].HPmax, 20);
+		printHbar(enemy.eVect[0].getHP(), enemy.eVect[0].getHPmax(), 20);
 		printf("  ");//2 spaces
-		printHbar(enemy.eVect[1].HP, enemy.eVect[1].HPmax, 20);
+		printHbar(enemy.eVect[1].getHP(), enemy.eVect[1].getHPmax(), 20);
 		printf("  ");//2 spaces
-		printHbar(enemy.eVect[2].HP, enemy.eVect[2].HPmax, 20);
+		printHbar(enemy.eVect[2].getHP(), enemy.eVect[2].getHPmax(), 20);
 		printf("%c\n", 179);
 		printf("%c", 179);
 		for (int a = 0; a < 64; a++)
@@ -3048,9 +3049,9 @@ void printHealthWindow(party& player, eparty& enemy)//player, enemy, number of e
 		printf("        ");//print 8 spaces
 		for (int a = 0; a < 20; a++)
 		{
-			if (a < enemy.eVect[0].name.size())
+			if (a < enemy.eVect[0].getName().size())
 			{
-				cout << enemy.eVect[0].name[a];
+				cout << enemy.eVect[0].getName()[a];
 			}
 			else
 			{
@@ -3060,9 +3061,9 @@ void printHealthWindow(party& player, eparty& enemy)//player, enemy, number of e
 		printf("        ");//8 spaces
 		for (int a = 0; a < 20; a++)
 		{
-			if (a < enemy.eVect[1].name.size())
+			if (a < enemy.eVect[1].getName().size())
 			{
-				cout << enemy.eVect[1].name[a];
+				cout << enemy.eVect[1].getName()[a];
 			}
 			else
 			{
@@ -3073,18 +3074,18 @@ void printHealthWindow(party& player, eparty& enemy)//player, enemy, number of e
 		printf("%c\n", 179);
 		printf("%c", 179);
 		printf("        ");//print 8 spaces
-		printHbar(enemy.eVect[0].HP, enemy.eVect[0].HPmax, 20);
+		printHbar(enemy.eVect[0].getHP(), enemy.eVect[0].getHPmax(), 20);
 		printf("        ");//8 spaces
-		printHbar(enemy.eVect[1].HP, enemy.eVect[1].HPmax, 20);
+		printHbar(enemy.eVect[1].getHP(), enemy.eVect[1].getHPmax(), 20);
 		printf("        ");//print 8 spaces
 		printf("%c\n", 179);
 		printf("%c", 179);
 		printf("        ");//print 8 spaces
 		for (int a = 0; a < 20; a++)
 		{
-			if (a < enemy.eVect[2].name.size())
+			if (a < enemy.eVect[2].getName().size())
 			{
-				cout << enemy.eVect[2].name[a];
+				cout << enemy.eVect[2].getName()[a];
 			}
 			else
 			{
@@ -3094,9 +3095,9 @@ void printHealthWindow(party& player, eparty& enemy)//player, enemy, number of e
 		printf("        ");//8 spaces
 		for (int a = 0; a < 20; a++)
 		{
-			if (a < enemy.eVect[3].name.size())
+			if (a < enemy.eVect[3].getName().size())
 			{
-				cout << enemy.eVect[3].name[a];
+				cout << enemy.eVect[3].getName()[a];
 			}
 			else
 			{
@@ -3107,18 +3108,18 @@ void printHealthWindow(party& player, eparty& enemy)//player, enemy, number of e
 		printf("%c\n", 179);
 		printf("%c", 179);
 		printf("        ");//print 8 spaces
-		printHbar(enemy.eVect[2].HP, enemy.eVect[2].HPmax, 20);
+		printHbar(enemy.eVect[2].getHP(), enemy.eVect[2].getHPmax(), 20);
 		printf("        ");//8 spaces
-		printHbar(enemy.eVect[3].HP, enemy.eVect[3].HPmax, 20);
+		printHbar(enemy.eVect[3].getHP(), enemy.eVect[3].getHPmax(), 20);
 		printf("        ");//print 8 spaces
 	}
 	else if (5 == enemy.a)
 	{
 		for (int a = 0; a < 20; a++)
 		{
-			if (a < enemy.eVect[0].name.size())
+			if (a < enemy.eVect[0].getName().size())
 			{
-				cout << enemy.eVect[0].name[a];
+				cout << enemy.eVect[0].getName()[a];
 			}
 			else
 			{
@@ -3128,9 +3129,9 @@ void printHealthWindow(party& player, eparty& enemy)//player, enemy, number of e
 		printf("  ");//2 spaces
 		for (int a = 0; a < 20; a++)
 		{
-			if (a < enemy.eVect[1].name.size())
+			if (a < enemy.eVect[1].getName().size())
 			{
-				cout << enemy.eVect[1].name[a];
+				cout << enemy.eVect[1].getName()[a];
 			}
 			else
 			{
@@ -3140,9 +3141,9 @@ void printHealthWindow(party& player, eparty& enemy)//player, enemy, number of e
 		printf("  ");//2 spaces
 		for (int a = 0; a < 20; a++)
 		{
-			if (a < enemy.eVect[2].name.size())
+			if (a < enemy.eVect[2].getName().size())
 			{
-				cout << enemy.eVect[2].name[a];
+				cout << enemy.eVect[2].getName()[a];
 			}
 			else
 			{
@@ -3151,19 +3152,19 @@ void printHealthWindow(party& player, eparty& enemy)//player, enemy, number of e
 		}
 		printf("%c\n", 179);
 		printf("%c", 179);
-		printHbar(enemy.eVect[0].HP, enemy.eVect[0].HPmax, 20);
+		printHbar(enemy.eVect[0].getHP(), enemy.eVect[0].getHPmax(), 20);
 		printf("  ");//2 spaces
-		printHbar(enemy.eVect[1].HP, enemy.eVect[1].HPmax, 20);
+		printHbar(enemy.eVect[1].getHP(), enemy.eVect[1].getHPmax(), 20);
 		printf("  ");//2 spaces
-		printHbar(enemy.eVect[2].HP, enemy.eVect[2].HPmax, 20);
+		printHbar(enemy.eVect[2].getHP(), enemy.eVect[2].getHPmax(), 20);
 		printf("%c\n", 179);
 		printf("%c", 179);
 		printf("        ");//print 8 spaces
 		for (int a = 0; a < 20; a++)
 		{
-			if (a < enemy.eVect[3].name.size())
+			if (a < enemy.eVect[3].getName().size())
 			{
-				cout << enemy.eVect[3].name[a];
+				cout << enemy.eVect[3].getName()[a];
 			}
 			else
 			{
@@ -3173,9 +3174,9 @@ void printHealthWindow(party& player, eparty& enemy)//player, enemy, number of e
 		printf("        ");//8 spaces
 		for (int a = 0; a < 20; a++)
 		{
-			if (a < enemy.eVect[4].name.size())
+			if (a < enemy.eVect[4].getName().size())
 			{
-				cout << enemy.eVect[4].name[a];
+				cout << enemy.eVect[4].getName()[a];
 			}
 			else
 			{
@@ -3186,18 +3187,18 @@ void printHealthWindow(party& player, eparty& enemy)//player, enemy, number of e
 		printf("%c\n", 179);
 		printf("%c", 179);
 		printf("        ");//print 8 spaces
-		printHbar(enemy.eVect[3].HP, enemy.eVect[3].HPmax, 20);
+		printHbar(enemy.eVect[3].getHP(), enemy.eVect[3].getHPmax(), 20);
 		printf("        ");//8 spaces
-		printHbar(enemy.eVect[4].HP, enemy.eVect[4].HPmax, 20);
+		printHbar(enemy.eVect[4].getHP(), enemy.eVect[4].getHPmax(), 20);
 		printf("        ");//print 8 spaces
 	}
 	else if (6 == enemy.a)
 	{
 		for (int a = 0; a < 20; a++)
 		{
-			if (a < enemy.eVect[0].name.size())
+			if (a < enemy.eVect[0].getName().size())
 			{
-				cout << enemy.eVect[0].name[a];
+				cout << enemy.eVect[0].getName()[a];
 			}
 			else
 			{
@@ -3207,9 +3208,9 @@ void printHealthWindow(party& player, eparty& enemy)//player, enemy, number of e
 		printf("  ");//2 spaces
 		for (int a = 0; a < 20; a++)
 		{
-			if (a < enemy.eVect[1].name.size())
+			if (a < enemy.eVect[1].getName().size())
 			{
-				cout << enemy.eVect[1].name[a];
+				cout << enemy.eVect[1].getName()[a];
 			}
 			else
 			{
@@ -3219,9 +3220,9 @@ void printHealthWindow(party& player, eparty& enemy)//player, enemy, number of e
 		printf("  ");//2 spaces
 		for (int a = 0; a < 20; a++)
 		{
-			if (a < enemy.eVect[2].name.size())
+			if (a < enemy.eVect[2].getName().size())
 			{
-				cout << enemy.eVect[2].name[a];
+				cout << enemy.eVect[2].getName()[a];
 			}
 			else
 			{
@@ -3230,18 +3231,18 @@ void printHealthWindow(party& player, eparty& enemy)//player, enemy, number of e
 		}
 		printf("%c\n", 179);
 		printf("%c", 179);
-		printHbar(enemy.eVect[0].HP, enemy.eVect[0].HPmax, 20);
+		printHbar(enemy.eVect[0].getHP(), enemy.eVect[0].getHPmax(), 20);
 		printf("  ");//2 spaces
-		printHbar(enemy.eVect[1].HP, enemy.eVect[1].HPmax, 20);
+		printHbar(enemy.eVect[1].getHP(), enemy.eVect[1].getHPmax(), 20);
 		printf("  ");//2 spaces
-		printHbar(enemy.eVect[2].HP, enemy.eVect[2].HPmax, 20);
+		printHbar(enemy.eVect[2].getHP(), enemy.eVect[2].getHPmax(), 20);
 		printf("%c\n", 179);
 		printf("%c", 179);
 		for (int a = 0; a < 20; a++)
 		{
-			if (a < enemy.eVect[3].name.size())
+			if (a < enemy.eVect[3].getName().size())
 			{
-				cout << enemy.eVect[3].name[a];
+				cout << enemy.eVect[3].getName()[a];
 			}
 			else
 			{
@@ -3251,9 +3252,9 @@ void printHealthWindow(party& player, eparty& enemy)//player, enemy, number of e
 		printf("  ");//2 spaces
 		for (int a = 0; a < 20; a++)
 		{
-			if (a < enemy.eVect[4].name.size())
+			if (a < enemy.eVect[4].getName().size())
 			{
-				cout << enemy.eVect[4].name[a];
+				cout << enemy.eVect[4].getName()[a];
 			}
 			else
 			{
@@ -3263,9 +3264,9 @@ void printHealthWindow(party& player, eparty& enemy)//player, enemy, number of e
 		printf("  ");//2 spaces
 		for (int a = 0; a < 20; a++)
 		{
-			if (a < enemy.eVect[5].name.size())
+			if (a < enemy.eVect[5].getName().size())
 			{
-				cout << enemy.eVect[5].name[a];
+				cout << enemy.eVect[5].getName()[a];
 			}
 			else
 			{
@@ -3274,11 +3275,11 @@ void printHealthWindow(party& player, eparty& enemy)//player, enemy, number of e
 		}
 		printf("%c\n", 179);
 		printf("%c", 179);
-		printHbar(enemy.eVect[3].HP, enemy.eVect[3].HPmax, 20);
+		printHbar(enemy.eVect[3].getHP(), enemy.eVect[3].getHPmax(), 20);
 		printf("  ");//2 spaces
-		printHbar(enemy.eVect[4].HP, enemy.eVect[4].HPmax, 20);
+		printHbar(enemy.eVect[4].getHP(), enemy.eVect[4].getHPmax(), 20);
 		printf("  ");//2 spaces
-		printHbar(enemy.eVect[5].HP, enemy.eVect[5].HPmax, 20);
+		printHbar(enemy.eVect[5].getHP(), enemy.eVect[5].getHPmax(), 20);
 	}
 	printf("%c\n", 179);
 	printf("%c", 192);
@@ -3363,15 +3364,15 @@ void killAndTop(party& player, eparty& enemyParty)//use between ai and action lo
 {
 	for (int e = 0; e < enemyParty.a; e++)
 	{
-		if (!enemyParty.eVect[e].dead)
+		if (!enemyParty.eVect[e].getDead())
 		{
-			if (enemyParty.eVect[e].HP <= 0)
+			if (enemyParty.eVect[e].getHP() <= 0)
 			{
-				enemyParty.eVect[e].dead = true;
+				enemyParty.eVect[e].setDead(true);
 			}
-			else if (enemyParty.eVect[e].HPmax < enemyParty.eVect[e].HP)
+			else if (enemyParty.eVect[e].getHPmax() < enemyParty.eVect[e].getHP())
 			{
-				enemyParty.eVect[e].HP = enemyParty.eVect[e].HPmax;
+				enemyParty.eVect[e].setHP(enemyParty.eVect[e].getHPmax());
 			}
 		}
 	}
@@ -3435,8 +3436,11 @@ void blocks(int a)
 
 void pixelArtRelay(int backID, int forID)
 {
+	ifstream in;
 	string image = "";
 	string image2 = "";
+	vector <string> animation;
+	string temp, temp2;
 	switch (backID)
 	{
 	case 0:
@@ -3469,23 +3473,30 @@ void pixelArtRelay(int backID, int forID)
 		image += "00000000000000000000000000000000";
 		printCombatGraphic(image, 6);
 		break;
+	case 3://drone swarm
+	case 4://golem
+	case 5://worm
+	case 6://guardian
+	case 7://chest opening
+		break;
 	default:
 		cout << "ERROR\n";
 	}
+	image = "";
 	switch (forID)
 	{
 	case 0:
-		image2 += "                                n";
-		image2 += "              aaaa              n";
-		image2 += "          22 aaaaaa 22          n";
-		image2 += "           22a4aa4a22           n";
-		image2 += "           22aa22aa22           n";
-		image2 += "            2aa22aa2            n";
-		image2 += "             aaaaaa             n";
-		image2 += "             aa22aa             n";
-		image2 += "              aaaa              n";
-		image2 += "           2222aa2222           n";
-		image2 += "          222222222222          ";
+		image += "                                n";
+		image += "              aaaa              n";
+		image += "          22 aaaaaa 22          n";
+		image += "           22a4aa4a22           n";
+		image += "           22aa22aa22           n";
+		image += "            2aa22aa2            n";
+		image += "             aaaaaa             n";
+		image += "             aa22aa             n";
+		image += "              aaaa              n";
+		image += "           2222aa2222           n";
+		image += "          222222222222          ";
 		printCombatGraphic(image2, 6);
 		break;
 	case 1://Sp_ce
@@ -3522,34 +3533,60 @@ void pixelArtRelay(int backID, int forID)
 		printImage(image, 0);
 		break;
 	case 2:
-		image2 = "";
-		image2 += "00000004000000044000000040000000n";
-		image2 += "0000004c4000004444000004c4000000n";
-		image2 += "0048004c4000044cc4400004c4880400n";
-		image2 += "04c4804c400044cffc440004c4884c40n";
-		image2 += "04c4804c40044cf55fc44004c4884c40n";
-		image2 += "04c4804440044cf55fc4400444884c40n";
-		image2 += "04c48884000044cffc44000048884c40n";
-		image2 += "00408884000044cccc44000040000400n";
-		image2 += "004400044000044cc448800440004400n";
-		image2 += "00044000440004444448804400044000n";
-		image2 += "00004444044004444440044044440000";
+		image = "";
+		image += "00000004000000044000000040000000n";
+		image += "0000004c4000004444000004c4000000n";
+		image += "0048004c4000044cc4400004c4880400n";
+		image += "04c4804c400044cffc440004c4884c40n";
+		image += "04c4804c40044cf55fc44004c4884c40n";
+		image += "04c4804440044cf55fc4400444884c40n";
+		image += "04c48884000044cffc44000048884c40n";
+		image += "00408884000044cccc44000040000400n";
+		image += "004400044000044cc448800440004400n";
+		image += "00044000440004444448804400044000n";
+		image += "00004444044004444440044044440000";
 		printCombatGraphic(image2, 6);
 		break;
 	case 3:
-		image2 = "";
-		image2 += "00000000000000000000000000000000n";
-		image2 += "000000fff0000f0000f0000000000000n";
-		image2 += "00000ff4ff000f0000f00000000fff00n";
-		image2 += "000000fff00000f00f00000000ff4ff0n";
-		image2 += "00000000000000f00f000000000fff00n";
-		image2 += "0000000000000ffffff0000000000000n";
-		image2 += "000fff000000ffffffff000000000000n";
-		image2 += "00ff4ff0000ffff4cffff000fff00000n";
-		image2 += "000fff00000ffff44ffff00ff4ff0000n";
-		image2 += "000000000000ffffffff0000fff00000n";
-		image2 += "0000000000000ffffff0000000000000";
+		image = "";
+		image += "00000000000000000000000000000000n";
+		image += "000000fff0000f0000f0000000000000n";
+		image += "00000ff4ff000f0000f00000000fff00n";
+		image += "000000fff00000f00f00000000ff4ff0n";
+		image += "00000000000000f00f000000000fff00n";
+		image += "0000000000000ffffff0000000000000n";
+		image += "000fff000000ffffffff000000000000n";
+		image += "00ff4ff0000ffff4cffff000fff00000n";
+		image += "000fff00000ffff44ffff00ff4ff0000n";
+		image += "000000000000ffffffff0000fff00000n";
+		image += "0000000000000ffffff0000000000000";
 		printCombatGraphic(image2, 6);
+		break;
+	case 4://golem forground
+	case 5://worm forground
+	case 6://guardian forground
+	case 7://chest animation
+		in.open("chest opening.txt");
+		temp2 = "";
+		for (int f = 0; f < 9; f++)
+		{
+			for (int a = 0; a < 25; a++)
+			{
+				getline(in, temp);
+				temp2 += temp + 'n';
+			}
+			getline(in, temp);
+			animation.push_back(temp2);
+			temp2 = "";
+		}
+		in.close();
+		printImage(animation[0], 0);
+		_getch();
+		for (int a = 1; a < 6; a++)
+		{
+			printImage(animation[a], 0);
+			Sleep(30);
+		}
 		break;
 	default:
 		cout << "ERROR" << endl;
@@ -3839,7 +3876,7 @@ void spaceGoblinAI(party& player, eparty& enemyParty, int a, int turnNum)
 			}
 		}
 	}
-	enemyParty.eVect[a].act = temp;
+	enemyParty.eVect[a].setAction((int)temp);
 	if (attack == temp)
 	{
 		int randAttack = _dice(player.cVect[0].HP + player.cVect[1].HP + player.cVect[2].HP);
@@ -3864,42 +3901,42 @@ void spaceGoblinAI(party& player, eparty& enemyParty, int a, int turnNum)
 			switch (_dice(enemyParty.a))
 			{
 			case 1:
-				if (!enemyParty.eVect[0].dead)
+				if (!enemyParty.eVect[0].getDead())
 				{
 					tempTarget = 0;
 					pickedOne = true;
 				}
 				break;
 			case 2:
-				if (!enemyParty.eVect[1].dead)
+				if (!enemyParty.eVect[1].getDead())
 				{
 					tempTarget = 1;
 					pickedOne = true;
 				}
 				break;
 			case 3:
-				if (!enemyParty.eVect[2].dead)
+				if (!enemyParty.eVect[2].getDead())
 				{
 					tempTarget = 2;
 					pickedOne = true;
 				}
 				break;
 			case 4:
-				if (!enemyParty.eVect[3].dead)
+				if (!enemyParty.eVect[3].getDead())
 				{
 					tempTarget = 3;
 					pickedOne = true;
 				}
 				break;
 			case 5:
-				if (!enemyParty.eVect[4].dead)
+				if (!enemyParty.eVect[4].getDead())
 				{
 					tempTarget = 4;
 					pickedOne = true;
 				}
 				break;
 			case 6:
-				if (!enemyParty.eVect[5].dead)
+				if (!enemyParty.eVect[5].getDead())
 				{
 					tempTarget = 5;
 					pickedOne = true;
@@ -3912,7 +3949,7 @@ void spaceGoblinAI(party& player, eparty& enemyParty, int a, int turnNum)
 	{
 		tempTarget = _dice(3) - 1;
 	}
-	enemyParty.eVect[a].target = tempTarget;
+	enemyParty.eVect[a].setTarget(tempTarget);
 	return;
 }
 
@@ -3931,57 +3968,57 @@ void spaceGoblinActions(party& player, eparty& enemyParty, int e)
 	coord.X = 0;
 	coord.Y = 29;
 	SetConsoleCursorPosition(standard, coord);
-	int TempAtk = (float)enemyParty.eVect[e].atk * enemyParty.eVect[e].atkMulti;
-	if (!enemyParty.eVect[e].dead)//enemy
+	int TempAtk = (float)enemyParty.eVect[e].getAtk() * enemyParty.eVect[e].getAtkMulti();
+	if (!enemyParty.eVect[e].getDead())//enemy
 	{
-		if (attack == enemyParty.eVect[e].act)//attacks 
+		if (attack == (action)enemyParty.eVect[e].getAction())//attacks 
 		{
-			if (evade == player.cVect[enemyParty.eVect[e].target].act && 1 == player.cVect[enemyParty.eVect[e].target].target)//player evades
+			if (evade == player.cVect[enemyParty.eVect[e].getTarget()].act && 1 == player.cVect[enemyParty.eVect[e].getTarget()].target)//player evades
 			{
-				if (player.cVect[enemyParty.eVect[e].target].defenceValue < 20 + _dice(10))//20 + _dice(10) is goblin's accuracy value. if the goblins accuracy is higher than the player's defence than the goblin hits
+				if (player.cVect[enemyParty.eVect[e].getTarget()].defenceValue < 20 + _dice(10))//20 + _dice(10) is goblin's accuracy value. if the goblins accuracy is higher than the player's defence than the goblin hits
 				{
-					cout << player.cVect[enemyParty.eVect[e].target].name << " fails to dodge " << enemyParty.eVect[e].name << "'s attack for " << TempAtk << " damage";
-					player.cVect[enemyParty.eVect[e].target].HP -= TempAtk;
+					cout << player.cVect[enemyParty.eVect[e].getTarget()].name << " fails to dodge " << enemyParty.eVect[e].getName() << "'s attack for " << TempAtk << " damage";
+					player.cVect[enemyParty.eVect[e].getTarget()].HP -= TempAtk;
 				}
 				else//75% chance to dodge
 				{
-					cout << player.cVect[enemyParty.eVect[e].target].name << " dodges " << enemyParty.eVect[e].name << "'s attack";
+					cout << player.cVect[enemyParty.eVect[e].getTarget()].name << " dodges " << enemyParty.eVect[e].getName() << "'s attack";
 				}
 			}
 			else//engineer does not evade
 			{
 				if (1 == _dice(4))//25% chance to miss, 
 				{
-					cout << enemyParty.eVect[e].name << " attacks " << player.cVect[enemyParty.eVect[e].target].name << " but misses";
+					cout << enemyParty.eVect[e].getName() << " attacks " << player.cVect[enemyParty.eVect[e].getTarget()].name << " but misses";
 				}
 				else//75% chance to not miss
 				{
-					cout << enemyParty.eVect[e].name << " attacks " << player.cVect[enemyParty.eVect[e].target].name << " for " << TempAtk << " damage";
-					player.cVect[enemyParty.eVect[e].target].HP -= TempAtk;
+					cout << enemyParty.eVect[e].getName() << " attacks " << player.cVect[enemyParty.eVect[e].getTarget()].name << " for " << TempAtk << " damage";
+					player.cVect[enemyParty.eVect[e].getTarget()].HP -= TempAtk;
 				}
 			}
 		}
-		else if (special == enemyParty.eVect[e].act)//uses special on
+		else if (special == (action)enemyParty.eVect[e].getAction())//uses special on
 		{
-			if (e == enemyParty.eVect[e].target)//goblin targeting itself increases it's attack multiplier
+			if (e == enemyParty.eVect[e].getTarget())//goblin targeting itself increases it's attack multiplier
 			{
-				cout << enemyParty.eVect[e].name << " gives its ray gun a smack, causing it to surge with energy";
-				enemyParty.eVect[e].atkMulti *= 1.1;
+				cout << enemyParty.eVect[e].getName() << " gives its ray gun a smack, causing it to surge with energy";
+				enemyParty.eVect[e].multAtkMulti(1.1);
 			}
-			else if (0 == enemyParty.eVect[e].target)
+			else if (0 == enemyParty.eVect[e].getTarget())
 			{
-				cout << enemyParty.eVect[e].name << " tends to " << enemyParty.eVect[0].name << "'s wounds for 3 health";
-				enemyParty.eVect[0].HP += 3;
+				cout << enemyParty.eVect[e].getName() << " tends to " << enemyParty.eVect[0].getName() << "'s wounds for 3 health";
+				enemyParty.eVect[0].addHP(3);
 			}
-			else if (1 == enemyParty.eVect[e].target)
+			else if (1 == enemyParty.eVect[e].getTarget())
 			{
-				cout << enemyParty.eVect[e].name << " tends to " << enemyParty.eVect[1].name << "'s wounds for 3 health";
-				enemyParty.eVect[1].HP += 3;
+				cout << enemyParty.eVect[e].getName() << " tends to " << enemyParty.eVect[1].getName() << "'s wounds for 3 health";
+				enemyParty.eVect[1].addHP(3);
 			}
-			else if (2 == enemyParty.eVect[e].target)
+			else if (2 == enemyParty.eVect[e].getTarget())
 			{
-				cout << enemyParty.eVect[e].name << " tends to " << enemyParty.eVect[2].name << "'s wounds for 3 health";
-				enemyParty.eVect[2].HP += 3;
+				cout << enemyParty.eVect[e].getName() << " tends to " << enemyParty.eVect[2].getName() << "'s wounds for 3 health";
+				enemyParty.eVect[2].addHP(3);
 			}
 			else
 			{
@@ -3989,7 +4026,7 @@ void spaceGoblinActions(party& player, eparty& enemyParty, int e)
 			}
 		}
 	}
-	if (evade != enemyParty.eVect[e].act && !enemyParty.eVect[e].dead)
+	if (evade != (action)enemyParty.eVect[e].getAction() && !enemyParty.eVect[e].getDead())
 	{
 		_getch();
 	}
@@ -4027,7 +4064,7 @@ void squidAI(party& player, eparty& enemyParty, int a, int turnNum)
 	{
 		temp = special;
 	}
-	enemyParty.eVect[a].act = temp;
+	enemyParty.eVect[a].setAction((int)temp);
 	if (attack == temp)//enemies should attack characters with more HP
 	{
 		int randAttack = _dice(player.cVect[0].HP + player.cVect[1].HP + player.cVect[2].HP);
@@ -4052,42 +4089,42 @@ void squidAI(party& player, eparty& enemyParty, int a, int turnNum)
 			switch (_dice(enemyParty.a))
 			{
 			case 1:
-				if (!enemyParty.eVect[0].dead)
+				if (!enemyParty.eVect[0].getDead())
 				{
 					tempTarget = 0;
 					pickedOne = true;
 				}
 				break;
 			case 2:
-				if (!enemyParty.eVect[1].dead)
+				if (!enemyParty.eVect[1].getDead())
 				{
 					tempTarget = 1;
 					pickedOne = true;
 				}
 				break;
 			case 3:
-				if (!enemyParty.eVect[2].dead)
+				if (!enemyParty.eVect[2].getDead())
 				{
 					tempTarget = 2;
 					pickedOne = true;
 				}
 				break;
 			case 4:
-				if (!enemyParty.eVect[3].dead)
+				if (!enemyParty.eVect[3].getDead())
 				{
 					tempTarget = 3;
 					pickedOne = true;
 				}
 				break;
 			case 5:
-				if (!enemyParty.eVect[4].dead)
+				if (!enemyParty.eVect[4].getDead())
 				{
 					tempTarget = 4;
 					pickedOne = true;
 				}
 				break;
 			case 6:
-				if (!enemyParty.eVect[5].dead)
+				if (!enemyParty.eVect[5].getDead())
 				{
 					tempTarget = 5;
 					pickedOne = true;
@@ -4100,7 +4137,7 @@ void squidAI(party& player, eparty& enemyParty, int a, int turnNum)
 	{
 		tempTarget = _dice(3) - 1;
 	}
-	enemyParty.eVect[a].target = tempTarget;
+	enemyParty.eVect[a].setTarget(tempTarget);
 	return;
 }
 
@@ -4119,53 +4156,53 @@ void squidActions(party& player, eparty& enemyParty, int e)
 	coord.X = 0;
 	coord.Y = 29;
 	SetConsoleCursorPosition(standard, coord);
-	int TempAtk = (float)enemyParty.eVect[e].atk * enemyParty.eVect[e].atkMulti;
-	if (!enemyParty.eVect[e].dead)//enemy
+	int TempAtk = (float)enemyParty.eVect[e].getAtk() * enemyParty.eVect[e].getAtkMulti();
+	if (!enemyParty.eVect[e].getDead())//enemy
 	{
-		if (attack == enemyParty.eVect[e].act)//attacks 
+		if (attack == (action)enemyParty.eVect[e].getAction())//attacks 
 		{
-			if (evade == player.cVect[enemyParty.eVect[e].target].act && 1 == player.cVect[enemyParty.eVect[e].target].target)//player evades
+			if (evade == player.cVect[enemyParty.eVect[e].getTarget()].act && 1 == player.cVect[enemyParty.eVect[e].getTarget()].target)//player evades
 			{
-				if (player.cVect[enemyParty.eVect[e].target].defenceValue < 25 + _dice(5))//
+				if (player.cVect[enemyParty.eVect[e].getTarget()].defenceValue < 25 + _dice(5))//
 				{
-					cout << player.cVect[enemyParty.eVect[e].target].name << " fails to dodge " << enemyParty.eVect[e].name << "'s attack doing " << TempAtk << " damage";
-					player.cVect[enemyParty.eVect[e].target].HP -= TempAtk;
-					enemyParty.eVect[e].atkMulti = 1.0;//reset charged attacks
+					cout << player.cVect[enemyParty.eVect[e].getTarget()].name << " fails to dodge " << enemyParty.eVect[e].getName() << "'s attack doing " << TempAtk << " damage";
+					player.cVect[enemyParty.eVect[e].getTarget()].HP -= TempAtk;
+					enemyParty.eVect[e].setAtkMulti(1.0);//reset charged attacks
 				}
 				else//75% chance to dodge
 				{
-					cout << player.cVect[enemyParty.eVect[e].target].name << " dodges " << enemyParty.eVect[e].name << "'s tentacle";
+					cout << player.cVect[enemyParty.eVect[e].getTarget()].name << " dodges " << enemyParty.eVect[e].getName() << "'s tentacle";
 				}
 			}
 			else//player does not evade
 			{
 				if (1 == _dice(4))//25% chance to miss
 				{
-					cout << enemyParty.eVect[e].name << " charges at " << player.cVect[enemyParty.eVect[e].target].name << " but misses";
+					cout << enemyParty.eVect[e].getName() << " charges at " << player.cVect[enemyParty.eVect[e].getTarget()].name << " but misses";
 				}
 				else//75% chance to not miss
 				{
-					cout << enemyParty.eVect[e].name << " slaps " << player.cVect[enemyParty.eVect[e].target].name << " doing " << TempAtk << " damage";
-					player.cVect[enemyParty.eVect[e].target].HP -= TempAtk;
-					enemyParty.eVect[e].atkMulti = 1.0;//reset charged attacks
+					cout << enemyParty.eVect[e].getName() << " slaps " << player.cVect[enemyParty.eVect[e].getTarget()].name << " doing " << TempAtk << " damage";
+					player.cVect[enemyParty.eVect[e].getTarget()].HP -= TempAtk;
+					enemyParty.eVect[e].setAtkMulti(1.0);//reset charged attacks
 				}
 			}
 		}
-		else if (special == enemyParty.eVect[e].act)//uses special on
+		else if (special == (action)enemyParty.eVect[e].getAction())//uses special on
 		{
-			if (e == enemyParty.eVect[e].target)//squid targeting itself increases it's attack multiplier
+			if (e == enemyParty.eVect[e].getTarget())//squid targeting itself increases it's attack multiplier
 			{
-				cout << enemyParty.eVect[e].name << " begins to spin, building momentum";
-				enemyParty.eVect[e].atkMulti *= 1.4;
+				cout << enemyParty.eVect[e].getName() << " begins to spin, building momentum";
+				enemyParty.eVect[e].multAtkMulti(1.4);
 			}
 			else
 			{
-				cout << enemyParty.eVect[e].name << " engulfs " << enemyParty.eVect[enemyParty.eVect[e].target].name << " in a cloud of healing ink, healing 2 damage";
-				enemyParty.eVect[enemyParty.eVect[e].target].HP += 2;
+				cout << enemyParty.eVect[e].getName() << " engulfs " << enemyParty.eVect[enemyParty.eVect[e].getTarget()].getName() << " in a cloud of healing ink, healing 2 damage";
+				enemyParty.eVect[enemyParty.eVect[e].getTarget()].addHP(2);
 			}
 		}
 	}
-	if (evade != enemyParty.eVect[e].act && !enemyParty.eVect[e].dead)
+	if (evade != (action)enemyParty.eVect[e].getAction() && !enemyParty.eVect[e].getDead())
 	{
 		_getch();
 	}
@@ -4186,18 +4223,18 @@ void droneAI(party& player, eparty& enemyParty, int a, int turnNum)
 	case 2:
 		temp = evade;
 	}
-	enemyParty.eVect[a].act = temp;
+	enemyParty.eVect[a].setAction((int)temp);
 	if (special == temp)
 	{
-		enemyParty.eVect[a].target = 1;//drones always target the brain
+		enemyParty.eVect[a].setTarget(1);//drones always target the brain
 	}
 	else if (attack == temp)
 	{
-		enemyParty.eVect[a].target = _dice(3) - 1;
+		enemyParty.eVect[a].setTarget(_dice(3) - 1);
 	}
 	else if (evade == temp)
 	{
-		enemyParty.eVect[a].target = _dice(3) - 1;
+		enemyParty.eVect[a].setTarget(_dice(3) - 1);
 	}
 	return;
 }
@@ -4217,43 +4254,43 @@ void droneActions(party& player, eparty& enemyParty, int e)
 	coord.X = 0;
 	coord.Y = 29;
 	SetConsoleCursorPosition(standard, coord);
-	int TempAtk = (float)enemyParty.eVect[e].atk * enemyParty.eVect[e].atkMulti;
-	if (!enemyParty.eVect[e].dead)//enemy
+	int TempAtk = (float)enemyParty.eVect[e].getAtk() * enemyParty.eVect[e].getAtkMulti();
+	if (!enemyParty.eVect[e].getDead())//enemy
 	{
-		if (attack == enemyParty.eVect[e].act)//attacks 
+		if (attack == (action)enemyParty.eVect[e].getAction())//attacks 
 		{
-			if (evade == player.cVect[enemyParty.eVect[e].target].act && 1 == player.cVect[enemyParty.eVect[e].target].target)//player evades
+			if (evade == player.cVect[enemyParty.eVect[e].getTarget()].act && 1 == player.cVect[enemyParty.eVect[e].getTarget()].target)//player evades
 			{
-				if (player.cVect[enemyParty.eVect[e].target].defenceValue < 15 + _dice(15))//15 + _dice(15) is drone's accuracy value. if the drone's accuracy is higher than the player's defence than the drone hits
+				if (player.cVect[enemyParty.eVect[e].getTarget()].defenceValue < 15 + _dice(15))//15 + _dice(15) is drone's accuracy value. if the drone's accuracy is higher than the player's defence than the drone hits
 				{
-					cout << player.cVect[enemyParty.eVect[e].target].name << " fails to dodge " << enemyParty.eVect[e].name << "'s lazer doing " << TempAtk << " damage";
-					player.cVect[enemyParty.eVect[e].target].HP -= TempAtk;
+					cout << player.cVect[enemyParty.eVect[e].getTarget()].name << " fails to dodge " << enemyParty.eVect[e].getName() << "'s lazer doing " << TempAtk << " damage";
+					player.cVect[enemyParty.eVect[e].getTarget()].HP -= TempAtk;
 				}
 				else//75% chance to dodge
 				{
-					cout << player.cVect[enemyParty.eVect[e].target].name << " dodges " << enemyParty.eVect[e].name << "'s attack";
+					cout << player.cVect[enemyParty.eVect[e].getTarget()].name << " dodges " << enemyParty.eVect[e].getName() << "'s attack";
 				}
 			}
 			else//player does not evade
 			{
 				if (1 == _dice(3))//33% chance to miss, 
 				{
-					cout << enemyParty.eVect[e].name << " attacks " << player.cVect[enemyParty.eVect[e].target].name << " but misses";
+					cout << enemyParty.eVect[e].getName() << " attacks " << player.cVect[enemyParty.eVect[e].getTarget()].name << " but misses";
 				}
 				else//75% chance to not miss
 				{
-					cout << enemyParty.eVect[e].name << " hits " << player.cVect[enemyParty.eVect[e].target].name << " with a lazer for " << TempAtk << " damage";
-					player.cVect[enemyParty.eVect[e].target].HP -= TempAtk;
+					cout << enemyParty.eVect[e].getName() << " hits " << player.cVect[enemyParty.eVect[e].getTarget()].name << " with a lazer for " << TempAtk << " damage";
+					player.cVect[enemyParty.eVect[e].getTarget()].HP -= TempAtk;
 				}
 			}
 		}
-		else if (special == enemyParty.eVect[e].act)//uses special on
+		else if (special == (action)enemyParty.eVect[e].getAction())//uses special on
 		{
-			cout << enemyParty.eVect[e].name << " siphons energy into " << enemyParty.eVect[enemyParty.eVect[e].target].name;
-			enemyParty.eVect[enemyParty.eVect[e].target].atkMulti *= 1.2;
+			cout << enemyParty.eVect[e].getName() << " siphons energy into " << enemyParty.eVect[enemyParty.eVect[e].getTarget()].getName();
+			enemyParty.eVect[enemyParty.eVect[e].getTarget()].multAtkMulti(1.2);
 		}
 	}
-	if (evade != enemyParty.eVect[e].act && !enemyParty.eVect[e].dead)
+	if (evade != (action)enemyParty.eVect[e].getAction() && !enemyParty.eVect[e].getDead())
 	{
 		_getch();
 	}
@@ -4271,14 +4308,14 @@ void droneBrainAI(party& player, eparty& enemyParty, int a, int turnNum)
 	{
 		temp = attack;
 	}
-	enemyParty.eVect[a].act = temp;
+	enemyParty.eVect[a].setAction((int)temp);
 	if (attack == temp)
 	{
-		enemyParty.eVect[a].target = _dice(3) - 1;
+		enemyParty.eVect[a].setTarget(_dice(3) - 1);
 	}
 	else if (evade == temp)
 	{
-		enemyParty.eVect[a].target = _dice(3) - 1;
+		enemyParty.eVect[a].setTarget(_dice(3) - 1);
 	}
 	return;
 }
@@ -4298,38 +4335,38 @@ void droneBrainActions(party& player, eparty& enemyParty, int e)
 	coord.X = 0;
 	coord.Y = 29;
 	SetConsoleCursorPosition(standard, coord);
-	int TempAtk = (float)enemyParty.eVect[e].atk * enemyParty.eVect[e].atkMulti;
-	if (!enemyParty.eVect[e].dead)//enemy
+	int TempAtk = (float)enemyParty.eVect[e].getAtk() * enemyParty.eVect[e].getAtkMulti();
+	if (!enemyParty.eVect[e].getDead())//enemy
 	{
-		if (attack == enemyParty.eVect[e].act)//attacks 
+		if (attack == (action)enemyParty.eVect[e].getAction())//attacks 
 		{
-			if (evade == player.cVect[enemyParty.eVect[e].target].act && 1 == player.cVect[enemyParty.eVect[e].target].target)//player evades
+			if (evade == player.cVect[enemyParty.eVect[e].getTarget()].act && 1 == player.cVect[enemyParty.eVect[e].getTarget()].target)//player evades
 			{
-				if (player.cVect[enemyParty.eVect[e].target].defenceValue < 15 + _dice(15))//15 + _dice(15) is drone's accuracy value. if the drone's accuracy is higher than the player's defence than the drone hits
+				if (player.cVect[enemyParty.eVect[e].getTarget()].defenceValue < 15 + _dice(15))//15 + _dice(15) is drone's accuracy value. if the drone's accuracy is higher than the player's defence than the drone hits
 				{
-					cout << player.cVect[enemyParty.eVect[e].target].name << " fails to dodge " << enemyParty.eVect[e].name << "'s lazer doing " << TempAtk << " damage";
-					player.cVect[enemyParty.eVect[e].target].HP -= TempAtk;
+					cout << player.cVect[enemyParty.eVect[e].getTarget()].name << " fails to dodge " << enemyParty.eVect[e].getName() << "'s lazer doing " << TempAtk << " damage";
+					player.cVect[enemyParty.eVect[e].getTarget()].HP -= TempAtk;
 				}
 				else//75% chance to dodge
 				{
-					cout << player.cVect[enemyParty.eVect[e].target].name << " dodges " << enemyParty.eVect[e].name << "'s attack";
+					cout << player.cVect[enemyParty.eVect[e].getTarget()].name << " dodges " << enemyParty.eVect[e].getName() << "'s attack";
 				}
 			}
 			else//player does not evade
 			{
 				if (1 == _dice(3))//33% chance to miss, 
 				{
-					cout << enemyParty.eVect[e].name << " attacks " << player.cVect[enemyParty.eVect[e].target].name << " but misses";
+					cout << enemyParty.eVect[e].getName() << " attacks " << player.cVect[enemyParty.eVect[e].getTarget()].name << " but misses";
 				}
 				else//75% chance to not miss
 				{
-					cout << enemyParty.eVect[e].name << " hits " << player.cVect[enemyParty.eVect[e].target].name << " with a lazer for " << TempAtk << " damage";
-					player.cVect[enemyParty.eVect[e].target].HP -= TempAtk;
+					cout << enemyParty.eVect[e].getName() << " hits " << player.cVect[enemyParty.eVect[e].getTarget()].name << " with a lazer for " << TempAtk << " damage";
+					player.cVect[enemyParty.eVect[e].getTarget()].HP -= TempAtk;
 				}
 			}
 		}
 	}
-	if (evade != enemyParty.eVect[e].act && !enemyParty.eVect[e].dead)
+	if (evade != (action)enemyParty.eVect[e].getAction() && !enemyParty.eVect[e].getDead())
 	{
 		_getch();
 	}
@@ -4341,17 +4378,17 @@ void droneBrainActions(party& player, eparty& enemyParty, int e)
 void printProjectAttack(party& player, eparty& enemyParty, int p)
 {
 	int e = player.cVect[p].target;
-	if (evade == enemyParty.eVect[e].act && 0 == enemyParty.eVect[e].target)//enemy evades
+	if (evade == (action)enemyParty.eVect[e].getAction() && 0 == enemyParty.eVect[e].getTarget())//enemy evades
 	{
-		if (enemyParty.eVect[e].dodgeValue <= 15 + _dice(20))//hit
+		if (enemyParty.eVect[e].getDodgeValue() <= 15 + _dice(20))//hit
 		{
 			int damage = (0.06 * player.projectsPrinted * player.projectsPrinted) + (0.1 * player.projectsPrinted) * player.cVect[p].atkMulti;
-			cout << player.cVect[p].name << " turns their project in to " << enemyParty.eVect[e].name << " it's " << player.projectsPrinted << " pages long!";
-			enemyParty.eVect[e].HP -= damage;
+			cout << player.cVect[p].name << " turns their project in to " << enemyParty.eVect[e].getName() << " it's " << player.projectsPrinted << " pages long!";
+			enemyParty.eVect[e].addHP(damage * -1);
 		}
 		else//miss
 		{
-			cout << enemyParty.eVect[e].name << " dodges " << player.cVect[p].name << "'s flurry of paper";
+			cout << enemyParty.eVect[e].getName() << " dodges " << player.cVect[p].name << "'s flurry of paper";
 		}
 	}
 	else//enemy doesn't evade
@@ -4359,12 +4396,12 @@ void printProjectAttack(party& player, eparty& enemyParty, int p)
 		if (1 != _dice(20))//hit
 		{
 			int damage = 8 * player.cVect[p].atkMulti;
-			cout << player.cVect[p].name << " turns their project in to " << enemyParty.eVect[e].name << " it's " << player.projectsPrinted << " pages long!";
-			enemyParty.eVect[e].HP -= damage;
+			cout << player.cVect[p].name << " turns their project in to " << enemyParty.eVect[e].getName() << " it's " << player.projectsPrinted << " pages long!";
+			enemyParty.eVect[e].addHP(damage * -1);
 		}
 		else//miss
 		{
-			cout << player.cVect[p].name << " gets a paper jam and can't fire at " << enemyParty.eVect[e].name;
+			cout << player.cVect[p].name << " gets a paper jam and can't fire at " << enemyParty.eVect[e].getName();
 		}
 	}
 }
@@ -4376,17 +4413,17 @@ void largeStapelerAttack(party& player, eparty& enemyParty, int p)//p = which pl
 	//are they dodging?
 	//flavor text
 	int e = player.cVect[p].target;
-	if (evade == enemyParty.eVect[e].act && 0 == enemyParty.eVect[e].target)//enemy evades
+	if (evade == (action)enemyParty.eVect[e].getAction() && 0 == enemyParty.eVect[e].getTarget())//enemy evades
 	{
-		if (enemyParty.eVect[e].dodgeValue <= 20 + _dice(20))//hit
+		if (enemyParty.eVect[e].getDodgeValue() <= 20 + _dice(20))//hit
 		{
 			int damage = (1 + _dice(5)) * ((player.cVect[p].atkMulti - 1.0) * 3.0 + 1.0);
-			cout << player.cVect[p].name << " pelts " << enemyParty.eVect[e].name << " with large staples for " << damage << " damage";
-			enemyParty.eVect[e].HP -= damage;
+			cout << player.cVect[p].name << " pelts " << enemyParty.eVect[e].getName() << " with large staples for " << damage << " damage";
+			enemyParty.eVect[e].addHP(damage * -1);
 		}
 		else//miss
 		{
-			cout << enemyParty.eVect[e].name << " dodges " << player.cVect[p].name << "'s volley of staples";
+			cout << enemyParty.eVect[e].getName() << " dodges " << player.cVect[p].name << "'s volley of staples";
 		}
 	}
 	else//enemy doesn't evade
@@ -4394,12 +4431,12 @@ void largeStapelerAttack(party& player, eparty& enemyParty, int p)//p = which pl
 		if (1 != _dice(20))//hit
 		{
 			int damage = (1 + _dice(5)) * ((player.cVect[p].atkMulti - 1.0) * 3.0 + 1.0);
-			cout << player.cVect[p].name << " pelts " << enemyParty.eVect[e].name << " with large staples for " << damage << " damage";
-			enemyParty.eVect[e].HP -= damage;
+			cout << player.cVect[p].name << " pelts " << enemyParty.eVect[e].getName() << " with large staples for " << damage << " damage";
+			enemyParty.eVect[e].addHP(damage * -1);
 		}
 		else//miss
 		{
-			cout << player.cVect[p].name << " mises " << enemyParty.eVect[e].name << " with a volley of staples";
+			cout << player.cVect[p].name << " mises " << enemyParty.eVect[e].getName() << " with a volley of staples";
 		}
 	}
 }
@@ -4407,17 +4444,17 @@ void largeStapelerAttack(party& player, eparty& enemyParty, int p)//p = which pl
 void basicAttack(party& player, eparty& enemyParty, int p)
 {
 	int e = player.cVect[p].target;
-	if (evade == enemyParty.eVect[e].act && 0 == enemyParty.eVect[e].target)//enemy evades
+	if (evade == (action)enemyParty.eVect[e].getAction() && 0 == enemyParty.eVect[e].getTarget())//enemy evades
 	{
-		if (enemyParty.eVect[e].dodgeValue <= 10 + _dice(20))//hit
+		if (enemyParty.eVect[e].getDodgeValue() <= 10 + _dice(20))//hit
 		{
 			int damage = 8 * player.cVect[p].atkMulti;
-			cout << player.cVect[p].name << " attacks " << enemyParty.eVect[e].name << " for " << damage << " damage";
-			enemyParty.eVect[e].HP -= damage;
+			cout << player.cVect[p].name << " attacks " << enemyParty.eVect[e].getName() << " for " << damage << " damage";
+			enemyParty.eVect[e].addHP(damage * -1);
 		}
 		else//miss
 		{
-			cout << enemyParty.eVect[e].name << " dodges " << player.cVect[p].name << "'s attack";
+			cout << enemyParty.eVect[e].getName() << " dodges " << player.cVect[p].name << "'s attack";
 		}
 	}
 	else//enemy doesn't evade
@@ -4425,12 +4462,12 @@ void basicAttack(party& player, eparty& enemyParty, int p)
 		if (1 != _dice(20))//hit
 		{
 			int damage = 8 * player.cVect[p].atkMulti;
-			cout << player.cVect[p].name << " attacks " << enemyParty.eVect[e].name << " for " << damage << " damage";
-			enemyParty.eVect[e].HP -= damage;
+			cout << player.cVect[p].name << " attacks " << enemyParty.eVect[e].getName() << " for " << damage << " damage";
+			enemyParty.eVect[e].addHP(damage * -1);
 		}
 		else//miss
 		{
-			cout << player.cVect[p].name << " mises " << enemyParty.eVect[e].name;
+			cout << player.cVect[p].name << " mises " << enemyParty.eVect[e].getName();
 		}
 	}
 }
