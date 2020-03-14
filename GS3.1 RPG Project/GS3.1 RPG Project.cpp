@@ -40,6 +40,7 @@
 #include <vector>
 #include <Windows.h>
 #include <fstream>
+#include <cmath>
 #include "Enemy.h"
 
 using namespace std;
@@ -65,7 +66,7 @@ struct crew
 	int target;//which crew/enemy is being targeted
 	float atkMulti;//damage multiplier
 	int attackID, specialID, defenceID;
-	int defenceValue;
+	int defenceValue, defenceBonus;
 };
 struct vessel
 {
@@ -168,6 +169,7 @@ int main()
 			tempEnemy.setDodgeValue(stoi(temp));
 			tempEnemy.setAtkMulti(1.0);
 			tempEnemy.setDead(false);
+			tempEnemy.setDodgeBonus(0);
 			tempParty.eVect.push_back(tempEnemy);
 		}
 		enemyVector.push_back(tempParty);
@@ -361,6 +363,8 @@ int main()
 			temp.specialID = stoi(fileTemp);
 			getline(in, fileTemp);
 			temp.defenceID = stoi(fileTemp);
+			temp.defenceValue = 1;
+			temp.defenceBonus = 0;
 			player.cVect.push_back(temp);
 		}
 	}
@@ -2734,6 +2738,7 @@ bool combat(party& player, eparty enemyParty, int &credits)
 			coord.X = 0;
 			coord.Y = 29;
 			SetConsoleCursorPosition(standard, coord);
+			player.cVect[a].defenceBonus = 0;
 			if (attack == player.cVect[a].act)//attacks
 			{
 				switch (player.cVect[a].attackID)
@@ -3478,7 +3483,6 @@ void pixelArtRelay(int backID, int forID)
 {
 	ifstream in;
 	string image = "";
-	string image2 = "";
 	vector <string> animation;
 	string temp, temp2;
 	switch (backID)
@@ -3537,7 +3541,7 @@ void pixelArtRelay(int backID, int forID)
 		image += "              aaaa              n";
 		image += "           2222aa2222           n";
 		image += "          222222222222          ";
-		printCombatGraphic(image2, 6);
+		printCombatGraphic(image, 6);
 		break;
 	case 1://Sp_ce
 		image += "000000000000000000000000000000000000000000000000000000000000n";
@@ -3585,7 +3589,7 @@ void pixelArtRelay(int backID, int forID)
 		image += "004400044000044cc448800440004400n";
 		image += "00044000440004444448804400044000n";
 		image += "00004444044004444440044044440000";
-		printCombatGraphic(image2, 6);
+		printCombatGraphic(image, 6);
 		break;
 	case 3:
 		image = "";
@@ -3600,7 +3604,7 @@ void pixelArtRelay(int backID, int forID)
 		image += "000fff00000ffff44ffff00ff4ff0000n";
 		image += "000000000000ffffffff0000fff00000n";
 		image += "0000000000000ffffff0000000000000";
-		printCombatGraphic(image2, 6);
+		printCombatGraphic(image, 6);
 		break;
 	case 4://golem forground
 	case 5://worm forground
@@ -3917,6 +3921,7 @@ void spaceGoblinAI(party& player, eparty& enemyParty, int a, int turnNum)
 		}
 	}
 	enemyParty.eVect[a].setAction((int)temp);
+	enemyParty.eVect[a].setDodgeBonus(0);
 	if (attack == temp)
 	{
 		int randAttack = _dice(player.cVect[0].HP + player.cVect[1].HP + player.cVect[2].HP);
@@ -3987,7 +3992,8 @@ void spaceGoblinAI(party& player, eparty& enemyParty, int a, int turnNum)
 	}
 	else if (evade == temp)
 	{
-		tempTarget = _dice(3) - 1;
+		tempTarget = 0;
+		enemyParty.eVect[a].setDodgeBonus(3);
 	}
 	enemyParty.eVect[a].setTarget(tempTarget);
 	return;
@@ -4013,30 +4019,9 @@ void spaceGoblinActions(party& player, eparty& enemyParty, int e)
 	{
 		if (attack == (action)enemyParty.eVect[e].getAction())//attacks 
 		{
-			if (evade == player.cVect[enemyParty.eVect[e].getTarget()].act && 1 == player.cVect[enemyParty.eVect[e].getTarget()].target)//player evades
-			{
-				if (player.cVect[enemyParty.eVect[e].getTarget()].defenceValue < 20 + _dice(10))//20 + _dice(10) is goblin's accuracy value. if the goblins accuracy is higher than the player's defence than the goblin hits
-				{
-					cout << player.cVect[enemyParty.eVect[e].getTarget()].name << " fails to dodge " << enemyParty.eVect[e].getName() << "'s attack for " << TempAtk << " damage";
-					player.cVect[enemyParty.eVect[e].getTarget()].HP -= TempAtk;
-				}
-				else//75% chance to dodge
-				{
-					cout << player.cVect[enemyParty.eVect[e].getTarget()].name << " dodges " << enemyParty.eVect[e].getName() << "'s attack";
-				}
-			}
-			else//engineer does not evade
-			{
-				if (1 == _dice(4))//25% chance to miss, 
-				{
-					cout << enemyParty.eVect[e].getName() << " attacks " << player.cVect[enemyParty.eVect[e].getTarget()].name << " but misses";
-				}
-				else//75% chance to not miss
-				{
-					cout << enemyParty.eVect[e].getName() << " attacks " << player.cVect[enemyParty.eVect[e].getTarget()].name << " for " << TempAtk << " damage";
-					player.cVect[enemyParty.eVect[e].getTarget()].HP -= TempAtk;
-				}
-			}
+			int damage = (int)ceil(((float)TempAtk / (0.15 * (float)player.cVect[enemyParty.eVect[e].getTarget()].defenceValue + 1.0)));
+			cout << enemyParty.eVect[e].getName() << " attacks " << player.cVect[enemyParty.eVect[e].getTarget()].name << " for " << damage << " damage";
+			player.cVect[enemyParty.eVect[e].getTarget()].HP -= damage;
 		}
 		else if (special == (action)enemyParty.eVect[e].getAction())//uses special on
 		{
@@ -4065,9 +4050,10 @@ void spaceGoblinActions(party& player, eparty& enemyParty, int e)
 				cout << "ERROR: NO TARGET";
 			}
 		}
-	}
-	if (evade != (action)enemyParty.eVect[e].getAction() && !enemyParty.eVect[e].getDead())
-	{
+		else if (evade == (action)enemyParty.eVect[e].getAction())
+		{
+			cout << enemyParty.eVect[e].getName() << " has defended from the attack";
+		}
 		_getch();
 	}
 	return;
@@ -4105,6 +4091,7 @@ void squidAI(party& player, eparty& enemyParty, int a, int turnNum)
 		temp = special;
 	}
 	enemyParty.eVect[a].setAction((int)temp);
+	enemyParty.eVect[a].setDodgeBonus(0);
 	if (attack == temp)//enemies should attack characters with more HP
 	{
 		int randAttack = _dice(player.cVect[0].HP + player.cVect[1].HP + player.cVect[2].HP);
@@ -4175,7 +4162,8 @@ void squidAI(party& player, eparty& enemyParty, int a, int turnNum)
 	}
 	else if (evade == temp)
 	{
-		tempTarget = _dice(3) - 1;
+		tempTarget = 0;
+		enemyParty.eVect[a].setDodgeBonus(2);
 	}
 	enemyParty.eVect[a].setTarget(tempTarget);
 	return;
@@ -4201,32 +4189,9 @@ void squidActions(party& player, eparty& enemyParty, int e)
 	{
 		if (attack == (action)enemyParty.eVect[e].getAction())//attacks 
 		{
-			if (evade == player.cVect[enemyParty.eVect[e].getTarget()].act && 1 == player.cVect[enemyParty.eVect[e].getTarget()].target)//player evades
-			{
-				if (player.cVect[enemyParty.eVect[e].getTarget()].defenceValue < 25 + _dice(5))//
-				{
-					cout << player.cVect[enemyParty.eVect[e].getTarget()].name << " fails to dodge " << enemyParty.eVect[e].getName() << "'s attack doing " << TempAtk << " damage";
-					player.cVect[enemyParty.eVect[e].getTarget()].HP -= TempAtk;
-					enemyParty.eVect[e].setAtkMulti(1.0);//reset charged attacks
-				}
-				else//75% chance to dodge
-				{
-					cout << player.cVect[enemyParty.eVect[e].getTarget()].name << " dodges " << enemyParty.eVect[e].getName() << "'s tentacle";
-				}
-			}
-			else//player does not evade
-			{
-				if (1 == _dice(4))//25% chance to miss
-				{
-					cout << enemyParty.eVect[e].getName() << " charges at " << player.cVect[enemyParty.eVect[e].getTarget()].name << " but misses";
-				}
-				else//75% chance to not miss
-				{
-					cout << enemyParty.eVect[e].getName() << " slaps " << player.cVect[enemyParty.eVect[e].getTarget()].name << " doing " << TempAtk << " damage";
-					player.cVect[enemyParty.eVect[e].getTarget()].HP -= TempAtk;
-					enemyParty.eVect[e].setAtkMulti(1.0);//reset charged attacks
-				}
-			}
+			int damage = (int)ceil(((float)TempAtk / (0.15 * (float)player.cVect[enemyParty.eVect[e].getTarget()].defenceValue + 1.0)));
+			cout << enemyParty.eVect[e].getName() << " whips " << player.cVect[enemyParty.eVect[e].getTarget()].name << " with it's tentacles, doing " << damage << " damage";
+			player.cVect[enemyParty.eVect[e].getTarget()].HP -= damage;
 		}
 		else if (special == (action)enemyParty.eVect[e].getAction())//uses special on
 		{
@@ -4241,11 +4206,13 @@ void squidActions(party& player, eparty& enemyParty, int e)
 				enemyParty.eVect[enemyParty.eVect[e].getTarget()].addHP(2);
 			}
 		}
-	}
-	if (evade != (action)enemyParty.eVect[e].getAction() && !enemyParty.eVect[e].getDead())
-	{
+		else if (evade == (action)enemyParty.eVect[e].getAction())
+		{
+			cout << enemyParty.eVect[e].getName() << " has defended from the attack";
+		}
 		_getch();
 	}
+	
 	return;
 }
 
@@ -4264,6 +4231,7 @@ void droneAI(party& player, eparty& enemyParty, int a, int turnNum)
 		temp = evade;
 	}
 	enemyParty.eVect[a].setAction((int)temp);
+	enemyParty.eVect[a].setDodgeBonus(0);
 	if (special == temp)
 	{
 		enemyParty.eVect[a].setTarget(1);//drones always target the brain
@@ -4274,7 +4242,8 @@ void droneAI(party& player, eparty& enemyParty, int a, int turnNum)
 	}
 	else if (evade == temp)
 	{
-		enemyParty.eVect[a].setTarget(_dice(3) - 1);
+		enemyParty.eVect[a].setTarget(0);
+		enemyParty.eVect[a].setDodgeBonus(3);
 	}
 	return;
 }
@@ -4299,39 +4268,19 @@ void droneActions(party& player, eparty& enemyParty, int e)
 	{
 		if (attack == (action)enemyParty.eVect[e].getAction())//attacks 
 		{
-			if (evade == player.cVect[enemyParty.eVect[e].getTarget()].act && 1 == player.cVect[enemyParty.eVect[e].getTarget()].target)//player evades
-			{
-				if (player.cVect[enemyParty.eVect[e].getTarget()].defenceValue < 15 + _dice(15))//15 + _dice(15) is drone's accuracy value. if the drone's accuracy is higher than the player's defence than the drone hits
-				{
-					cout << player.cVect[enemyParty.eVect[e].getTarget()].name << " fails to dodge " << enemyParty.eVect[e].getName() << "'s lazer doing " << TempAtk << " damage";
-					player.cVect[enemyParty.eVect[e].getTarget()].HP -= TempAtk;
-				}
-				else//75% chance to dodge
-				{
-					cout << player.cVect[enemyParty.eVect[e].getTarget()].name << " dodges " << enemyParty.eVect[e].getName() << "'s attack";
-				}
-			}
-			else//player does not evade
-			{
-				if (1 == _dice(3))//33% chance to miss, 
-				{
-					cout << enemyParty.eVect[e].getName() << " attacks " << player.cVect[enemyParty.eVect[e].getTarget()].name << " but misses";
-				}
-				else//75% chance to not miss
-				{
-					cout << enemyParty.eVect[e].getName() << " hits " << player.cVect[enemyParty.eVect[e].getTarget()].name << " with a lazer for " << TempAtk << " damage";
-					player.cVect[enemyParty.eVect[e].getTarget()].HP -= TempAtk;
-				}
-			}
+			int damage = (int)ceil(((float)TempAtk / (0.15 * (float)player.cVect[enemyParty.eVect[e].getTarget()].defenceValue + 1.0)));
+			cout << enemyParty.eVect[e].getName() << " fires it's lazer at " << player.cVect[enemyParty.eVect[e].getTarget()].name << " doing " << damage << " damage";
+			player.cVect[enemyParty.eVect[e].getTarget()].HP -= damage;
 		}
 		else if (special == (action)enemyParty.eVect[e].getAction())//uses special on
 		{
 			cout << enemyParty.eVect[e].getName() << " siphons energy into " << enemyParty.eVect[enemyParty.eVect[e].getTarget()].getName();
 			enemyParty.eVect[enemyParty.eVect[e].getTarget()].multAtkMulti(1.2);
 		}
-	}
-	if (evade != (action)enemyParty.eVect[e].getAction() && !enemyParty.eVect[e].getDead())
-	{
+		else if (evade == (action)enemyParty.eVect[e].getAction())
+		{
+			cout << enemyParty.eVect[e].getName() << " has defended from the attack";
+		}
 		_getch();
 	}
 	return;
@@ -4349,13 +4298,15 @@ void droneBrainAI(party& player, eparty& enemyParty, int a, int turnNum)
 		temp = attack;
 	}
 	enemyParty.eVect[a].setAction((int)temp);
+	enemyParty.eVect[a].setDodgeBonus(0);
 	if (attack == temp)
 	{
 		enemyParty.eVect[a].setTarget(_dice(3) - 1);
 	}
 	else if (evade == temp)
 	{
-		enemyParty.eVect[a].setTarget(_dice(3) - 1);
+		enemyParty.eVect[a].setTarget(0);
+		enemyParty.eVect[a].setDodgeBonus(4);
 	}
 	return;
 }
@@ -4380,34 +4331,14 @@ void droneBrainActions(party& player, eparty& enemyParty, int e)
 	{
 		if (attack == (action)enemyParty.eVect[e].getAction())//attacks 
 		{
-			if (evade == player.cVect[enemyParty.eVect[e].getTarget()].act && 1 == player.cVect[enemyParty.eVect[e].getTarget()].target)//player evades
-			{
-				if (player.cVect[enemyParty.eVect[e].getTarget()].defenceValue < 15 + _dice(15))//15 + _dice(15) is drone's accuracy value. if the drone's accuracy is higher than the player's defence than the drone hits
-				{
-					cout << player.cVect[enemyParty.eVect[e].getTarget()].name << " fails to dodge " << enemyParty.eVect[e].getName() << "'s lazer doing " << TempAtk << " damage";
-					player.cVect[enemyParty.eVect[e].getTarget()].HP -= TempAtk;
-				}
-				else//75% chance to dodge
-				{
-					cout << player.cVect[enemyParty.eVect[e].getTarget()].name << " dodges " << enemyParty.eVect[e].getName() << "'s attack";
-				}
-			}
-			else//player does not evade
-			{
-				if (1 == _dice(3))//33% chance to miss, 
-				{
-					cout << enemyParty.eVect[e].getName() << " attacks " << player.cVect[enemyParty.eVect[e].getTarget()].name << " but misses";
-				}
-				else//75% chance to not miss
-				{
-					cout << enemyParty.eVect[e].getName() << " hits " << player.cVect[enemyParty.eVect[e].getTarget()].name << " with a lazer for " << TempAtk << " damage";
-					player.cVect[enemyParty.eVect[e].getTarget()].HP -= TempAtk;
-				}
-			}
+			int damage = (int)ceil(((float)TempAtk / (0.15 * (float)player.cVect[enemyParty.eVect[e].getTarget()].defenceValue + 1.0)));
+			cout << enemyParty.eVect[e].getName() << " fires a beam at " << player.cVect[enemyParty.eVect[e].getTarget()].name << " for " << damage << " damage";
+			player.cVect[enemyParty.eVect[e].getTarget()].HP -= damage;
 		}
-	}
-	if (evade != (action)enemyParty.eVect[e].getAction() && !enemyParty.eVect[e].getDead())
-	{
+		else if (evade == (action)enemyParty.eVect[e].getAction())
+		{
+			cout << enemyParty.eVect[e].getName() << " has defended from the attack";
+		}
 		_getch();
 	}
 	return;
@@ -4418,98 +4349,25 @@ void droneBrainActions(party& player, eparty& enemyParty, int e)
 void printProjectAttack(party& player, eparty& enemyParty, int p)
 {
 	int e = player.cVect[p].target;
-	if (evade == (action)enemyParty.eVect[e].getAction() && 0 == enemyParty.eVect[e].getTarget())//enemy evades
-	{
-		if (enemyParty.eVect[e].getDodgeValue() <= 15 + _dice(20))//hit
-		{
-			int damage = (0.06 * player.projectsPrinted * player.projectsPrinted) + (0.1 * player.projectsPrinted) * player.cVect[p].atkMulti;
-			cout << player.cVect[p].name << " turns their project in to " << enemyParty.eVect[e].getName() << " it's " << player.projectsPrinted << " pages long!";
-			enemyParty.eVect[e].addHP(damage * -1);
-		}
-		else//miss
-		{
-			cout << enemyParty.eVect[e].getName() << " dodges " << player.cVect[p].name << "'s flurry of paper";
-		}
-	}
-	else//enemy doesn't evade
-	{
-		if (1 != _dice(20))//hit
-		{
-			int damage = 8 * player.cVect[p].atkMulti;
-			cout << player.cVect[p].name << " turns their project in to " << enemyParty.eVect[e].getName() << " it's " << player.projectsPrinted << " pages long!";
-			enemyParty.eVect[e].addHP(damage * -1);
-		}
-		else//miss
-		{
-			cout << player.cVect[p].name << " gets a paper jam and can't fire at " << enemyParty.eVect[e].getName();
-		}
-	}
+	int damage = (0.06 * player.projectsPrinted * player.projectsPrinted) + (0.1 * player.projectsPrinted) * player.cVect[p].atkMulti;
+	cout << player.cVect[p].name << " turns their project in to " << enemyParty.eVect[e].getName() << " it's " << player.projectsPrinted << " pages long!";
+	enemyParty.eVect[e].addHP((int)ceil(((float)damage / (0.15 * (float)(enemyParty.eVect[e].getDodgeBonus() + enemyParty.eVect[e].getDodgeValue() + 1)))) * -1);
 }
 
 void largeStapelerAttack(party& player, eparty& enemyParty, int p)//p = which player is executing the action (0-2)
 {
-	//which player is attacking?
-	//which enemy?
-	//are they dodging?
-	//flavor text
 	int e = player.cVect[p].target;
-	if (evade == (action)enemyParty.eVect[e].getAction() && 0 == enemyParty.eVect[e].getTarget())//enemy evades
-	{
-		if (enemyParty.eVect[e].getDodgeValue() <= 20 + _dice(20))//hit
-		{
-			int damage = (1 + _dice(5)) * ((player.cVect[p].atkMulti - 1.0) * 3.0 + 1.0);
-			cout << player.cVect[p].name << " pelts " << enemyParty.eVect[e].getName() << " with large staples for " << damage << " damage";
-			enemyParty.eVect[e].addHP(damage * -1);
-		}
-		else//miss
-		{
-			cout << enemyParty.eVect[e].getName() << " dodges " << player.cVect[p].name << "'s volley of staples";
-		}
-	}
-	else//enemy doesn't evade
-	{
-		if (1 != _dice(20))//hit
-		{
-			int damage = (1 + _dice(5)) * ((player.cVect[p].atkMulti - 1.0) * 3.0 + 1.0);
-			cout << player.cVect[p].name << " pelts " << enemyParty.eVect[e].getName() << " with large staples for " << damage << " damage";
-			enemyParty.eVect[e].addHP(damage * -1);
-		}
-		else//miss
-		{
-			cout << player.cVect[p].name << " mises " << enemyParty.eVect[e].getName() << " with a volley of staples";
-		}
-	}
+	int damage = (1 + _dice(5)) * ((player.cVect[p].atkMulti - 1.0) * 3.0 + 1.0);
+	cout << player.cVect[p].name << " pelts " << enemyParty.eVect[e].getName() << " with large staples for " << damage << " damage";
+	enemyParty.eVect[e].addHP((int)ceil(((float)damage / (0.15 * (float)(enemyParty.eVect[e].getDodgeBonus() + enemyParty.eVect[e].getDodgeValue() + 1)))) * -1);
 }
 
 void basicAttack(party& player, eparty& enemyParty, int p)
 {
 	int e = player.cVect[p].target;
-	if (evade == (action)enemyParty.eVect[e].getAction() && p == enemyParty.eVect[e].getTarget())//enemy evades
-	{
-		if (enemyParty.eVect[e].getDodgeValue() <= 10 + _dice(20))//hit
-		{
-			int damage = 8 * player.cVect[p].atkMulti;
-			cout << player.cVect[p].name << " attacks " << enemyParty.eVect[e].getName() << " for " << damage << " damage";
-			enemyParty.eVect[e].addHP(damage * -1);
-		}
-		else//miss
-		{
-			cout << enemyParty.eVect[e].getName() << " dodges " << player.cVect[p].name << "'s attack";
-		}
-	}
-	else//enemy doesn't evade
-	{
-		if (1 != _dice(20))//hit
-		{
-			int damage = 8 * player.cVect[p].atkMulti;
-			cout << player.cVect[p].name << " attacks " << enemyParty.eVect[e].getName() << " for " << damage << " damage";
-			enemyParty.eVect[e].addHP(damage * -1);
-		}
-		else//miss
-		{
-			cout << player.cVect[p].name << " misses " << enemyParty.eVect[e].getName();
-		}
-	}
+	int damage = 8 * player.cVect[p].atkMulti;
+	cout << player.cVect[p].name << " attacks " << enemyParty.eVect[e].getName() << " for " << damage << " damage";
+	enemyParty.eVect[e].addHP((int)ceil(((float)damage / (0.15 * (float)(enemyParty.eVect[e].getDodgeBonus() + enemyParty.eVect[e].getDodgeValue() + 1)))) * -1);
 }
 
 //player specials
@@ -4523,7 +4381,7 @@ void basicHeal(party& player, eparty& enemyParty, int p)
 //player defenses
 void basicEvade(party& player, int p)
 {
-	player.cVect[p].defenceValue += 20 + _dice(20);
+	player.cVect[p].defenceBonus = 2;
 }
 
 

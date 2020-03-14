@@ -1,4 +1,4 @@
 1
-0,0,0,1,0,0,0,0,1,1,0,0,0,0,0,0,1,0,0,1,
-0,0,0,0,1,1,1,0,0,0,0,0,1,1,1,1,0,0,1,0,
-Ancient Warp Gate,1,Colored Hole,5,Spectral Sink,2,Soiled Sink,3,Ancient Warp Gate,1,Glimering Egg,9,Soiled Rim,4,Spatered Sink,7,Spatered Egg,3,Wasted Row,3,Abandoned Egg,8,Wasted Terminal,4,Filthy Reef,2,Great Wastes,2,Great Row,2,Colored Reef,2,Spectral Breach,3,Soiled Row,6,Arcane Wastes,9,Spatered Rim,9,Ancient Warp Gate,1,Spectral Terminal,5,Glimering Reef,4,Soiled Hole,2,Ancient Warp Gate,1,
+0,1,1,0,0,0,1,1,0,1,0,0,1,0,0,0,1,0,0,0,
+0,0,0,1,1,0,0,0,0,0,0,1,1,0,1,0,0,1,1,1,
+Ancient Warp Gate,1,Soiled Terminal,8,Spectral Egg,6,Spectral Rim,4,Ancient Warp Gate,1,Glimering Reef,3,Arcane Terminal,4,Wasted Terminal,4,Glimering Singularity,9,Arcane Station,2,Great Reaches,5,Daunting Station,3,Spatered Sink,2,Filthy Hole,9,Spatered Reef,2,Spectral Breach,5,Spectral Reef,7,Terrifying Hole,3,Abandoned Reef,9,Terrifying Rim,2,Ancient Warp Gate,1,Daunting Station,3,Terrifying Wastes,2,Abandoned Reaches,2,Ancient Warp Gate,1,

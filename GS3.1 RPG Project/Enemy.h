@@ -19,6 +19,7 @@ public:
 	void multAtkMulti(float mult);
 	void setID(int _ID);
 	void setDodgeValue(int _dodgeValue);
+	void setDodgeBonus(int _dodgeBonus);
 	std::string getName();
 	int getHPmax();
 	int getHP();
@@ -29,6 +30,7 @@ public:
 	float getAtkMulti();
 	int getID();
 	int getDodgeValue();
+	int getDodgeBonus();
 private:
 	std::string name;
 	int HP, HPmax, atk;
@@ -37,7 +39,8 @@ private:
 	int target;//which crew/enemy is being targeted
 	float atkMulti;
 	int ID;
-	int dodgeValue;//add to dodge chance when evading/blocking
+	int dodgeValue;
+	int dodgeBonus;
 };
 
 Enemy::Enemy()
@@ -120,6 +123,10 @@ void Enemy::setDodgeValue(int _dodgeValue)
 {
 	dodgeValue = _dodgeValue;
 }
+void Enemy::setDodgeBonus(int _dodgeBonus)
+{
+	dodgeBonus = _dodgeBonus;
+}
 std::string Enemy::getName()
 {
 	return name;
@@ -159,4 +166,8 @@ int Enemy::getID()
 int Enemy::getDodgeValue()
 {
 	return dodgeValue;
+}
+int Enemy::getDodgeBonus()
+{
+	return dodgeBonus;
 }

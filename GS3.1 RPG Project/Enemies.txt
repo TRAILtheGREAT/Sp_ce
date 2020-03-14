@@ -1,28 +1,28 @@
 0
 0
 6
-0,Tam,3,9,10
-0,Tem,3,9,10
-0,Tim,3,9,10
-0,Tom,3,9,10
-0,Tum,3,9,10
-0,Tym,3,9,10
+0,Tam,3,9,1
+0,Tem,3,9,1
+0,Tim,3,9,1
+0,Tom,3,9,1
+0,Tum,3,9,1
+0,Tym,3,9,1
 ENDPARTY,
 2
 2
 3
-1,Squid,4,8,30
-1,Squidy,4,8,30
-1,Squiddidily,4,8,30
+1,Squid,4,8,4
+1,Squidy,4,8,4
+1,Squiddidily,4,8,4
 ENDPARTY,
 2
 3
 5
-2,alpha drone,2,4,30
-3,omega brain,8,20,30
-2,beta drone,2,4,30
-2,gamma drone,2,4,30
-2,delta drone,2,4,30
+2,alpha drone,2,4,2
+3,omega brain,8,20,8
+2,beta drone,2,4,2
+2,gamma drone,2,4,2
+2,delta drone,2,4,2
 ENDPARTY,
 END
 
