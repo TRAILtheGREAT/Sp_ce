@@ -4507,7 +4507,7 @@ void basicAttack(party& player, eparty& enemyParty, int p)
 		}
 		else//miss
 		{
-			cout << player.cVect[p].name << " mises " << enemyParty.eVect[e].getName();
+			cout << player.cVect[p].name << " misses " << enemyParty.eVect[e].getName();
 		}
 	}
 }
