@@ -1,6 +1,11 @@
 General Notes:
 	if an enemy doesn't evade, the player will miss if the accuracy of their weapon is the minimum possible value
 	escaping damages your ship. ship can only be repaired at certain places (NPCs, ???)
+	
+	IF PLAYERS CAN SELL ITEMS, 
+
+			
+			----THEY MAY NOT SELL DEFAULT MOVES----
 
 NPCs
 	- Space Lizard
@@ -36,6 +41,7 @@ Moves
 		Basic Evade :: ID 0
 			adds 20 + _dice(20) to evasion score
 		Insult :: ID 1
+		Body Armo :: ID 2
 Enemies
 	SpaceGoblin :: party and enemy ID 0
 		accuracy = 20 + _dice(10)

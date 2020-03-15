@@ -42,6 +42,7 @@
 #include <fstream>
 #include <cmath>
 #include "Enemy.h"
+#include "Inventory.h"
 
 using namespace std;
 
@@ -78,6 +79,8 @@ struct party
 	vector <crew> cVect;
 	vessel ship;
 	int projectsPrinted;//used for print project attack
+	Inventory inventory;
+	int credits;
 };
 struct eparty
 {
@@ -89,15 +92,15 @@ struct eparty
 
 void displayMap(bool(&VdoorArray)[4][5], bool(&HdoorArray)[5][4], int C, int R);
 int _dice(int max);
-bool encounter(party& player, int encounterID, int& credits, vector <eparty> enemyVector);
+bool encounter(party& player, int encounterID, vector <eparty> enemyVector);
 int roundUp(int number, int devisor);
 void printHbar(int HP, int HPmax, int length);
 void printHealthWindow(party& player, eparty& enemy);//player, enemy, number of enemies in eparty
 char _getdir();
 void killAndTop(party& player, eparty& enemyParty);
 string getMoveName(action type, int ID);
-bool combat(party& player, eparty enemyParty, int& credits);
-void treasureCache(party& player, int& credits);
+bool combat(party& player, eparty enemyParty);
+void treasureCache(party& player);
 
 void color(int a);
 void blocks(int a);
@@ -118,6 +121,8 @@ void largeStapelerAttack(party& player, eparty& enemyParty, int p);
 void basicAttack(party& player, eparty& enemyParty, int p);
 void basicHeal(party& player, eparty& enemyParty, int p);
 void basicEvade(party& player, int p);
+void printInventory(party& player);
+void equipItem(party& player, int i, int a);//player, item, character
 
 void updateCrewSave(party player, int playerC, int playerR);
 
@@ -317,18 +322,36 @@ int main()
 		printf("there are some items left in the lockers that the miners left behind\n");
 		printf("the crew scavenges what they can\n");
 		player.cVect[0].attackID = 0;
+		player.inventory.addItem(0);
+		player.inventory.setEquip(0, 0);
 		player.cVect[0].defenceID = 0;
+		player.inventory.addItem(6);
+		player.inventory.setEquip(1, 0);
 		player.cVect[0].specialID = 0;
-		player.cVect[1].attackID = 1;
+		player.inventory.addItem(3);
+		player.inventory.setEquip(2, 0);
+		player.cVect[1].attackID = 0;
+		player.inventory.addItem(0);
+		player.inventory.setEquip(3, 1);
 		player.cVect[1].defenceID = 0;
+		player.inventory.addItem(6);
+		player.inventory.setEquip(4, 1);
 		player.cVect[1].specialID = 0;
+		player.inventory.addItem(3);
+		player.inventory.setEquip(5, 1);
 		player.cVect[2].attackID = 0;
+		player.inventory.addItem(0);
+		player.inventory.setEquip(6, 2);
 		player.cVect[2].defenceID = 0;
+		player.inventory.addItem(6);
+		player.inventory.setEquip(7, 2);
 		player.cVect[2].specialID = 0;
+		player.inventory.addItem(3);
+		player.inventory.setEquip(8, 2);
 		player.projectsPrinted = 0;
 		playerC = 4;
 		playerR = 4;
-		// JoeJoeJoeBob
+		//JoeJoeJoeBob
 		updateCrewSave(player, playerC, playerR);
 		printf("With the ship fully operational and your party fully equiped, the crew sets off into the great unknown...\n[press any key to continue]");
 		_getch();
@@ -869,13 +892,13 @@ int main()
 	}
 	char inputc;
 	bool exit = false;
-	int credits = 0;
+	player.credits = 0;
 	//navigation/main game loop
 	while (!exit)
 	{
 		system("cls");
 		printf("you arive in sector (%i, %i), %s\n", playerC + 1, playerR + 1, roomArray[playerC][playerR].name.c_str());
-		bool victory = encounter(player, roomArray[playerC][playerR].encounterID, credits, enemyVector);
+		bool victory = encounter(player, roomArray[playerC][playerR].encounterID, enemyVector);
 		updateCrewSave(player, playerC, playerR);
 		if (!victory)//game over
 		{
@@ -1093,7 +1116,7 @@ char _getdir()
 	}
 }
 
-bool encounter(party &player, int encounterID, int &credits, vector <eparty> enemyVector)//this is why we use structs
+bool encounter(party &player, int encounterID, vector <eparty> enemyVector)//this is why we use structs
 {
 	if (1 == encounterID)//starting sector
 	{
@@ -1110,19 +1133,19 @@ bool encounter(party &player, int encounterID, int &credits, vector <eparty> ene
 			cout << "a haphazardly constructed vessel suddenly careens into the ship's starbord side" << endl;
 			cout << "rushing to assess the damage, your crew stumbles upon a band of three raggedy goblins ravaging the crew quarters" << endl;
 			_getch();
-			combat(player, enemyVector[0], credits);
+			combat(player, enemyVector[0]);
 			break;
 		case 2:
 			cout << "your crew exits warp straight into an astroid field" << endl;
 			cout << "they begin to get an uneasy feeling when a breach is detected and tentacled creatures can be seen creeping into the ship" << endl;
 			_getch();
-			combat(player, enemyVector[1], credits);
+			combat(player, enemyVector[1]);
 			break;
 		case 3:
 			cout << "lazers flash across the sky in this new sector" << endl;
 			cout << "a squad of armed drones spot your ship and move in to attack" << endl;
 			_getch();
-			combat(player, enemyVector[2], credits);
+			combat(player, enemyVector[2]);
 			break;
 		}
 		return 1;
@@ -1135,13 +1158,13 @@ bool encounter(party &player, int encounterID, int &credits, vector <eparty> ene
 			cout << "your crew exits warp straight into an astroid field" << endl;
 			cout << "they begin to get an uneasy feeling when a breach is detected and tentacled creatures can be seen creeping into the ship" << endl;
 			_getch();
-			combat(player, enemyVector[1], credits);
+			combat(player, enemyVector[1]);
 			break;
 		case 2:
 			cout << "lazers flash across the sky in this new sector" << endl;
 			cout << "a squad of armed drones spot your ship and move in to attack" << endl;
 			_getch();
-			combat(player, enemyVector[2], credits);
+			combat(player, enemyVector[2]);
 			break;
 		}
 		return 1;
@@ -1181,14 +1204,14 @@ bool encounter(party &player, int encounterID, int &credits, vector <eparty> ene
 		cout << "while carfully navigating an astroid field, a glint catches " << player.cVect[2].name << "'s eye\n";
 		cout << "beaming the object into the ship reveals it to be a lost credit cache\n";
 		_getch();
-		treasureCache(player, credits);
+		treasureCache(player);
 		return 1;
 	}
 }
 
 
 //combat related functions
-bool combat(party& player, eparty enemyParty, int &credits)
+bool combat(party& player, eparty enemyParty)
 {
 	system("cls");
 	bool DEBUG = false;
@@ -3420,7 +3443,7 @@ string getMoveName(action type, int ID)//0 = attack, 1 = defence, 2 = special
 	return output;
 }
 
-void treasureCache(party& player, int& credits)
+void treasureCache(party& player)
 {
 	system("cls");
 	COORD coord;
@@ -3454,7 +3477,7 @@ void treasureCache(party& player, int& credits)
 	}
 	int creditsFound = 199 + _dice(400);
 	cout << creditsFound << " credits\n";
-	credits += creditsFound;
+	player.credits += creditsFound;
 	_getch();
 }
 
@@ -4382,6 +4405,237 @@ void basicHeal(party& player, eparty& enemyParty, int p)
 void basicEvade(party& player, int p)
 {
 	player.cVect[p].defenceBonus = 2;
+}
+
+//inventory stuff
+void printInventory(party& player)
+{
+	bool exitInventory = false;
+	while (!exitInventory)
+	{
+		system("cls");
+		COORD position;
+		cout << "Inventory:\n";
+		for (int i = 0; i < player.inventory.getSize(); i++)
+		{
+			cout << "   " << player.inventory.getName(i);
+			if (3 != player.inventory.getItemEquip(i))
+			{
+				cout << " (" << player.cVect[player.inventory.getItemEquip(i)].name << ")";
+			}
+			cout << "\n";
+		}
+		cout << "   Done";
+		position.X = 93;
+		position.Y = 1;
+		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), position);
+		cout << "Credits: " << player.credits;
+		position.X = 1;
+		position.Y = 1;
+		COORD pastPosition;
+		pastPosition.X = 1;
+		pastPosition.Y = 1;
+		bool reprint = false;
+		while (!reprint)
+		{
+			SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pastPosition);
+			cout << " ";
+			SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), position);
+			cout << ">";
+			pastPosition = position;
+			char inputc = _getdir();
+			if ('u' == inputc)
+			{
+				if (1 != position.Y)
+				{
+					position.Y--;
+				}
+			}
+			else if ('d' == inputc)
+			{
+				if (player.inventory.getSize() + 1 != position.Y)
+				{
+					position.Y++;
+				}
+			}
+			else if (13 == inputc)
+			{
+				int itemChosen = (int)position.Y - 1;
+				if (player.inventory.getSize() == itemChosen)
+				{
+					exitInventory = true;
+					break;
+				}
+				position.X = 30;
+				position.Y = 0;
+				SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), position);
+				cout << "Equip to:";
+				position.X = 33;
+				for (int a = 1; a < 4; a++)//print crew names
+				{
+					position.Y = a;
+					SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), position);
+					cout << player.cVect[a - 1].name;
+				}
+				position.X = 31;
+				position.Y = 1;
+				while (true)//pick crew to equip item
+				{
+
+					SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pastPosition);
+					cout << " ";
+					SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), position);
+					cout << ">";
+					pastPosition = position;
+					inputc = _getdir();
+					if ('u' == inputc)
+					{
+						if (1 != position.Y)
+						{
+							position.Y--;
+						}
+					}
+					else if ('d' == inputc)
+					{
+						if (3 != position.Y)
+						{
+							position.Y++;
+						}
+					}
+					else if (13 == inputc)
+					{
+						int characterChosen = (int)position.Y - 1;
+						equipItem(player, itemChosen, characterChosen);
+						reprint = true;
+						break;
+					}
+				}
+			}
+		}
+	}
+}
+
+void equipItem(party& player, int i, int a)//player, inventory slot, character
+{
+	//find item id of players current item
+	int currentItemID;
+	if (0 == player.inventory.getItemType(i))//attack
+	{
+		switch (player.cVect[a].attackID)
+		{
+		case 0:
+			currentItemID = 0;
+			break;
+		case 1:
+			currentItemID = 1;
+			break;
+		case 2:
+			currentItemID = 2;
+			break;
+		}
+	}
+	else if (1 == player.inventory.getItemType(i))//special
+	{
+		switch (player.cVect[a].specialID)
+		{
+		case 0:
+			currentItemID = 3;
+			break;
+		case 1:
+			currentItemID = 4;
+			break;
+		case 2:
+			currentItemID = 5;
+			break;
+		}
+	}
+	else if (2 == player.inventory.getItemType(i))
+	{
+		switch (player.cVect[a].defenceID)
+		{
+		case 0:
+			currentItemID = 6;
+			break;
+		case 1:
+			currentItemID = 7;
+			break;
+		case 2:
+			currentItemID = 8;
+			break;
+		}
+	}
+	//search for item equiped to character a and has and ID matching character a's old item and unequip it
+	player.inventory.setEquip(player.inventory.searchForItem(currentItemID, a), 3);
+	//check if item i is equiped by another character, if it is, use recursion to equip the offending character with a basic version of the attack
+	if (a != player.inventory.getItemEquip(i) && 3 != player.inventory.getItemEquip(i))
+	{
+		int unusedItem;
+		switch (player.inventory.getItemType(i))
+		{
+		case 0:
+			unusedItem = player.inventory.searchForItem(0, 3);
+			break;
+		case 1:
+			unusedItem = player.inventory.searchForItem(3, 3);
+			break;
+		case 2:
+			unusedItem = player.inventory.searchForItem(6, 3);
+			break;
+		}
+		equipItem(player, unusedItem, player.inventory.getItemEquip(i));//YEAH BABY, I USED RECURSION
+	}
+	//set item i to being equiped by character a
+	player.inventory.setEquip(i, a);
+	//set characters item ID to item i
+	int tempID = player.inventory.getItemID(i);
+	if (0 <= tempID && tempID <= 2)//attack item
+	{
+		int adjustedID;
+		switch (player.inventory.getItemID(i))
+		{
+		case 0:
+			adjustedID = 0;
+			break;
+		case 1:
+			adjustedID = 1;
+			break;
+		case 2:
+			adjustedID = 2;
+		}
+		player.cVect[a].attackID = adjustedID;
+	}
+	else if (3 <= tempID && tempID <= 5)//special
+	{
+		int adjustedID;
+		switch (player.inventory.getItemID(i))
+		{
+		case 3:
+			adjustedID = 0;
+			break;
+		case 4:
+			adjustedID = 1;
+			break;
+		case 5:
+			adjustedID = 2;
+		}
+		player.cVect[a].specialID = adjustedID;
+	}
+	else if (6 <= tempID && tempID <= 5)//defence
+	{
+		int adjustedID;
+		switch (player.inventory.getItemID(i))
+		{
+		case 6:
+			adjustedID = 0;
+			break;
+		case 7:
+			adjustedID = 1;
+			break;
+		case 8:
+			adjustedID = 2;
+		}
+		player.cVect[a].defenceID = adjustedID;
+	}
 }
 
 
