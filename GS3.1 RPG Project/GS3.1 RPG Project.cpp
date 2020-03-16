@@ -53,6 +53,7 @@ struct roomInfo //room struct will store location and encounter. door state will
 {
 	string name;
 	int encounterID = 0;//npc, enemy, or encounter in this room//is this legal?
+	bool visited;
 };
 struct point
 {
@@ -390,6 +391,16 @@ int main()
 			temp.defenceBonus = 0;
 			player.cVect.push_back(temp);
 		}
+		in.close();
+		in.open("Inventory.txt");
+		int i = 0;
+		while (getline(in, fileTemp, ','))
+		{
+			player.inventory.addItem(stoi(fileTemp));
+			getline(in, fileTemp);
+			player.inventory.setEquip(i, stoi(fileTemp));
+			i++;
+		}
 	}
 	system("cls");
 	in.close();
@@ -686,10 +697,17 @@ int main()
 		{
 			for (int c = 0; c < 5; c++)
 			{
-				if ((0 == c && 0 == r) || (0 == c && 4 == r) || (4 == c && 0 == r) || (4 == c && 4 == r))
+				roomArray[c][r].visited = false;
+				if ((0 == c && 0 == r) || (0 == c && 4 == r) || (4 == c && 0 == r))
 				{
 					roomArray[c][r].name = "Ancient Warp Gate";
 					roomArray[c][r].encounterID = 1;
+					continue;
+				}
+				if ((4 == c && 4 == r))
+				{
+					roomArray[c][r].name = "Ancient Warp Gate";
+					roomArray[c][r].encounterID = 0;
 					continue;
 				}
 				int adjective = _dice(14);
@@ -850,11 +868,11 @@ int main()
 			}
 		}
 		out << '\n';
-		for (int r = 0; r < 5; r++)//print name and encounterID
+		for (int r = 0; r < 5; r++)//print name and encounterID and visited
 		{
 			for (int c = 0; c < 5; c++)
 			{
-				out << roomArray[r][c].name << ',' << roomArray[r][c].encounterID << ',';
+				out << roomArray[r][c].name << ',' << roomArray[r][c].encounterID << ',' << (int)roomArray[r][c].visited << ',';
 			}
 		}
 		out.close();
@@ -887,6 +905,8 @@ int main()
 				roomArray[r][c].name = fileTemp;
 				getline(in, fileTemp, ',');
 				roomArray[r][c].encounterID = stoi(fileTemp);
+				getline(in, fileTemp, ',');
+				roomArray[r][c].visited = stoi(fileTemp);
 			}
 		}
 	}
@@ -898,7 +918,18 @@ int main()
 	{
 		system("cls");
 		printf("you arive in sector (%i, %i), %s\n", playerC + 1, playerR + 1, roomArray[playerC][playerR].name.c_str());
-		bool victory = encounter(player, roomArray[playerC][playerR].encounterID, enemyVector);
+		bool victory;
+		if (false == roomArray[playerC][playerR].visited)
+		{
+			victory = encounter(player, roomArray[playerC][playerR].encounterID, enemyVector);
+			roomArray[playerC][playerR].visited = true;
+		}
+		else
+		{
+			cout << "there is nothing else of interest here\n";
+			_getch();
+			victory = true;
+		}
 		updateCrewSave(player, playerC, playerR);
 		if (!victory)//game over
 		{
@@ -946,12 +977,17 @@ int main()
 				printf("[no warp node]\n");
 			}
 			printf("m. view map\n");
+			cout << "i. view inventory\n";
 			cin >> inputc;
 			fseek(stdin, 0, SEEK_END);
 			if ('m' == inputc)
 			{
 				displayMap(VdoorArray, HdoorArray, playerC, playerR);
 				_getch();
+			}
+			else if ('i' == inputc)
+			{
+				printInventory(player);
 			}
 			else if (0 == HdoorArray[playerC][playerR - 1] && 'n' == inputc)
 			{
@@ -1118,10 +1154,16 @@ char _getdir()
 
 bool encounter(party &player, int encounterID, vector <eparty> enemyVector)//this is why we use structs
 {
-	if (1 == encounterID)//starting sector
+	if (0 == encounterID)//starting sector
 	{
 		printf("as your party leaves the mining station you see an ancient warp gate, long lost to time, shrinking in the distance\n");
 		printf("while this region of the galaxy isn't necessarily the most civilized of places, there are still enough warp nodes\nuntouched to get from sector to sector\n");
+		_getch();
+		return 1;
+	}
+	else if (0 == encounterID)
+	{
+		cout << "gate guardian";
 		_getch();
 		return 1;
 	}
@@ -1133,22 +1175,21 @@ bool encounter(party &player, int encounterID, vector <eparty> enemyVector)//thi
 			cout << "a haphazardly constructed vessel suddenly careens into the ship's starbord side" << endl;
 			cout << "rushing to assess the damage, your crew stumbles upon a band of three raggedy goblins ravaging the crew quarters" << endl;
 			_getch();
-			combat(player, enemyVector[0]);
+			return combat(player, enemyVector[0]);
 			break;
 		case 2:
 			cout << "your crew exits warp straight into an astroid field" << endl;
 			cout << "they begin to get an uneasy feeling when a breach is detected and tentacled creatures can be seen creeping into the ship" << endl;
 			_getch();
-			combat(player, enemyVector[1]);
+			return combat(player, enemyVector[1]);
 			break;
 		case 3:
 			cout << "lazers flash across the sky in this new sector" << endl;
 			cout << "a squad of armed drones spot your ship and move in to attack" << endl;
 			_getch();
-			combat(player, enemyVector[2]);
+			return combat(player, enemyVector[2]);
 			break;
 		}
-		return 1;
 	}
 	else if (3 == encounterID)//medium difficulty enemies
 	{
@@ -1158,16 +1199,15 @@ bool encounter(party &player, int encounterID, vector <eparty> enemyVector)//thi
 			cout << "your crew exits warp straight into an astroid field" << endl;
 			cout << "they begin to get an uneasy feeling when a breach is detected and tentacled creatures can be seen creeping into the ship" << endl;
 			_getch();
-			combat(player, enemyVector[1]);
+			return combat(player, enemyVector[1]);
 			break;
 		case 2:
 			cout << "lazers flash across the sky in this new sector" << endl;
 			cout << "a squad of armed drones spot your ship and move in to attack" << endl;
 			_getch();
-			combat(player, enemyVector[2]);
+			return combat(player, enemyVector[2]);
 			break;
 		}
-		return 1;
 	}
 	else if (4 == encounterID)//hard difficulty enemies
 	{
@@ -3454,26 +3494,36 @@ void treasureCache(party& player)
 	pixelArtRelay(7, 7);
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 	cout << "the cache contained:                             \n";
-	int random = _dice(5);
+	int random = _dice(6);
 	if (1 == random)
 	{
 		cout << "Large Stapler (attack)\n";
+		player.inventory.addItem(1);
 	}
 	else if (2 == random)
 	{
-		cout << "Printer (attack)\n";
+		cout << "Room 206 Printer (attack)\n";
+		player.inventory.addItem(2);
 	}
 	else if (3 == random)
 	{
 		cout << "Lizard Staff (special)\n";
+		player.inventory.addItem(4);
 	}
 	else if (4 == random)
 	{
 		cout << "Wizard Tail (special)\n";
+		player.inventory.addItem(5);
 	}
 	else if (5 == random)
 	{
 		cout << "Book of Insults (defensive)\n";
+		player.inventory.addItem(7);
+	}
+	else if (6 == random)
+	{
+		cout << "Body Armor (defensive)\n";
+		player.inventory.addItem(8);
 	}
 	int creditsFound = 199 + _dice(400);
 	cout << creditsFound << " credits\n";
@@ -4652,4 +4702,11 @@ void updateCrewSave(party player, int playerC, int playerR)
 		out << player.cVect[a].dead << ',' << player.cVect[a].attackID << ',';
 		out << player.cVect[a].specialID << ',' << player.cVect[a].defenceID << '\n';
 	}
+	out.close();
+	out.open("Inventory.txt");
+	for (int i = 0; i < player.inventory.getSize(); i++)
+	{
+		out << player.inventory.getItemID(i) << ',' << player.inventory.getItemEquip(i) << '\n';
+	}
+	out.close();
 }

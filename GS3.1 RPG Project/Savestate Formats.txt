@@ -15,3 +15,5 @@
 //VdoorArray
 //HdoorArray
 //name,encounterID
+-----------------------------Inventory---------------------------
+//ID, equipedTo\n
