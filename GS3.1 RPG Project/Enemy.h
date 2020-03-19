@@ -35,7 +35,7 @@ private:
 	std::string name;
 	int HP, HPmax, atk;
 	bool dead;
-	int act;//attacking, using special, evading...
+	int act;//attacking, evading, using special...
 	int target;//which crew/enemy is being targeted
 	float atkMulti;
 	int ID;

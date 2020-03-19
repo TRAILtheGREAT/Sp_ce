@@ -7,13 +7,15 @@ General Notes:
 			
 			----THEY MAY NOT SELL DEFAULT MOVES----
 
+Shop
+	pay to fully heal your party, 15 credits per HP
 NPCs
-	- Space Lizard
+	Space Lizard
 		- Heals you if you can beat him at brawlhalla (based on attack damage or minigame)
 		- Gives "Lizard Staff" and "Wizard Tail" healing abilities (trade offs ex. less healing, more uses per battle, or small AoE heals vs single big heal)
-	- Miyoshi
+	Miyoshi
 		- gives "Large Stapler" and "Print Project" attack moves
-	- Blueberry
+	Chef
 		- Heals your party if you can beat him at smash (based on attack damage or minigame)
 		- Gives "Insult" defensive move
 Moves
@@ -46,6 +48,8 @@ Enemies
 	SpaceGoblin :: party and enemy ID 0
 		accuracy = 20 + _dice(10)
 			adds 20 + _dice(30) to evasion score
+	squid :: party and enemy ID 1
+		accuracy = 25 + _dice(5)
 	RobotSwarm :: party ID 2
 		drone :: enemy ID 2
 			accuracy 15 + _dice(15)
@@ -56,6 +60,25 @@ Enemies
 		image could have the brain in the middle and bots around it that could be removed as they die
 		the encounter would end when the brain dies but the bots have to do enough healing that the player must kill some of them off before trying to kill the
 		brain
-	squid :: party and enemy ID 1
-		accuracy = 25 + _dice(5)
+	twins :: party ID 3
+		Retinazer :: enemy ID 4
+			high damage
+			attacks character with most health
+		Spazmatism :: enemy ID 5
+			low damage, attack multi x 1.05 every attack
+			attacks player with least health
+		specials are just special attacks
+		should do more damage when below half health
+		"This is going to be a terrible night..."
+	worm :: party ID 4
+		worm :: enemy ID 6
+			can be named "Akka", "Eir", "Ur", "Xol", or "Yul"
+	golem :: party ID 5
+		golem :: enemy ID 7
+	guardian :: party ID 6
+		guardian enemy ID 8
+			specail attacks (based on turnNum % 3)
+				-super lazer (red)
+				-heal self (green)
+				-buff damage (purple)
 		

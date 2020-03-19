@@ -24,13 +24,32 @@ ENDPARTY,
 2,gamma drone,2,4,2
 2,delta drone,2,4,2
 ENDPARTY,
+8
+8
+2
+5,Spazmatism,6,25,3
+4,Retinazer,10,25,3
+ENDPARTY,
+5
+5
+1
+6,Wiggles,8,35,5
+ENDPARTY,
+4
+4
+1
+7,Golem,11,50,4
+ENDPARTY,
+6
+6
+1
+8,µkΩæR╫§☼^msë,12,85,10
+ENDPARTY,
 END
-
-
-
-
 
 //graphicBackID
 //graphicForID
-//a
+//a (number of party members)
 //ID, name, atk, HP and HPmax, dodgeValue
+
+

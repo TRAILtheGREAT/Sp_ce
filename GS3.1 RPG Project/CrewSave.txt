@@ -1,6 +1,6 @@
-ship,21,21
+shipy mcshipface,21,21
 0
-4,3
-engineer,12,12,0,0,0,0
-scientist,11,11,0,0,0,0
-pilot,14,14,0,0,0,0
+0,0
+carl,10,17,0,0,0,0
+jefff,10,13,0,0,0,0
+anakin!,6,12,0,0,0,0
