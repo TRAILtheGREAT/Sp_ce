@@ -7,9 +7,10 @@
 //name,HP,HPmax (ship)
 //projectsPrinted
 //R,C
-//name,HP,HPmax,dead,attackID,specialID,defenceID (eng)
-//name,HP,HPmax,dead,attackID,specialID,defenceID (sci)
-//name,HP,HPmax,dead,attackID,specialID,defenceID (pil)
+//name,HP,HPmax,dead,attackID,specialID,defenceID,defenceValue (eng)
+//name,HP,HPmax,dead,attackID,specialID,defenceID,defenceValue (sci)
+//name,HP,HPmax,dead,attackID,specialID,defenceID,defenceValue (pil)
+//credits
 ------------------------------MapSave----------------------------
 //condition (bool)
 //VdoorArray

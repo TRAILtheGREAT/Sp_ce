@@ -43,11 +43,13 @@
 #include <cmath>
 #include "Enemy.h"
 #include "Inventory.h"
+#include "PlayerStruct.h"
+#include "Shop.h"
 
 using namespace std;
 
 enum turn { eng, sci, pil };
-enum action { attack, evade, special, escape };
+//enum action { attack, evade, special, escape };
 
 struct roomInfo //room struct will store location and encounter. door state will be stored in the door arrays
 {
@@ -59,6 +61,7 @@ struct point
 {
 	int X, Y;
 };
+/*
 struct crew
 {
 	string name;
@@ -83,11 +86,11 @@ struct party
 	Inventory inventory;
 	int credits;
 };
+*/
 struct eparty
 {
 	vector <Enemy> eVect;
 	int a;//number of enemies in the party that need to be displayed
-	int credits;
 	int graphicBackID, graphicForID;
 };
 
@@ -128,10 +131,15 @@ void golemActions(party& player, eparty& enemyParty, int e);
 void guardianAI(party& player, eparty& enemyParty, int a, int turnNum);
 void guardianActions(party& player, eparty& enemyParty, int e, int turnNum);
 
+void printProjectAttack(party& player, eparty& enemyParty, int p);
 void largeStapelerAttack(party& player, eparty& enemyParty, int p);
 void basicAttack(party& player, eparty& enemyParty, int p);
 void basicHeal(party& player, eparty& enemyParty, int p);
+void lizardStaffSpecial(party& player, int p);
+void wizardTailSpecial(party& player, int p);
 void basicEvade(party& player, int p);
+void insultEvade(party& player, eparty& enemyParty, int p);
+void bodyArmorEvade(party& player, int p);
 void printInventory(party& player);
 void equipItem(party& player, int i, int a);//player, item, character
 
@@ -281,6 +289,7 @@ int main()
 		player.projectsPrinted = 0;
 		playerC = 4;
 		playerR = 4;
+		player.credits = 0;
 		//JoeJoeJoeBob
 		updateCrewSave(player, playerC, playerR);
 		printf("With the ship fully operational and your party fully equiped, the crew sets off into the great unknown...\n[press any key to continue]");
@@ -314,12 +323,15 @@ int main()
 			temp.attackID = stoi(fileTemp);
 			getline(in, fileTemp, ',');
 			temp.specialID = stoi(fileTemp);
-			getline(in, fileTemp);
+			getline(in, fileTemp, ',');
 			temp.defenceID = stoi(fileTemp);
-			temp.defenceValue = 1;
+			getline(in, fileTemp);
+			temp.defenceValue = stoi(fileTemp);
 			temp.defenceBonus = 0;
 			player.cVect.push_back(temp);
 		}
+		getline(in, fileTemp);
+		player.credits = stoi(fileTemp);
 		in.close();
 		in.open("Inventory.txt");
 		int i = 0;
@@ -841,7 +853,6 @@ int main()
 	}
 	char inputc;
 	bool exit = false;
-	player.credits = 0;
 	//navigation/main game loop
 	while (!exit)
 	{
@@ -851,7 +862,10 @@ int main()
 		if (false == roomArray[playerC][playerR].visited)
 		{
 			victory = encounter(player, roomArray[playerC][playerR].encounterID, enemyVector);
-			roomArray[playerC][playerR].visited = true;
+			if (5 != roomArray[playerC][playerR].encounterID)
+			{
+				roomArray[playerC][playerR].visited = true;
+			}
 		}
 		else
 		{
@@ -1122,7 +1136,7 @@ bool encounter(party &player, int encounterID, vector <eparty> enemyVector)//thi
 	else if (3 == encounterID)//medium difficulty enemies
 	{
 		string wormName;
-		switch (1)
+		switch (_dice(2))
 		{
 		case 1://eyes
 			cout << "as the ship exits warp, the air in the cabin seems to get colder" << endl;
@@ -1167,8 +1181,10 @@ bool encounter(party &player, int encounterID, vector <eparty> enemyVector)//thi
 	}
 	else if (5 == encounterID)//shop
 	{
-		cout << "shop";
+		cout << "A large neon sign directs your party to a shop where they can purchase useful items and upgrades";
 		_getch();
+		Shop shop1("Shop1.txt");
+		player = shop1.enterShop(player);
 		return 1;
 	}
 	else if (6 == encounterID)//npc 1
@@ -1221,7 +1237,7 @@ bool combat(party& player, eparty enemyParty)
 		string currentChar;//name of whichever character's turn it is
 		pTurn = eng;
 		//print health window
-		if (6 == enemyParty.graphicForID)
+		if (6 == enemyParty.graphicForID)//if guardian
 		{
 			eparty temp = enemyParty;
 			temp.graphicForID = (turnNum % 3) + 9;
@@ -2708,7 +2724,7 @@ bool combat(party& player, eparty enemyParty)
 				}
 			}
 		}
-		//randomize enemy input
+		//get enemy input
 		for (int a = 0; a < enemyParty.eVect.size(); a++)
 		{
 			switch (enemyParty.eVect[a].getID())
@@ -2756,9 +2772,9 @@ bool combat(party& player, eparty enemyParty)
 			cout << "e3: action " << enemyParty.eVect[2].getAction() << " target " << enemyParty.eVect[2].getTarget() << "\n";
 			_getch();
 		}
-		player.cVect[0].defenceValue = 10;//resetting/initializing defence Values
-		player.cVect[1].defenceValue = 10;
-		player.cVect[2].defenceValue = 10;
+		player.cVect[0].defenceBonus = 0;
+		player.cVect[1].defenceBonus = 0;
+		player.cVect[2].defenceBonus = 0;
 		//player actions
 		turn a = eng;
 		bool exit = false;
@@ -2785,6 +2801,10 @@ bool combat(party& player, eparty enemyParty)
 					break;
 				case 1:
 					largeStapelerAttack(player, enemyParty, a);
+					break;
+				case 2:
+					printProjectAttack(player, enemyParty, a);
+					break;
 				}
 			}
 			else if (special == player.cVect[a].act)
@@ -2793,6 +2813,12 @@ bool combat(party& player, eparty enemyParty)
 				{
 				case 0:
 					basicHeal(player, enemyParty, a);
+					break;
+				case 1:
+					lizardStaffSpecial(player, a);
+					break;
+				case 2:
+					wizardTailSpecial(player, a);
 					break;
 				}
 			}
@@ -2803,12 +2829,15 @@ bool combat(party& player, eparty enemyParty)
 				case 0:
 					basicEvade(player, a);
 					break;
+				case 1:
+					insultEvade(player, enemyParty, a);
+					break;
+				case 2:
+					bodyArmorEvade(player, a);
+					break;
 				}
 			}
-			if (player.cVect[a].act != evade)
-			{
-				_getch();
-			}
+			_getch();
 			switch (a)
 			{
 			case eng:
@@ -3443,7 +3472,7 @@ string getMoveName(action type, int ID)//0 = attack, 1 = defence, 2 = special
 	}
 	else if (evade == type)//defence
 	{
-		vector <string> defenceNames = { "Basic Evade", "Insult" };
+		vector <string> defenceNames = { "Basic Evade", "Insult", "Body Armor" };
 		output = defenceNames[ID];
 	}
 	else if (special == type)//special
@@ -4923,11 +4952,41 @@ void basicHeal(party& player, eparty& enemyParty, int p)
 	player.cVect[player.cVect[p].target].HP += healRate;
 }
 
+void lizardStaffSpecial(party& player, int p)
+{
+	cout << player.cVect[p].name << " uses their Lizard Staff to heal each party member for 3 HP";
+	for (int a = 0; a < 3; a++)
+	{
+		player.cVect[a].HP += 3;
+		player.cVect[a].atkMulti += 0.1;
+	}
+}
+
+void wizardTailSpecial(party& player, int p)
+{
+	cout << player.cVect[p].name << " waves the Wizard Tail at " << player.cVect[player.cVect[p].target].name << " incresing their damage";
+	player.cVect[player.cVect[p].target].atkMulti += 0.3;
+}
+
 //player defenses
 void basicEvade(party& player, int p)
 {
 	player.cVect[p].defenceBonus = 2;
+	cout << player.cVect[p].name << " takes a defencive stance";
 }
+
+void insultEvade(party& player, eparty& enemyParty, int p)
+{
+	cout << player.cVect[p].name << " slings a nasty insult at " << enemyParty.eVect[player.cVect[p].target].getName() << ", causing them to soften up";
+	enemyParty.eVect[player.cVect[p].target].multAtkMulti(0.93);
+}
+
+void bodyArmorEvade(party& player, int p)
+{
+	player.cVect[p].defenceBonus = 10;
+	cout << player.cVect[p].name << " hides behind their oversized body armor";
+}
+
 
 //inventory stuff
 void printInventory(party& player)
@@ -5172,8 +5231,9 @@ void updateCrewSave(party player, int playerC, int playerR)
 	{
 		out << player.cVect[a].name << ',' << player.cVect[a].HP << ',' << player.cVect[a].HPmax << ',';
 		out << player.cVect[a].dead << ',' << player.cVect[a].attackID << ',';
-		out << player.cVect[a].specialID << ',' << player.cVect[a].defenceID << '\n';
+		out << player.cVect[a].specialID << ',' << player.cVect[a].defenceID << ',' << player.cVect[a].defenceValue << '\n';
 	}
+	out << player.credits;
 	out.close();
 	out.open("Inventory.txt");
 	for (int i = 0; i < player.inventory.getSize(); i++)

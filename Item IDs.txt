@@ -7,3 +7,6 @@
 6 - knee pads (basic evade)
 7 - book of insults (insult)
 8 - body armor
+
+9 - + 1 HP
+10 - + 1 Defence
