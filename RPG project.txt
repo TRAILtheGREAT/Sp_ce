@@ -11,13 +11,11 @@ Shop
 	pay to fully heal your party, 15 credits per HP
 NPCs
 	Space Lizard
-		- Heals you if you can beat him at brawlhalla (based on attack damage or minigame)
-		- Gives "Lizard Staff" and "Wizard Tail" healing abilities (trade offs ex. less healing, more uses per battle, or small AoE heals vs single big heal)
+		- Gives "Lizard Staff" and "Body Armor" healing abilities (trade offs ex. less healing, more uses per battle, or small AoE heals vs single big heal)
 	Miyoshi
-		- gives "Large Stapler" and "Print Project" attack moves
+		- gives "Large Stapler" or "Print Project" attack moves
 	Chef
-		- Heals your party if you can beat him at smash (based on attack damage or minigame)
-		- Gives "Insult" defensive move
+		- Gives "Insult" defensive move or "Wizard Tail" special move
 Moves
 	Attacks
 		Basic Attack :: ID 0

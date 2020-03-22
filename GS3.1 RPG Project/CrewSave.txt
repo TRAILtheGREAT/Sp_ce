@@ -1,7 +1,1 @@
-shipy mcshipface,21,21
-0
-3,1
-engineer,20,20,0,1,1,1,7
-scientist,11,13,0,1,1,1,5
-pilot,12,12,0,1,1,1,5
-9940
+0,

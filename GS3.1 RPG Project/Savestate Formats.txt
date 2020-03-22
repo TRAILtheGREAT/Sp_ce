@@ -18,3 +18,14 @@
 //name,encounterID
 -----------------------------Inventory---------------------------
 //ID, equipedTo\n
+-----------------------------Shop--------------------------------
+//banner graphic 60x6
+//itemName,ID,price
+END,
+-----------------------------NPC---------------------------------
+//image 60x25
+//item1ID,item2ID
+//blurb
+//blurb
+//etc...
+//choice blurb

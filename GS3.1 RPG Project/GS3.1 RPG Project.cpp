@@ -45,6 +45,7 @@
 #include "Inventory.h"
 #include "PlayerStruct.h"
 #include "Shop.h"
+#include "NPC.h"
 
 using namespace std;
 
@@ -148,6 +149,7 @@ void updateMapSave(bool VdoorArray[4][5], bool HdoorArray[5][4], roomInfo roomAr
 
 int main()
 {
+	bool DEBUG = false;
 	srand((unsigned)time(NULL));
 	ifstream in;
 	ofstream out;
@@ -230,7 +232,7 @@ int main()
 		printf("the last crew member is the pilot\nWhat is their name?\n");
 		getline(cin, player.cVect[2].name);
 		printf("generating random health pools...\n");
-		int crewMin = 9; //using variables in case I want to add difficulty modes later
+		int crewMin = 10; //using variables in case I want to add difficulty modes later
 		int crewMax = 15;
 		player.cVect[0].HP = crewMin + rand() % (crewMax - crewMin + 1) + 3; //engi has more HP, sci has less
 		player.cVect[1].HP = crewMin + rand() % (crewMax - crewMin + 1) - 2;
@@ -241,6 +243,9 @@ int main()
 		player.cVect[1].dead = false;
 		player.cVect[2].HPmax = player.cVect[2].HP;
 		player.cVect[2].dead = false;
+		player.cVect[0].defenceValue = 3 + _dice(4);
+		player.cVect[1].defenceValue = 3 + _dice(4);
+		player.cVect[2].defenceValue = 3 + _dice(4);
 		int shipMin = 15;
 		int shipMax = 25;
 		player.ship.HP = 15 + rand() % (25 - 15 + 1);
@@ -960,7 +965,94 @@ int main()
 			}
 		}
 	}
-	//print scores
+	int score = 0;
+	for (int c = 0; c < 5; c++)
+	{
+		for (int r = 0; r < 5; r++)
+		{
+			if (true == roomArray[c][r].visited)
+			{
+				switch (roomArray[c][r].encounterID)
+				{
+				case 1:
+					score += 2500;
+					break;
+				case 2:
+					score += 100;
+					break;
+				case 3:
+					score += 300;
+					break;
+				case 4:
+					score += 500;
+					break;
+				case 6:
+					score += 300;
+					break;
+				case 7:
+					score += 300;
+					break;
+				case 8:
+					score += 300;
+					break;
+				case 9:
+					score += 500;
+					break;
+				}
+			}
+		}
+	}
+	for (int i = 0; i < player.inventory.getSize(); i++)
+	{
+		switch (player.inventory.getItemID(i))
+		{
+		case 1:
+			score += 50;
+			break;
+		case 2:
+			score += 75;
+			break;
+		case 4:
+			score += 75;
+			break;
+		case 5:
+			score += 50;
+			break;
+		case 7:
+			score += 50;
+			break;
+		case 8:
+			score += 75;
+			break;
+		default:
+			score += 10;
+		}
+	}
+	score += player.credits - (player.credits % 5);
+	if (!DEBUG)
+	{
+		out.open("CrewSave.txt");
+		out << "0,";
+		out.close();
+		out.open("Inventory.txt");
+		out << "";
+		out.close();
+		out.open("MapSave.txt");
+		out << "0";
+		out.close();
+	}
+	system("cls");
+	COORD coord;
+	coord.X = 51;
+	coord.Y = 10;
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+	cout << "final score: " << score;
+	_getch();
+	coord.X = 50;
+	coord.Y = 12;
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+	cout << "thank you for playing";
+	_getch();
 	return 0;
 }
 
@@ -1189,20 +1281,32 @@ bool encounter(party &player, int encounterID, vector <eparty> enemyVector)//thi
 	}
 	else if (6 == encounterID)//npc 1
 	{
-		cout << "first NPC";
+		cout << "stoping on a sparsely populated planet, you crew finds themselves in a bustling rural market\n";
+		cout << "there they meet a master chef who brings them into his kitchen to show off his skills\n";
 		_getch();
+		NPC chef("NPC_chef.txt");
+		player.inventory.addItem(chef.encounter());
 		return 1;
 	}
 	else if (7 == encounterID)//npc 2
 	{
-		cout << "second NPC\n";
+		cout << "your crew stops on a jungle planet, hoping to stock up on food\n";
+		cout << "while pushing through some bushes, " << player.cVect[0].name << "finds something\n";
 		_getch();
+		cout << "or rather someone...";
+		_getch();
+		NPC lizard("NPC_lizard.txt");
+		player.inventory.addItem(lizard.encounter());
 		return 1;
 	}
 	else if (8 == encounterID)//npc 3
 	{
-		cout << "third NPC\n";
+		cout << player.ship.name << " exits warm a bit to close to a wormhole and is sucked in\n";
+		cout << "when they come out on the other side, your crew finds themselves in a server room face to face with the man himself...\n";
+		cout << "Mr. Miyoshi";
 		_getch();
+		NPC miyoshi("NPC_miyoshi.txt");
+		player.inventory.addItem(miyoshi.encounter());
 		return 1;
 	}
 	else if (9 == encounterID)//treasure trove
@@ -2904,10 +3008,48 @@ bool combat(party& player, eparty enemyParty)
 			coord.Y = 15;
 			SetConsoleCursorPosition(standard, coord);
 			cout << "victory";
-			for (int a = 0; a < 6; a++)
+			int creditsEarned = 0;
+			for (int e = 0; e < enemyParty.eVect.size(); e++)
 			{
-				cout << "\n";
+				switch (enemyParty.eVect[e].getID())
+				{
+				case 0://goblin
+					creditsEarned += 15 + _dice(25);
+					break;
+				case 1://squid
+					creditsEarned += 25 + _dice(15);
+					break;
+				case 2://drone
+					creditsEarned += 10 + _dice(15);
+					break;
+				case 3://drone brain
+					creditsEarned += 75 + _dice(25);
+					break;
+				case 4://Retinazer
+					creditsEarned += 100 + _dice(50);
+					break;
+				case 5://spazmatism
+					creditsEarned += 100 + _dice(50);
+					break;
+				case 6://worm
+					creditsEarned += 75 + _dice(100);
+					break;
+				case 7://golem
+					creditsEarned += 150 + _dice(50);
+					break;
+				case 8://guardian
+					creditsEarned += 250 + _dice(100);
+					break;
+				}
 			}
+			player.credits += creditsEarned;
+			coord.X = 27;
+			coord.Y = 16;
+			SetConsoleCursorPosition(standard, coord);
+			cout << creditsEarned << " credits found";
+			coord.X = 0;
+			coord.Y = 29;
+			SetConsoleCursorPosition(standard, coord);
 			_getch();
 			return 1;
 		}
@@ -2932,6 +3074,7 @@ bool combat(party& player, eparty enemyParty)
 			return 0;
 		}
 	}
+
 }
 
 void printHbar(int HP, int HPmax, int length)
@@ -5219,8 +5362,7 @@ void equipItem(party& player, int i, int a)//player, inventory slot, character
 	}
 }
 
-
-
+//savestate stuff
 void updateCrewSave(party player, int playerC, int playerR)
  {
 	ofstream out;
