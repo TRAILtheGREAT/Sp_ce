@@ -1,0 +1,156 @@
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                  ffff                      
+                              ffff8888f                     
+                          ffff888888888f                    
+                      ffff88888888888888f                   
+                   fff8888888888888888ffff                  
+                  ff88888888888888ffff888f                  
+                  f8f888888888ffff8888888f                  
+                  f88f8888ffff88888888888f                  
+                  f888ffff888888888888888f                  
+                  f888f888288888888888888f                  
+                  f888f848888888888888ffff                  
+                   f88f84818888888ffff                      
+                    f8f8488888ffff                          
+                     ff888ffff                              
+                      ffff                                  
+                                                            
+                                                            
+frame 1
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                  ffff                      
+                              ffff8888f                     
+                          ffff888888888f                    
+                      ffff888888888888eef                   
+                   fff888888888888eeeeffff                  
+                  ff8888888888eeeeffff888f                  
+                  f8fe8888eeeeffff8888888f                  
+                  f88feeeeffff88888888888f                  
+                  f888ffff888888888888888f                  
+                  f888f888288888888888888f                  
+                  f888f848888888888888ffff                  
+                   f88f84818888888ffff                      
+                    f8f8488888ffff                          
+                     ff888ffff                              
+                      ffff                                  
+                                                            
+                                                            
+frame 2
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                  ffff                      
+                              ffff8888f                     
+                          ffff8888eeeeef                    
+                      ffff8888eeeeeeeeeef                   
+                   fff8888eeeeeeeeeeeeffff                  
+                  ff88eeeeeeeeeeeeffff888f                  
+                  f8feeeeeeeeeffff8888888f                  
+                  f88feeeeffff88888888888f                  
+                  f888ffff888888888888888f                  
+                  f888f888288888888888888f                  
+                  f888f848888888888888ffff                  
+                   f88f84818888888ffff                      
+                    f8f8488888ffff                          
+                     ff888ffff                              
+                      ffff                                  
+                                                            
+                                                            
+frame 3
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                  8888                      
+                              8888ffff                      
+                          8888ffffeeeef                     
+                      8888ffffeeeeeeeeef                    
+                   888ffffeeeeeeeeeeeeeef                   
+                   fffeeeeeeeeeeeeeeeeffff                  
+                  ffeeeeeeeeeeeeeeffff888f                  
+                  f8feeeeeeeeeffff8888888f                  
+                  f88feeeeffff88888888888f                  
+                  f888ffff888888888888888f                  
+                  f888f888288888888888888f                  
+                  f888f848888888888888ffff                  
+                   f88f84818888888ffff                      
+                    f8f8488888ffff                          
+                     ff888ffff                              
+                      ffff                                  
+                                                            
+                                                            
+frame 4
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                  8888                      
+                              88888888                      
+                          88888888ffff                      
+                      88888888ffffeeeef                     
+                   8888888ffffeeeeeeeeef                    
+                   888ffffeeeeeeeeeeeeeef                   
+                   fffeeeeeeeeeeeeeeeeffff                  
+                  ffeeeeeeeeeeeeeeffff888f                  
+                  f8feeeeeeeeeffff8888888f                  
+                  f88feeeeffff88888888888f                  
+                  f888ffff888888888888888f                  
+                  f888f888288888888888888f                  
+                  f888f848888888888888ffff                  
+                   f88f84818888888ffff                      
+                    f8f8488888ffff                          
+                     ff888ffff                              
+                      ffff                                  
+                                                            
+                                                            
+frame 5
+                                                            
+                                                            
+                                                            
+                                                            
+                                  8                         
+                              888888                        
+                         8888888888880                      
+                     88888888888888888                      
+                888888888888888888ffff                      
+                 8888888888888ffffeeeef                     
+                  88888888ffffeeeeeeeeef                    
+                   888ffffeeeeeeeeeeeeeef                   
+                   fffeeeeeeeeeeeeeeeeffff                  
+                  ffeeeeeeeeeeeeeeffff888f                  
+                  f8feeeeeeeeeffff8888888f                  
+                  f88feeeeffff88888888888f                  
+                  f888ffff888888888888888f                  
+                  f888f888288888888888888f                  
+                  f888f848888888888888ffff                  
+                   f88f84818888888ffff                      
+                    f8f8488888ffff                          
+                     ff888ffff                              
+                      ffff                                  
+                                                            
+                                                            
+frame 6

@@ -1,0 +1,31 @@
+------------------------------Enemies----------------------------
+//graphicBackID
+//graphicForID
+//a
+//ID, name, atk, HP and HPmax, dodgeValue
+------------------------------CrewSave---------------------------
+//name,HP,HPmax (ship)
+//projectsPrinted
+//R,C
+//name,HP,HPmax,dead,attackID,specialID,defenceID,defenceValue (eng)
+//name,HP,HPmax,dead,attackID,specialID,defenceID,defenceValue (sci)
+//name,HP,HPmax,dead,attackID,specialID,defenceID,defenceValue (pil)
+//credits
+------------------------------MapSave----------------------------
+//condition (bool)
+//VdoorArray
+//HdoorArray
+//name,encounterID
+-----------------------------Inventory---------------------------
+//ID, equipedTo\n
+-----------------------------Shop--------------------------------
+//banner graphic 60x6
+//itemName,ID,price
+END,
+-----------------------------NPC---------------------------------
+//image 60x25
+//item1ID,item2ID
+//blurb
+//blurb
+//etc...
+//choice blurb

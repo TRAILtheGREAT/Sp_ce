@@ -1,0 +1,55 @@
+0
+0
+6
+0,Tam,3,9,1
+0,Tem,3,9,1
+0,Tim,3,9,1
+0,Tom,3,9,1
+0,Tum,3,9,1
+0,Tym,3,9,1
+ENDPARTY,
+2
+2
+3
+1,Squid,4,8,4
+1,Squidy,4,8,4
+1,Squiddidily,4,8,4
+ENDPARTY,
+2
+3
+5
+2,alpha drone,2,4,2
+3,omega brain,8,20,8
+2,beta drone,2,4,2
+2,gamma drone,2,4,2
+2,delta drone,2,4,2
+ENDPARTY,
+8
+8
+2
+5,Spazmatism,6,25,3
+4,Retinazer,10,25,3
+ENDPARTY,
+5
+5
+1
+6,Wiggles,8,35,5
+ENDPARTY,
+4
+4
+1
+7,Golem,11,50,4
+ENDPARTY,
+6
+6
+1
+8,µkΩæR╫§☼^msë,12,85,10
+ENDPARTY,
+END
+
+//graphicBackID
+//graphicForID
+//a (number of party members)
+//ID, name, atk, HP and HPmax, dodgeValue
+
+

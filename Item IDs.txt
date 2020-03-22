@@ -1,0 +1,12 @@
+0 - blunt object (basic attack)
+1 - large stapler
+2 - room 206 printer (print project)
+3 - first aid kit (basic heal)
+4 - lizard staff
+5 - wizard tail
+6 - knee pads (basic evade)
+7 - book of insults (insult)
+8 - body armor
+
+9 - + 1 HP
+10 - + 1 Defence

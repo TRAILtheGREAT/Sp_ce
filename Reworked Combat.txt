@@ -1,0 +1,1 @@
+damage = (attack)/(0.15 * resistance + 1) [rounded up using <tgmath.h>]
