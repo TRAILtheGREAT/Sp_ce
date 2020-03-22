@@ -62,32 +62,6 @@ struct point
 {
 	int X, Y;
 };
-/*
-struct crew
-{
-	string name;
-	int HP, HPmax;
-	bool dead;
-	action act;//attacking, using special, evading...
-	int target;//which crew/enemy is being targeted
-	float atkMulti;//damage multiplier
-	int attackID, specialID, defenceID;
-	int defenceValue, defenceBonus;
-};
-struct vessel
-{
-	string name;
-	int HP, HPmax;
-};
-struct party
-{
-	vector <crew> cVect;
-	vessel ship;
-	int projectsPrinted;//used for print project attack
-	Inventory inventory;
-	int credits;
-};
-*/
 struct eparty
 {
 	vector <Enemy> eVect;
@@ -212,7 +186,9 @@ int main()
 	{
 		out.open("CrewSave.txt");
 		system("cls");
-		printf("Hello!\nMy name is Trail Sammarco, the creator of this game.\nMiyoshi says that introductions should be written last so that's all I'll say about that.\n\n");
+		cout << "Game by Trail Sammarco";
+		_getch();
+		system("cls");
 		printf("You are in control of a group of 3 cosmonauts.\n");
 		printf("After a terrible accident they are stranded in a dangerous region of the galaxy thousands of lightyears from home.\n");
 		printf("They will need to fight through the galaxy's most dangerous foes to get them home and find out the truth about what\nhappened in...\n\n");
