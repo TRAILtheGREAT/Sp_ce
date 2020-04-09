@@ -1,1 +1,4 @@
-0
+1
+0,0,0,0,1,0,0,0,1,1,0,0,0,0,1,0,1,0,0,0,
+0,0,0,0,1,1,1,0,1,1,0,0,1,1,1,0,0,0,1,1,
+Ancient Warp Gate,1,0,Filthy Sink,5,0,Easter Reef,2,0,Great Reaches,9,0,Ancient Warp Gate,1,0,Soiled Sink,5,0,Spectral Rim,2,0,Easter Rim,6,0,Daunting Station,4,0,Filthy Hole,3,0,Filthy Row,4,0,Terrifying Breach,8,0,Glimering Wastes,3,0,Spatered Egg,9,0,Soiled Sink,2,0,Great Singularity,2,0,Spectral Singularity,7,0,Arcane Egg,9,0,Spectral Terminal,3,0,Terrifying Reef,2,0,Ancient Warp Gate,1,0,Soiled Rim,4,0,Easter Row,3,0,Spatered Row,2,0,Ancient Warp Gate,0,1,

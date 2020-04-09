@@ -5042,7 +5042,8 @@ void printProjectAttack(party& player, eparty& enemyParty, int p)
 {
 	int e = player.cVect[p].target;
 	int damage = (0.06 * player.projectsPrinted * player.projectsPrinted) + (0.1 * player.projectsPrinted) * player.cVect[p].atkMulti;
-	cout << player.cVect[p].name << " turns their project in to " << enemyParty.eVect[e].getName() << " it's " << player.projectsPrinted << " pages long!";
+	player.projectsPrinted += 1;
+	cout << player.cVect[p].name << " turns their project in to " << enemyParty.eVect[e].getName() << " it's " << player.projectsPrinted << " pages long! " << damage << " damage!";
 	enemyParty.eVect[e].addHP((int)ceil(((float)damage / (0.15 * (float)(enemyParty.eVect[e].getDodgeBonus() + enemyParty.eVect[e].getDodgeValue() + 1)))) * -1);
 }
 
@@ -5320,7 +5321,7 @@ void equipItem(party& player, int i, int a)//player, inventory slot, character
 		}
 		player.cVect[a].specialID = adjustedID;
 	}
-	else if (6 <= tempID && tempID <= 5)//defence
+	else if (6 <= tempID && tempID <= 8)//defence
 	{
 		int adjustedID;
 		switch (player.inventory.getItemID(i))
