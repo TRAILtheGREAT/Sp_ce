@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.29306.81
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GS3.1 RPG Project", "GS3.1 RPG Project\GS3.1 RPG Project.vcxproj", "{F2A324C4-1656-44A8-9C3E-15DE45B8F2EF}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Sp_ce Installer", "Sp_ce Installer\Sp_ce Installer.vdproj", "{834C51D1-EE42-4950-9AFC-F5B524D177D5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,12 @@ Global
 		{F2A324C4-1656-44A8-9C3E-15DE45B8F2EF}.Release|x64.Build.0 = Release|x64
 		{F2A324C4-1656-44A8-9C3E-15DE45B8F2EF}.Release|x86.ActiveCfg = Release|Win32
 		{F2A324C4-1656-44A8-9C3E-15DE45B8F2EF}.Release|x86.Build.0 = Release|Win32
+		{834C51D1-EE42-4950-9AFC-F5B524D177D5}.Debug|x64.ActiveCfg = Debug
+		{834C51D1-EE42-4950-9AFC-F5B524D177D5}.Debug|x64.Build.0 = Debug
+		{834C51D1-EE42-4950-9AFC-F5B524D177D5}.Debug|x86.ActiveCfg = Debug
+		{834C51D1-EE42-4950-9AFC-F5B524D177D5}.Release|x64.ActiveCfg = Release
+		{834C51D1-EE42-4950-9AFC-F5B524D177D5}.Release|x64.Build.0 = Release
+		{834C51D1-EE42-4950-9AFC-F5B524D177D5}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
