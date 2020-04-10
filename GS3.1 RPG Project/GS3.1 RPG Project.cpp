@@ -41,6 +41,7 @@
 #include <Windows.h>
 #include <fstream>
 #include <cmath>
+#include <assert.h>
 #include "Enemy.h"
 #include "Inventory.h"
 #include "PlayerStruct.h"
@@ -858,6 +859,16 @@ int main()
 		updateMapSave(VdoorArray, HdoorArray, roomArray);
 		if (!victory)//game over
 		{
+			break;
+		}
+		if (roomArray[0][0].visited && roomArray[0][4].visited && roomArray[4][0].visited && roomArray[4][4].visited)
+		{
+			system("cls");
+			COORD coor;
+			coor.X = 51;
+			coor.Y = 10;
+			SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coor);
+			cout << "you have won";
 			break;
 		}
 		while (true)//menue after encounter
@@ -5289,6 +5300,7 @@ void equipItem(party& player, int i, int a)//player, inventory slot, character
 	player.inventory.setEquip(i, a);
 	//set characters item ID to item i
 	int tempID = player.inventory.getItemID(i);
+	assert(0 <= tempID && tempID <= 8 && "player.inventory.getItemID(i) returned an value not associated with an item");
 	if (0 <= tempID && tempID <= 2)//attack item
 	{
 		int adjustedID;
